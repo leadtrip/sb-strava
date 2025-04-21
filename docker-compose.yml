@@ -1,0 +1,35 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: sb-strava-db
+    environment:
+      MYSQL_ROOT_PASSWORD: sbstravaapi_root_pw
+      MYSQL_DATABASE: sb_strava_db
+      MYSQL_USER: sb_strava
+      MYSQL_PASSWORD: sb_strava
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    networks:
+      - app-network
+  app:
+    build: .
+    container_name: sb-strava-app
+    ports:
+      - "9050:9050"
+    depends_on:
+      - db
+    restart: always
+    networks:
+      - app-network
+    environment:
+      DB_HOST: sb-strava-db
+      STRAVA_CLIENT_ID: 2341
+      STRAVA_CLIENT_SECRET: 573c851ca91d0b3d4c770b56aa828efcc63dbb87
+volumes:
+  db_data:
+networks:
+  app-network:
+    driver: bridge
