@@ -40,7 +40,7 @@ public class StravaCallbackController {
     }
 
     @GetMapping("/oauth/callback")
-    public ResponseEntity<? extends Object> handleStravaCallback(@RequestParam("code") String authorizationCode) {
+    public ResponseEntity<?> handleStravaCallback(@RequestParam("code") String authorizationCode) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -61,12 +61,12 @@ public class StravaCallbackController {
 
         AthleteTokenDto athleteTokenDto = responseEntity.getBody();
 
-        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+        if (responseEntity.getStatusCode().is2xxSuccessful() && athleteTokenDto != null) {
             log.info("Successful login for Strava athlete: {}", athleteTokenDto);
             Athlete athlete = athleteTokenService.getAthlete(athleteTokenDto);
             return ResponseEntity.ok(athlete);
         } else {
-            System.err.println("Error retrieving athlete data: " + responseEntity.getStatusCode());
+            log.error("Error retrieving athlete data: {}", responseEntity.getStatusCode());
             return ResponseEntity.status(responseEntity.getStatusCode()).body(null);
         }
     }

@@ -29,10 +29,11 @@ public class AthleteTokenService {
     }
 
 
-    public Athlete getAthlete(AthleteTokenDto athleteTokenDto) {
-        Optional<AthleteToken> athleteToken = athleteTokenRepository.findByAthlete_Id(athleteTokenDto.getStravaAthleteId());
+    public Athlete getAthlete(final AthleteTokenDto athleteTokenDto) {
+        log.info("Looking for athlete token with athlete id {}", athleteTokenDto.getStravaAthleteId());
+        Optional<AthleteToken> athleteToken = athleteTokenRepository.findByAthlete_StravaAthleteId(athleteTokenDto.getStravaAthleteId());
         if (athleteToken.isPresent()) {
-            log.info("Found athlete: {}", athleteToken.get().getStravaAthleteId());
+            log.info("Found athlete: {}", athleteToken.get().getAthlete().getStravaAthleteId());
             // TODO update, might be the same as just saving below
             return athleteToken.get().getAthlete();
         }

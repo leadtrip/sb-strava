@@ -17,16 +17,11 @@ public class AthleteToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "athlete_id")
     private Athlete athlete;
     private String accessToken;
     private String refreshToken;
     private Long expiresAt;
     private Long expiresIn;
-
-    @Transient
-    public Long getStravaAthleteId() {
-        return athlete.getStravaAthleteId();
-    }
 }

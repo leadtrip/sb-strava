@@ -23,6 +23,7 @@ function removeImages() {
     echo "Removing Docker images..."
     docker image rm sb-strava-app -f
     docker image rm sb-strava-db -f
+    docker volume rm sb-strava_db_data
 }
 
 function displayHelp() {
