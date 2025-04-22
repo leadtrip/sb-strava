@@ -2,8 +2,6 @@ package wood.mike.sbstravaapi.controllers.auth;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -41,9 +39,6 @@ public class StravaCallbackController {
 
     @GetMapping("/oauth/callback")
     public ResponseEntity<?> handleStravaCallback(@RequestParam("code") String authorizationCode) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("client_id", clientId);
         body.add("client_secret", clientSecret);
@@ -51,10 +46,9 @@ public class StravaCallbackController {
         body.add("grant_type", "authorization_code");
         body.add("redirect_uri", redirectUri);
 
-        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);
-
         ResponseEntity<AthleteTokenDto> responseEntity = this.restClient.post()
                 .uri("/oauth/token")
+                .headers(httpHeaders -> httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .body(body)
                 .retrieve()
                 .toEntity(AthleteTokenDto.class);

@@ -31,11 +31,16 @@ public class AthleteTokenService {
 
     public Athlete getAthlete(final AthleteTokenDto athleteTokenDto) {
         log.info("Looking for athlete token with athlete id {}", athleteTokenDto.getStravaAthleteId());
-        Optional<AthleteToken> athleteToken = athleteTokenRepository.findByAthlete_StravaAthleteId(athleteTokenDto.getStravaAthleteId());
-        if (athleteToken.isPresent()) {
-            log.info("Found athlete: {}", athleteToken.get().getAthlete().getStravaAthleteId());
-            // TODO update, might be the same as just saving below
-            return athleteToken.get().getAthlete();
+        Optional<AthleteToken> athleteTokenOpt = athleteTokenRepository.findByAthlete_StravaAthleteId(athleteTokenDto.getStravaAthleteId());
+        if (athleteTokenOpt.isPresent()) {
+            AthleteToken athleteToken = athleteTokenOpt.get();
+            log.info("Updating token details for athlete: {}", athleteToken.getAthlete().getStravaAthleteId());
+            athleteToken.setAccessToken(athleteTokenDto.getAccessToken());
+            athleteToken.setExpiresAt(athleteTokenDto.getExpiresAt());
+            athleteToken.setExpiresIn(athleteTokenDto.getExpiresIn());
+            athleteToken.setRefreshToken(athleteTokenDto.getRefreshToken());
+            athleteTokenRepository.save(athleteToken);
+            return athleteToken.getAthlete();
         }
         else {
             log.info("Creating new athlete with Strava ID: {}", athleteTokenDto.getStravaAthleteId());

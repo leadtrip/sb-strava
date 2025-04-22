@@ -16,13 +16,4 @@ public class AthleteTokenTransformer {
         athleteToken.setAthlete(athlete);
         return athleteToken;
     }
-
-    public AthleteTokenDto toDto(AthleteToken athleteToken) {
-        AthleteTokenDto athleteTokenDto = new AthleteTokenDto();
-        athleteTokenDto.setAccessToken(athleteToken.getAccessToken());
-        athleteTokenDto.setExpiresAt(athleteToken.getExpiresAt());
-        athleteTokenDto.setExpiresIn(athleteToken.getExpiresIn());
-        athleteTokenDto.setRefreshToken(athleteToken.getRefreshToken());
-        return athleteTokenDto;
-    }
 }
