@@ -7,6 +7,12 @@ services:
       MYSQL_DATABASE: sb_strava_db
       MYSQL_USER: sb_strava
       MYSQL_PASSWORD: sb_strava
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     ports:
       - "3306:3306"
     volumes:
@@ -20,14 +26,15 @@ services:
     ports:
       - "9050:9050"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     restart: always
     networks:
       - app-network
     environment:
       DB_HOST: sb-strava-db
-      STRAVA_CLIENT_ID: 2341
-      STRAVA_CLIENT_SECRET: 573c851ca91d0b3d4c770b56aa828efcc63dbb87
+      STRAVA_CLIENT_ID: ${STRAVA_CLIENT_ID}
+      STRAVA_CLIENT_SECRET: ${STRAVA_CLIENT_SECRET}
 volumes:
   db_data:
 networks:
