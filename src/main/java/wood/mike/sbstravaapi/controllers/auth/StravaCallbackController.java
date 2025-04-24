@@ -1,5 +1,6 @@
 package wood.mike.sbstravaapi.controllers.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -10,6 +11,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.servlet.view.RedirectView;
+import wood.mike.sbstravaapi.config.Constants;
 import wood.mike.sbstravaapi.dtos.athlete.AthleteTokenDto;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.services.athlete.AthleteTokenService;
@@ -38,7 +41,7 @@ public class StravaCallbackController {
     }
 
     @GetMapping("/oauth/callback")
-    public ResponseEntity<?> handleStravaCallback(@RequestParam("code") String authorizationCode) {
+    public RedirectView handleStravaCallback(@RequestParam("code") String authorizationCode, HttpServletRequest request) {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("client_id", clientId);
         body.add("client_secret", clientSecret);
@@ -58,10 +61,11 @@ public class StravaCallbackController {
         if (responseEntity.getStatusCode().is2xxSuccessful() && athleteTokenDto != null) {
             log.info("Successful login for Strava athlete: {}", athleteTokenDto);
             Athlete athlete = athleteTokenService.getAthlete(athleteTokenDto);
-            return ResponseEntity.ok(athlete);
+            request.getSession().setAttribute(Constants.STRAVA_ATHLETE_ID, athlete.getStravaAthleteId());
+            return new RedirectView("/athlete");
         } else {
             log.error("Error retrieving athlete data: {}", responseEntity.getStatusCode());
-            return ResponseEntity.status(responseEntity.getStatusCode()).body(null);
+            return new RedirectView("/login?error=login_failed");
         }
     }
 }
