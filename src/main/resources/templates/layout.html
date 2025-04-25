@@ -5,40 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${pageTitle}">Default Title</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        /* Custom styles for the navbar and layout */
-        body {
-            padding-top: 70px; /* Adjust for fixed navbar height */
-        }
-        .navbar-brand {
-            font-weight: bold;
-        }
-        .nav-item .nav-link {
-            color: #ffffff;
-            transition: color 0.3s ease;
-        }
-        .nav-item .nav-link:hover {
-            color: #eeeeee;
-        }
-        .dropdown-menu {
-            background-color: #343a40; /* Dark dropdown menu */
-            border: none;
-        }
-        .dropdown-item {
-            color: #ffffff;
-            transition: background-color 0.3s ease;
-        }
-        .dropdown-item:hover {
-            background-color: #495057; /* Darker hover for dropdown items */
-            color: #ffffff;
-        }
-        .dropdown-divider {
-            border-top: 1px solid rgba(255, 255, 255, 0.1); /* Light divider */
-        }
-        .container {
-            margin-top: 20px; /* Add some margin below the navbar */
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">

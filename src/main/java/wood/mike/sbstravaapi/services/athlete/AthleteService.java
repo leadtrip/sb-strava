@@ -14,7 +14,7 @@ public class AthleteService {
         this.athleteRepository = athleteRepository;
     }
 
-    public Optional<Athlete> getAthlete(Long stravaAthleteId) {
-        return athleteRepository.findByStravaAthleteId(stravaAthleteId);
+    public Optional<Athlete> getAthlete(Long id) {
+        return athleteRepository.findById(id);
     }
 }

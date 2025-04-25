@@ -1,6 +1,6 @@
 create table athlete
 (
-    id BIGINT NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
     strava_athlete_id BIGINT UNIQUE NOT NULL,
     country VARCHAR(60) NOT NULL,
     firstname VARCHAR(100) NOT NULL,
@@ -15,10 +15,12 @@ create table athlete
 
 create table athlete_token
 (
-    id BIGINT NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
     athlete_id INT UNIQUE NOT NULL,
     access_token VARCHAR(255) NOT NULL,
     refresh_token VARCHAR(255) NOT NULL,
     expires_at INT NOT NULL,
     expires_in INT NOT NULL
 );
+
+alter table athlete_token add constraint foreign key (athlete_id) references athlete (id);

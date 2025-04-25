@@ -1,0 +1,24 @@
+<table th:fragment="activityTable" class="table table-striped">
+    <thead>
+    <tr>
+        <th>Start Date</th>
+        <th>Name</th>
+        <th>Distance</th>
+        <th>Elapsed Time</th>
+        <th>Elevation Gain</th>
+        <th>Sport Type</th>
+        <th>Average Watts</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="activity : ${activities}">
+        <td th:text="${activity.startDate}"></td>
+        <td th:text="${activity.name}"></td>
+        <td th:text="${#numbers.formatDecimal(activity.distance / 1000, 0, 2)} + ' km'"></td>
+        <td th:text="${#temporals.format(activity.startDate, 'dd-MM-yyyy HH:mm')}"></td>
+        <td th:text="${#numbers.formatDecimal(activity.totalElevationGain, 0, 0)} + ' m'"></td>
+        <td th:text="${activity.sportType}"></td>
+        <td th:text="${activity.averageWatts != null ? #numbers.formatDecimal(activity.averageWatts, 0, 0) : '-'}"></td>
+    </tr>
+    </tbody>
+</table>

@@ -1,0 +1,54 @@
+/* ---- layout ---- */
+body {
+    padding-top: 70px;
+}
+.navbar-brand {
+    font-weight: bold;
+}
+.nav-item .nav-link {
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+.nav-item .nav-link:hover {
+    color: #eeeeee;
+}
+.dropdown-menu {
+    background-color: #343a40;
+    border: none;
+}
+.dropdown-item {
+    color: #ffffff;
+    transition: background-color 0.3s ease;
+}
+.dropdown-item:hover {
+    background-color: #495057;
+    color: #ffffff;
+}
+.dropdown-divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.container {
+    margin-top: 20px;
+}
+
+/* ---- athlete ---- */
+.profile-img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 3px solid #007bff;
+}
+.athlete-details {
+    background-color: #e9ecef;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+.detail-label {
+    font-weight: bold;
+    color: #003366;
+}
+.detail-value {
+    color: #004080;
+}

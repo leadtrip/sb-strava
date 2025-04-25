@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface AthleteTokenRepository extends JpaRepository<AthleteToken, Long> {
     Optional<AthleteToken> findByAthlete_StravaAthleteId(Long stravaAthleteId);
+    Optional<AthleteToken> findByAthleteId(Long athleteId);
 }

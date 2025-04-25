@@ -21,7 +21,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         }
 
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute(Constants.STRAVA_ATHLETE_ID) == null) {
+        if (session == null || session.getAttribute(Constants.ATHLETE_ID) == null) {
             log.info("No session exists for user, redirecting to /login");
             response.sendRedirect("/login");
             return false;
