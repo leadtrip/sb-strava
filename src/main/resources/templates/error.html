@@ -1,1 +1,7 @@
-${errorMessage}
+<div th:fragment="content">
+    <div class="error-container">
+        <h1>Error</h1>
+        <p th:text="${errorMessage}">An unexpected error occurred.</p>
+        <a href="/" class="btn btn-home">Go to Home Page</a>
+    </div>
+</div>

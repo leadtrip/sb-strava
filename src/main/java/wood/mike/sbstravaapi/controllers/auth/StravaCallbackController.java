@@ -62,7 +62,7 @@ public class StravaCallbackController {
             log.info("Successful login for Strava athlete: {}", athleteTokenDto);
             Athlete athlete = athleteTokenService.getAthlete(athleteTokenDto);
             request.getSession().setAttribute(Constants.STRAVA_ATHLETE_ID, athlete.getStravaAthleteId());
-            return new RedirectView("/athlete");
+            return new RedirectView("/profile");
         } else {
             log.error("Error retrieving athlete data: {}", responseEntity.getStatusCode());
             return new RedirectView("/login?error=login_failed");
