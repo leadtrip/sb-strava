@@ -1,0 +1,28 @@
+<div th:fragment="pagination-block">
+    <div class="d-flex justify-content-center my-4">
+        <nav>
+            <ul class="pagination">
+
+                <!-- Previous -->
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/activities(page=${currentPage - 1})}">Previous</a>
+                </li>
+
+                <li class="page-item"
+                    th:each="i : ${#numbers.sequence(
+                    T(java.lang.Math).max(0, currentPage - 4),
+                    T(java.lang.Math).max(0, currentPage - 4) + 9)}"
+                    th:if="${i < totalPages}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-link" th:href="@{/activities(page=${i})}" th:text="${i + 1}">1</a>
+                </li>
+
+                <li class="page-item">
+                    <a class="page-link" th:href="@{/activities(page=${currentPage + 1})}">Next</a>
+                </li>
+
+            </ul>
+        </nav>
+    </div>
+
+</div>

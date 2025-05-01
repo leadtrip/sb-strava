@@ -1,6 +1,7 @@
 package wood.mike.sbstravaapi.controllers.activity;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Controller
 public class ActivityController {
 
@@ -59,28 +61,28 @@ public class ActivityController {
 
         Athlete athlete = athleteOpt.get();
 
-        long localCount = activityRepository.countByAthlete(athlete);
-        int requiredCount = (page + 1) * size;
+        // Fetch from DB
+        Pageable pageable = PageRequest.of(page, size, Sort.by("startDate").descending());
+        Page<Activity> activityPage = activityRepository.findByAthlete(athlete, pageable);
 
-        if (localCount < requiredCount) {
-            // We need to fetch more from Strava
-            int toFetch = requiredCount - (int) localCount;
-            int stravaPage = (int) (localCount / size) + 1;
-            List<ActivityDto> fetched = stravaService.getActivities(stravaPage, toFetch);
+        // If requested page has fewer than pageSize results, fetch more from Strava
+        if (activityPage.isEmpty() || activityPage.getNumberOfElements() < size) {
+            log.info("Fetching more activities from Strava...");
+
+            List<ActivityDto> fetched = stravaService.getActivities(page, size);
             for (ActivityDto activityDto : fetched) {
                 if (!activityRepository.existsByStravaActivityId(activityDto.getId())) {
                     activityRepository.save(activityTransformer.toEntity(activityDto));
                 }
             }
+
+            activityPage = activityRepository.findByAthlete(athlete, pageable); // Re-fetch
         }
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("startDate").descending());
-        Page<Activity> activities = activityRepository.findByAthlete(athlete, pageable);
-
-        model.addAttribute("activities", activities.getContent());
+        model.addAttribute("activities", activityPage.getContent());
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", activities.getTotalPages());
-        model.addAttribute("pageTitle", "My Activities");
+        model.addAttribute("totalPages", activityPage.getTotalPages());
+        model.addAttribute("pageTitle", "All Activities");
         model.addAttribute("templateName", "activity/index");
 
         return "layout";
