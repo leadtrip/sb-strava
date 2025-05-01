@@ -9,7 +9,6 @@ import wood.mike.sbstravaapi.config.Constants;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.services.activity.ActivityService;
 import wood.mike.sbstravaapi.services.athlete.AthleteService;
-import wood.mike.sbstravaapi.services.strava.StravaService;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,13 +19,13 @@ public class AthleteController {
 
     private final AthleteService athleteService;
     private final ActivityService activityService;
-    private final StravaService stravaService;
     private final HttpSession httpSession;
 
-    public AthleteController(AthleteService athleteService, ActivityService activityService, StravaService stravaService, HttpSession httpSession) {
+    public AthleteController(AthleteService athleteService,
+                             ActivityService activityService,
+                             HttpSession httpSession) {
         this.athleteService = athleteService;
         this.activityService = activityService;
-        this.stravaService = stravaService;
         this.httpSession = httpSession;
     }
 
