@@ -33,14 +33,9 @@ public class AthleteController {
     @GetMapping("/profile")
     public String profile(Model model) {
         Long athleteId = (Long) httpSession.getAttribute(Constants.ATHLETE_ID);
-        log.info("Retrieved athlete ID from session: {}", athleteId);
         Optional<Athlete> athlete = athleteService.getAthlete(athleteId);
         if (athlete.isPresent()) {
             List<?> activities = activityService.getLatestActivities(athlete.get(), 10);
-            if(activities.isEmpty()) {
-                log.info("No activities found locally, fetching from Strava");
-                activities = stravaService.getActivities(1, 10);
-            }
             model.addAttribute("athlete", athlete.get());
             model.addAttribute("activities", activities);
             model.addAttribute("pageTitle", "Athlete Profile");

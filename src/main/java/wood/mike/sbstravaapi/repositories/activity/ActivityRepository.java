@@ -1,5 +1,6 @@
 package wood.mike.sbstravaapi.repositories.activity;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import wood.mike.sbstravaapi.entities.activity.Activity;
@@ -11,4 +12,7 @@ import java.util.Optional;
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
     List<Activity> findByAthleteOrderByStartDateDesc(Athlete athlete, Pageable pageable);
     Optional<Activity> findByStravaActivityId(Long stravaActivityId);
+    boolean existsByStravaActivityId(Long stravaActivityId);
+    Long countByAthlete(Athlete athlete);
+    Page<Activity> findByAthlete(Athlete athlete, Pageable pageable);
 }

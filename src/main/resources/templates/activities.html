@@ -14,7 +14,7 @@
     <tbody>
     <tr th:each="activity : ${activities}">
         <td th:text="${@activityFormatter.formatDateTime(activity.startDate)}"></td>
-        <td><a th:href="@{/activity/{id}(id=${activity.id})}" th:text="${activity.name}"></a></td>
+        <td><a th:href="@{/activity/{id}(id=${activity.stravaActivityId})}" th:text="${activity.name}"></a></td>
         <td th:text="${@activityFormatter.formatDistance(activity.distance)}"></td>
         <td th:text="${@activityFormatter.formatDuration(activity.elapsedTime)}"></td>
         <td th:text="${@activityFormatter.roundWithUnit(activity.totalElevationGain,'m')}"></td>

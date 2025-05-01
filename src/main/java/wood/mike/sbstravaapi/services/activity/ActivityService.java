@@ -12,7 +12,6 @@ import wood.mike.sbstravaapi.services.strava.StravaService;
 import wood.mike.sbstravaapi.transformers.activity.ActivityTransformer;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service

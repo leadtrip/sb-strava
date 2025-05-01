@@ -16,6 +16,7 @@ import wood.mike.sbstravaapi.config.Constants;
 import wood.mike.sbstravaapi.dtos.athlete.AthleteTokenDto;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.services.athlete.AthleteTokenService;
+import wood.mike.sbstravaapi.services.strava.StravaSyncService;
 
 @Slf4j
 @Controller
@@ -34,10 +35,12 @@ public class StravaCallbackController {
 
     private final RestClient restClient;
     private final AthleteTokenService athleteTokenService;
+    private final StravaSyncService stravaSyncService;
 
-    public StravaCallbackController(RestClient.Builder builder, AthleteTokenService athleteTokenService) {
+    public StravaCallbackController(RestClient.Builder builder, AthleteTokenService athleteTokenService, StravaSyncService stravaSyncService) {
         this.restClient = builder.baseUrl("https://www.strava.com/api/v3").build();
         this.athleteTokenService = athleteTokenService;
+        this.stravaSyncService = stravaSyncService;
     }
 
     @GetMapping("/oauth/callback")
@@ -62,6 +65,7 @@ public class StravaCallbackController {
             log.info("Successful login for Strava athlete: {}", athleteTokenDto);
             Athlete athlete = athleteTokenService.getAthlete(athleteTokenDto);
             request.getSession().setAttribute(Constants.ATHLETE_ID, athlete.getId());
+            stravaSyncService.syncAthlete(athlete.getId());
             return new RedirectView("/profile");
         } else {
             log.error("Error retrieving athlete data: {}", responseEntity.getStatusCode());
