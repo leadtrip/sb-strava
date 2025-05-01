@@ -35,7 +35,11 @@ public class ActivityController {
     private final ActivityRepository activityRepository;
     private final ActivityTransformer activityTransformer;
 
-    public ActivityController(ActivityService activityService, AthleteService athleteService, StravaService stravaService, ActivityRepository activityRepository, ActivityTransformer activityTransformer) {
+    public ActivityController(ActivityService activityService,
+                              AthleteService athleteService,
+                              StravaService stravaService,
+                              ActivityRepository activityRepository,
+                              ActivityTransformer activityTransformer) {
         this.activityService = activityService;
         this.athleteService = athleteService;
         this.stravaService = stravaService;
