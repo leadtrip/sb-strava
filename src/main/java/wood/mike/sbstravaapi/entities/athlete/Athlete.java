@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "athlete")
 @Getter
@@ -36,4 +38,6 @@ public class Athlete {
     private String ftp;
     @Column(name = "weight")
     private String weight;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 }

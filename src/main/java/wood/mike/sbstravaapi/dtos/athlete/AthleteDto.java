@@ -3,6 +3,8 @@ package wood.mike.sbstravaapi.dtos.athlete;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Data
 public class AthleteDto {
     @JsonProperty("id")
@@ -23,4 +25,6 @@ public class AthleteDto {
     private String ftp;
     @JsonProperty("weight")
     private String weight;
+    @JsonProperty("created_at")
+    private LocalDateTime createdAt;
 }

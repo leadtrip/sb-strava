@@ -34,6 +34,10 @@
                     <div class="col-sm-4"><span class="detail-label">Weight:</span></div>
                     <div class="col-sm-8"><span class="detail-value" th:text="${athlete.weight}"></span></div>
                 </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4"><span class="detail-label">Created:</span></div>
+                    <div class="col-sm-8"><span class="detail-value" th:text="${#temporals.format(athlete.createdAt, 'dd-MM-yyyy HH:mm')}"></span></div>
+                </div>
             </div>
         </div>
     </div>

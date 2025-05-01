@@ -9,7 +9,8 @@ create table athlete
     profile VARCHAR(255) NULL,
     profile_medium VARCHAR(255) NULL,
     sex VARCHAR(1) NULL,
-    weight FLOAT NULL
+    weight FLOAT NULL,
+    created_at DATETIME NOT NULL
 );
 
 

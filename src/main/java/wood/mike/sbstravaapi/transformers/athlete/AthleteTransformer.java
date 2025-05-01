@@ -17,6 +17,7 @@ public class AthleteTransformer {
         athlete.setProfile(athleteDto.getProfile());
         athlete.setProfileMedium(athleteDto.getProfileMedium());
         athlete.setWeight(athleteDto.getWeight());
+        athlete.setCreatedAt(athleteDto.getCreatedAt());
         return athlete;
     }
 }

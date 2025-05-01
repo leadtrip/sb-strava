@@ -15,7 +15,13 @@
         <td th:text="${#temporals.format(activity.startDate, 'dd-MM-yyyy HH:mm')}"></td>
         <td th:text="${activity.name}"></td>
         <td th:text="${#numbers.formatDecimal(activity.distance / 1000, 0, 2)} + ' km'"></td>
-        <td th:text="${activity.elapsedTime}"></td>
+        <td th:with="h=${activity.elapsedTime / 3600},
+             m=(${activity.elapsedTime % 3600}) / 60,
+             s=${activity.elapsedTime % 60}"
+            th:text="${#numbers.formatInteger(h, 2)} + ':' +
+             ${#numbers.formatInteger(m, 2)} + ':' +
+             ${#numbers.formatInteger(s, 2)}">
+        </td>
         <td th:text="${#numbers.formatDecimal(activity.totalElevationGain, 0, 0)} + ' m'"></td>
         <td th:text="${activity.sportType}"></td>
         <td th:text="${activity.averageWatts != null ? #numbers.formatDecimal(activity.averageWatts, 0, 0) : '-'}"></td>
