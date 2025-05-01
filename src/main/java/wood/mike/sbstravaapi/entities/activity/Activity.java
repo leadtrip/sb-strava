@@ -24,6 +24,9 @@ public class Activity {
     @JoinColumn(name = "athlete_id")
     private Athlete athlete;
 
+    @Column(name = "strava_activity_id", nullable = false, length = 100)
+    private Long stravaActivityId;
+
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 

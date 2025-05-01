@@ -17,4 +17,6 @@ public class AthleteService {
     public Optional<Athlete> getAthlete(Long id) {
         return athleteRepository.findById(id);
     }
+
+    public Optional<Athlete> getAthleteByStravaId(Long stravaId) {return athleteRepository.findByStravaAthleteId(stravaId);}
 }

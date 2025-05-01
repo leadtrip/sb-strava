@@ -6,7 +6,9 @@ import wood.mike.sbstravaapi.entities.activity.Activity;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
     List<Activity> findByAthleteOrderByStartDateDesc(Athlete athlete, Pageable pageable);
+    Optional<Activity> findByStravaActivityId(Long stravaActivityId);
 }

@@ -52,3 +52,31 @@ body {
 .detail-value {
     color: #004080;
 }
+
+/* ---- activity ---- */
+.activity-details {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.activity-detail-label {
+    font-weight: bold;
+    color: #0c4a6e;
+}
+.activity-detail-value {
+    color: #334155;
+}
+.data-row {
+    margin-bottom: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 12px;
+}
+.section-title {
+    color: #1e293b;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #94a3b8;
+    padding-bottom: 0.5rem;
+}

@@ -4,12 +4,22 @@ import org.springframework.stereotype.Service;
 import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
 import wood.mike.sbstravaapi.entities.activity.Activity;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
+import wood.mike.sbstravaapi.services.athlete.AthleteService;
 
 @Service
 public class ActivityTransformer {
-    public Activity toEntity(ActivityDto activityDto, Athlete athlete) {
+
+    private final AthleteService athleteService;
+
+    public ActivityTransformer(AthleteService athleteService) {
+        this.athleteService = athleteService;
+    }
+
+    public Activity
+    toEntity(ActivityDto activityDto) {
         Activity activityEntity = new Activity();
-        activityEntity.setAthlete(athlete);
+        activityEntity.setStravaActivityId(activityDto.getId());
+        activityEntity.setAthlete(athleteService.getAthleteByStravaId(activityDto.getAthlete().getStravaAthleteId()).orElseThrow(() -> new RuntimeException("Athlete not found")));
         activityEntity.setName(activityDto.getName());
         activityEntity.setDistance(activityDto.getDistance());
         activityEntity.setMovingTime(activityDto.getMovingTime());
@@ -27,6 +37,7 @@ public class ActivityTransformer {
         activityEntity.setAverageWatts(activityDto.getAverageWatts());
         activityEntity.setMaxWatts(activityDto.getMaxWatts());
         activityEntity.setWeightedAverageWatts(activityDto.getWeightedAverageWatts());
+        activityEntity.setSufferScore(activityDto.getSufferScore());
         return activityEntity;
     }
 }

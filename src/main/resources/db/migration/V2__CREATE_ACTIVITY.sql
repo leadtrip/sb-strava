@@ -1,5 +1,6 @@
 create table activity (
     id INT NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
+    strava_activity_id BIGINT NOT NULL UNIQUE,
     athlete_id INT NOT NULL,
     name VARCHAR(100) NOT NULL ,
     distance FLOAT NOT NULL ,

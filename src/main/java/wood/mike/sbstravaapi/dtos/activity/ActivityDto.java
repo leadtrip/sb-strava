@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 
 @Data
 public class ActivityDto {
+    @JsonProperty("id")
+    private Long id;
     @JsonProperty("athlete")
     private AthleteDto athlete;
     @JsonProperty("name")
