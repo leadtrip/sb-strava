@@ -11,7 +11,7 @@ services:
       test: [ "CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}" ]
       interval: 5s
       timeout: 5s
-      retries: 3
+      retries: 4
       start_period: 10s
     ports:
       - "3306:3306"

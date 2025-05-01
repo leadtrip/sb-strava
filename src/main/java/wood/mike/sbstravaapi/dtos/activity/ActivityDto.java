@@ -44,4 +44,6 @@ public class ActivityDto {
     private Integer maxWatts;
     @JsonProperty("weighted_average_watts")
     private Integer weightedAverageWatts;
+    @JsonProperty("suffer_score")
+    private Integer sufferScore;
 }

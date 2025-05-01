@@ -12,17 +12,16 @@ import java.util.List;
 public interface StravaApiClient {
 
     @GetMapping("/athlete")
-    ResponseEntity<AthleteDto> fetchAthlete(String accessToken);
+    ResponseEntity<AthleteDto> fetchAthlete();
 
     @GetMapping("/activities/{activityId}")
-    ResponseEntity<ActivityDto> fetchActivity(@PathVariable String activityId, String accessToken);
+    ResponseEntity<ActivityDto> fetchActivity(@PathVariable String activityId);
 
     @GetMapping("/activities")
     ResponseEntity<List<ActivityDto>> fetchActivities(
             @RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "per_page", required = false) Integer perPage,
-            String accessToken);
+            @RequestParam(value = "per_page", required = false) Integer perPage);
 
     @GetMapping("/activities")
-    ResponseEntity<List<ActivityDto>> activitiesAfter(@RequestParam Long after, String accessToken);
+    ResponseEntity<List<ActivityDto>> activitiesAfter(@RequestParam Long after);
 }

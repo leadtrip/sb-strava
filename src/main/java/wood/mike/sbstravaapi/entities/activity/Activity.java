@@ -74,4 +74,7 @@ public class Activity {
 
     @Column(name = "weighted_average_watts")
     private Integer weightedAverageWatts;
+
+    @Column(name = "suffer_score")
+    private Integer sufferScore;
 }

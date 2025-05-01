@@ -17,7 +17,8 @@ create table activity (
     kilojoules FLOAT,
     average_watts FLOAT,
     max_watts INT,
-    weighted_average_watts INT
+    weighted_average_watts INT,
+    suffer_score INT
 );
 
 alter table activity add constraint foreign key (athlete_id) references athlete (id);

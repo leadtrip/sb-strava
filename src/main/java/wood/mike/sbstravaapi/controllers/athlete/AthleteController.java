@@ -39,7 +39,7 @@ public class AthleteController {
             List<?> activities = activityService.getLatestActivities(athlete.get(), 10);
             if(activities.isEmpty()) {
                 log.info("No activities found locally, fetching from Strava");
-                activities = stravaService.getActivities(1, 10, athleteId);
+                activities = stravaService.getActivities(1, 10);
             }
             model.addAttribute("athlete", athlete.get());
             model.addAttribute("activities", activities);

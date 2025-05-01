@@ -21,43 +21,39 @@ public class StravaApiClientImpl implements StravaApiClient {
     }
 
     @Override
-    public ResponseEntity<AthleteDto> fetchAthlete(String accessToken) {
+    public ResponseEntity<AthleteDto> fetchAthlete() {
         return this.restClient.get()
                 .uri("/athlete")
-                .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
                 .toEntity(AthleteDto.class);
     }
 
     @Override
-    public ResponseEntity<ActivityDto> fetchActivity(String activityId, String accessToken) {
+    public ResponseEntity<ActivityDto> fetchActivity(String activityId) {
         return this.restClient.get()
                 .uri("/activities/{activityId}", activityId)
-                .header("Authorization", "Bearer " + accessToken) // Add header here
                 .retrieve()
                 .toEntity(ActivityDto.class);
     }
 
     @Override
-    public ResponseEntity<List<ActivityDto>> fetchActivities(Integer page, Integer perPage, String accessToken) {
+    public ResponseEntity<List<ActivityDto>> fetchActivities(Integer page, Integer perPage) {
         return this.restClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/activities")
                         .queryParam("page", page)
                         .queryParam("per_page", perPage)
                         .build())
-                .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
                 .toEntity(new ParameterizedTypeReference<>() {
                 });
     }
 
     @Override
-    public ResponseEntity<List<ActivityDto>> activitiesAfter(Long after, String accessToken) {
+    public ResponseEntity<List<ActivityDto>> activitiesAfter(Long after) {
         return this.restClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/activities")
                         .queryParam("after", after)
                         .build())
-                .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
                 .toEntity(new ParameterizedTypeReference<>() {});
     }
