@@ -13,12 +13,14 @@ public class StravaAuthService {
 
     public StravaAuthService(
             @Value("${strava.client.id}") String clientId,
-            @Value("${strava.redirect.uri}") String redirectUri) {
-        this.stravaAuthUrl = UriComponentsBuilder.fromUriString("https://www.strava.com/oauth/authorize")
+            @Value("${strava.redirect.uri}") String redirectUri,
+            @Value("${strava.oauth.url}") String url,
+            @Value("${strava.oauth.scope}") String scope) {
+        this.stravaAuthUrl = UriComponentsBuilder.fromUriString(url)
                 .queryParam("client_id", clientId)
                 .queryParam("response_type", "code")
                 .queryParam("redirect_uri", redirectUri)
-                .queryParam("scope", "read,activity:read_all")
+                .queryParam("scope", scope)
                 .build()
                 .toUriString();
     }

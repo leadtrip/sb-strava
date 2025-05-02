@@ -38,6 +38,7 @@
 </nav>
 
 <main class="container">
+    <h1 th:text="${pageTitle}"></h1>
     <div th:replace="~{${templateName} :: ${fragmentName != null ? fragmentName : 'content'}}"></div>
 </main>
 
