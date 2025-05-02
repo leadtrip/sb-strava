@@ -35,7 +35,7 @@ public class Athlete {
     @Column(name = "sex")
     private String sex;
     @Column(name = "ftp")
-    private String ftp;
+    private Integer ftp;
     @Column(name = "weight")
     private String weight;
     @Column(name = "created_at")

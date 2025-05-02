@@ -22,7 +22,7 @@ public class AthleteDto {
     @JsonProperty("sex")
     private String sex;
     @JsonProperty("ftp")
-    private String ftp;
+    private Integer ftp;
     @JsonProperty("weight")
     private String weight;
     @JsonProperty("created_at")

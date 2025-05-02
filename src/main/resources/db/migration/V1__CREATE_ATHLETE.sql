@@ -4,7 +4,7 @@ create table athlete
     strava_athlete_id BIGINT UNIQUE NOT NULL,
     country VARCHAR(60) NOT NULL,
     firstname VARCHAR(100) NOT NULL,
-    ftp TINYINT NULL,
+    ftp SMALLINT NULL,
     lastname VARCHAR(255) NOT NULL,
     profile VARCHAR(255) NULL,
     profile_medium VARCHAR(255) NULL,

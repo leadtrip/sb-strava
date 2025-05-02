@@ -31,14 +31,6 @@
                 <div class="col-sm-8"><span class="activity-detail-value" th:text="${@activityFormatter.roundWithUnit(activity.totalElevationGain,'m')}"></span></div>
             </div>
             <div class="row data-row">
-                <div class="col-sm-4"><span class="activity-detail-label">Elevation High:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${@activityFormatter.roundWithUnit(activity.elevHigh,'m')}"></span></div>
-            </div>
-            <div class="row data-row">
-                <div class="col-sm-4"><span class="activity-detail-label">Elevation Low:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${@activityFormatter.roundWithUnit(activity.elevLow,'m')}"></span></div>
-            </div>
-            <div class="row data-row">
                 <div class="col-sm-4"><span class="activity-detail-label">Average Speed:</span></div>
                 <div class="col-sm-8"><span class="activity-detail-value" th:text="${@activityFormatter.formatSpeed(activity.averageSpeed)}"></span></div>
             </div>
@@ -47,12 +39,8 @@
                 <div class="col-sm-8"><span class="activity-detail-value" th:text="${@activityFormatter.formatSpeed(activity.maxSpeed)}"></span></div>
             </div>
             <div class="row data-row">
-                <div class="col-sm-4"><span class="activity-detail-label">Gear ID:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.gearId}"></span></div>
-            </div>
-            <div class="row data-row">
                 <div class="col-sm-4"><span class="activity-detail-label">Kilojoules:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${#numbers.formatDecimal(activity.kilojoules, 0, 2)} + ' kJ'"></span></div>
+                <div class="col-sm-8"><span class="activity-detail-value" th:text="${@activityFormatter.roundWithUnit(activity.kilojoules,'kJ')}"></span></div>
             </div>
             <div class="row data-row">
                 <div class="col-sm-4"><span class="activity-detail-label">Average Watts:</span></div>

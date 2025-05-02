@@ -69,11 +69,11 @@ public class ActivityController {
         Pageable pageable = PageRequest.of(page, size, Sort.by("startDate").descending());
         Page<Activity> activityPage = activityRepository.findByAthlete(athlete, pageable);
 
-        // If requested page has fewer than pageSize results, fetch more from Strava
+        // If the requested page has fewer than pageSize results, fetch more from Strava
         if (activityPage.isEmpty() || activityPage.getNumberOfElements() < size) {
             log.info("Fetching more activities from Strava...");
 
-            List<ActivityDto> fetched = stravaService.getActivities(page, size);
+            List<ActivityDto> fetched = stravaService.getActivities(page + 1, size);
             for (ActivityDto activityDto : fetched) {
                 if (!activityRepository.existsByStravaActivityId(activityDto.getId())) {
                     activityRepository.save(activityTransformer.toEntity(activityDto));
