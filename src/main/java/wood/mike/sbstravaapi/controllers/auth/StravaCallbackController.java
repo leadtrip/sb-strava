@@ -28,11 +28,6 @@ public class StravaCallbackController {
     @Value("${strava.client.secret}")
     private String clientSecret;
 
-    @Value("${strava.redirect.uri}")
-    private String redirectUri;
-
-    private static final String STRAVA_TOKEN_URL = "https://www.strava.com/oauth/token";
-
     private final RestClient restClient;
     private final AthleteTokenService athleteTokenService;
     private final StravaSyncService stravaSyncService;
@@ -50,7 +45,6 @@ public class StravaCallbackController {
         body.add("client_secret", clientSecret);
         body.add("code", authorizationCode);
         body.add("grant_type", "authorization_code");
-        body.add("redirect_uri", redirectUri);
 
         ResponseEntity<AthleteTokenDto> responseEntity = this.restClient.post()
                 .uri("/oauth/token")
@@ -62,7 +56,7 @@ public class StravaCallbackController {
         AthleteTokenDto athleteTokenDto = responseEntity.getBody();
 
         if (responseEntity.getStatusCode().is2xxSuccessful() && athleteTokenDto != null) {
-            log.info("Successful login for Strava athlete: {}", athleteTokenDto);
+            log.info("Successful login for Strava athlete: {}", athleteTokenDto.getStravaAthleteId());
             Athlete athlete = athleteTokenService.getAthlete(athleteTokenDto);
             request.getSession().setAttribute(Constants.ATHLETE_ID, athlete.getId());
             stravaSyncService.syncAthlete(athlete.getId(), 1);
