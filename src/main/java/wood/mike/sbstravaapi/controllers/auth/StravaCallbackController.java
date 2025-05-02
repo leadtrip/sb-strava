@@ -2,16 +2,12 @@ package wood.mike.sbstravaapi.controllers.auth;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestClient;
 import org.springframework.web.servlet.view.RedirectView;
+import wood.mike.sbstravaapi.clients.StravaApiClient;
 import wood.mike.sbstravaapi.config.Constants;
 import wood.mike.sbstravaapi.dtos.athlete.AthleteTokenDto;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
@@ -22,40 +18,21 @@ import wood.mike.sbstravaapi.services.strava.StravaSyncService;
 @Controller
 public class StravaCallbackController {
 
-    @Value("${strava.client.id}")
-    private String clientId;
-
-    @Value("${strava.client.secret}")
-    private String clientSecret;
-
-    private final RestClient restClient;
     private final AthleteTokenService athleteTokenService;
     private final StravaSyncService stravaSyncService;
+    private final StravaApiClient stravaApiClient;
 
-    public StravaCallbackController(RestClient.Builder builder,
-                                    AthleteTokenService athleteTokenService,
+    public StravaCallbackController(AthleteTokenService athleteTokenService,
                                     StravaSyncService stravaSyncService,
-                                    @Value("${strava.api.base.url}") String stravaApiBaseUrl) {
-        this.restClient = builder.baseUrl(stravaApiBaseUrl).build();
+                                    StravaApiClient stravaApiClient) {
+        this.stravaApiClient = stravaApiClient;
         this.athleteTokenService = athleteTokenService;
         this.stravaSyncService = stravaSyncService;
     }
 
     @GetMapping("/oauth/callback")
     public RedirectView handleStravaCallback(@RequestParam("code") String authorizationCode, HttpServletRequest request) {
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("client_id", clientId);
-        body.add("client_secret", clientSecret);
-        body.add("code", authorizationCode);
-        body.add("grant_type", "authorization_code");
-
-        ResponseEntity<AthleteTokenDto> responseEntity = this.restClient.post()
-                .uri("/oauth/token")
-                .headers(httpHeaders -> httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .body(body)
-                .retrieve()
-                .toEntity(AthleteTokenDto.class);
-
+        ResponseEntity<AthleteTokenDto> responseEntity = this.stravaApiClient.fetchAthleteToken(authorizationCode);
         AthleteTokenDto athleteTokenDto = responseEntity.getBody();
 
         if (responseEntity.getStatusCode().is2xxSuccessful() && athleteTokenDto != null) {

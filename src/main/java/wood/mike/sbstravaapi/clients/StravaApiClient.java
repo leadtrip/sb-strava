@@ -6,10 +6,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.http.ResponseEntity;
 import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
 import wood.mike.sbstravaapi.dtos.athlete.AthleteDto;
+import wood.mike.sbstravaapi.dtos.athlete.AthleteTokenDto;
 
 import java.util.List;
 
 public interface StravaApiClient {
+
+    @GetMapping("/token")
+    ResponseEntity<AthleteTokenDto> fetchAthleteToken(@RequestParam("code") String authorizationCode);
 
     @GetMapping("/athlete")
     ResponseEntity<AthleteDto> fetchAthlete();
