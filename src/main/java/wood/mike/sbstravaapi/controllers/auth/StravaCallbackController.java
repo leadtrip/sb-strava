@@ -32,8 +32,11 @@ public class StravaCallbackController {
     private final AthleteTokenService athleteTokenService;
     private final StravaSyncService stravaSyncService;
 
-    public StravaCallbackController(RestClient.Builder builder, AthleteTokenService athleteTokenService, StravaSyncService stravaSyncService) {
-        this.restClient = builder.baseUrl("https://www.strava.com/api/v3").build();
+    public StravaCallbackController(RestClient.Builder builder,
+                                    AthleteTokenService athleteTokenService,
+                                    StravaSyncService stravaSyncService,
+                                    @Value("${strava.api.base.url}") String stravaApiBaseUrl) {
+        this.restClient = builder.baseUrl(stravaApiBaseUrl).build();
         this.athleteTokenService = athleteTokenService;
         this.stravaSyncService = stravaSyncService;
     }
