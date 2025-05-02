@@ -28,7 +28,7 @@ public class ActivityDto {
     private Float elevLow;
     @JsonProperty("sport_type")
     private String sportType;
-    @JsonProperty("start_date")
+    @JsonProperty("start_date_local")
     private LocalDateTime startDate;
     @JsonProperty("timezone")
     private String timezone;
