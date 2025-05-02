@@ -50,6 +50,22 @@ public class StravaApiClientImpl implements StravaApiClient {
     }
 
     @Override
+    public ResponseEntity<AthleteTokenDto> refreshAthleteToken(String refreshToken) {
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("client_id", clientId);
+        body.add("client_secret", clientSecret);
+        body.add("refresh_token", refreshToken);
+        body.add("grant_type", "refresh_token");
+
+        return this.restClient.post()
+                .uri("/oauth/token")
+                .headers(httpHeaders -> httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .body(body)
+                .retrieve()
+                .toEntity(AthleteTokenDto.class);
+    }
+
+    @Override
     public ResponseEntity<AthleteDto> fetchAthlete() {
         return this.restClient.get()
                 .uri("/athlete")

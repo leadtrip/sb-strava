@@ -15,6 +15,9 @@ public interface StravaApiClient {
     @GetMapping("/token")
     ResponseEntity<AthleteTokenDto> fetchAthleteToken(@RequestParam("code") String authorizationCode);
 
+    @GetMapping("/refreshtoken")
+    ResponseEntity<AthleteTokenDto> refreshAthleteToken(@RequestParam("refresh_token") String refreshToken);
+
     @GetMapping("/athlete")
     ResponseEntity<AthleteDto> fetchAthlete();
 

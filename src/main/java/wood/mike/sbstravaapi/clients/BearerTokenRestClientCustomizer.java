@@ -6,8 +6,7 @@ import org.springframework.boot.web.client.RestClientCustomizer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import wood.mike.sbstravaapi.config.Constants;
-import wood.mike.sbstravaapi.entities.athlete.AthleteToken;
-import wood.mike.sbstravaapi.repositories.athlete.AthleteTokenRepository;
+import wood.mike.sbstravaapi.services.athlete.AthleteTokenService;
 
 import java.net.URI;
 
@@ -15,12 +14,13 @@ import java.net.URI;
 @Component
 public class BearerTokenRestClientCustomizer implements RestClientCustomizer {
 
-    private final AthleteTokenRepository athleteTokenRepository;
     private final HttpSession httpSession;
+    private final AthleteTokenService athleteTokenService;
 
-    public BearerTokenRestClientCustomizer(AthleteTokenRepository athleteTokenRepository, HttpSession httpSession) {
-        this.athleteTokenRepository = athleteTokenRepository;
+    public BearerTokenRestClientCustomizer(HttpSession httpSession,
+                                           AthleteTokenService athleteTokenService) {
         this.httpSession = httpSession;
+        this.athleteTokenService = athleteTokenService;
     }
 
     @Override
@@ -44,7 +44,6 @@ public class BearerTokenRestClientCustomizer implements RestClientCustomizer {
         if (athleteId == null) {
             throw new RuntimeException("Athlete ID not found in session");
         }
-        AthleteToken token = athleteTokenRepository.findByAthleteId(athleteId).orElseThrow(() -> new RuntimeException("Athlete not found"));
-        return token.getAccessToken();
+        return athleteTokenService.getValidAccessToken(athleteId);
     }
 }
