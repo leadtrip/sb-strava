@@ -35,28 +35,27 @@ public class StravaApiClientImpl implements StravaApiClient {
 
     @Override
     public ResponseEntity<AthleteTokenDto> fetchAthleteToken(String authorizationCode) {
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("client_id", clientId);
-        body.add("client_secret", clientSecret);
+        MultiValueMap<String, String> body = commonTokenBody("authorization_code");
         body.add("code", authorizationCode);
-        body.add("grant_type", "authorization_code");
-
-        return this.restClient.post()
-                .uri("/oauth/token")
-                .headers(httpHeaders -> httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .body(body)
-                .retrieve()
-                .toEntity(AthleteTokenDto.class);
+        return fetchToken(body);
     }
 
     @Override
     public ResponseEntity<AthleteTokenDto> refreshAthleteToken(String refreshToken) {
+        MultiValueMap<String, String> body = commonTokenBody("refresh_token");
+        body.add("refresh_token", refreshToken);
+        return fetchToken(body);
+    }
+
+    MultiValueMap <String, String> commonTokenBody(String grantType) {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("client_id", clientId);
         body.add("client_secret", clientSecret);
-        body.add("refresh_token", refreshToken);
-        body.add("grant_type", "refresh_token");
+        body.add("grant_type", grantType);
+        return body;
+    }
 
+    private ResponseEntity<AthleteTokenDto> fetchToken(MultiValueMap<String, String> body) {
         return this.restClient.post()
                 .uri("/oauth/token")
                 .headers(httpHeaders -> httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED))
