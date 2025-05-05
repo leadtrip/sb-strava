@@ -1,0 +1,47 @@
+<div th:fragment="weekly">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <h3>Weekly load</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Year</th>
+            <th>Week</th>
+            <th>Total Suffer Score</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entry : ${weeklyScores}">
+            <td th:text="${entry.year}"></td>
+            <td th:text="${entry.week}"></td>
+            <td th:text="${entry.totalScore}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <canvas id="sufferScoreChart" height="400"></canvas>
+
+    <script th:inline="javascript">
+        const ctx = document.getElementById('sufferScoreChart');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: /*[[${labels}]]*/ [],
+                datasets: [{
+                    label: 'Weekly Suffer Score',
+                    data: /*[[${values}]]*/ [],
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</div>
+<div th:fragment="errorMessage">
+    <span th:text="${errorMessage}"></span>
+</div>

@@ -23,7 +23,11 @@ function removeImages() {
     echo "Removing Docker images..."
     docker image rm sb-strava-app -f
     docker image rm sb-strava-db -f
-    docker volume rm sb-strava_db_data
+}
+
+function removeData() {
+  echo "Removing data..."
+  docker volume rm sb-strava_db_data
 }
 
 function displayHelp() {
@@ -31,6 +35,7 @@ function displayHelp() {
     echo "Options:"
     echo "  -c, --clean   Perform a gradle clean before building"
     echo "  -r, --remove  Remove Docker images before building"
+    echo "  -d, --removeData Remove database volume"
     echo "  -h, --help    Display this help message"
     echo "  --no-start  Don't start the docker compose"
 }
@@ -38,6 +43,7 @@ function displayHelp() {
 function __run__() {
     local CLEAN="false"
     local REMOVE_IMAGES="false"
+    local REMOVE_DATA="false"
     local START_CONTAINER="true"
 
     while [[ $# -gt 0 ]]; do
@@ -49,6 +55,10 @@ function __run__() {
             ;;
         -r | --remove)
             REMOVE_IMAGES="true"
+            shift
+            ;;
+        -d | --removeData)
+            REMOVE_DATA="true"
             shift
             ;;
         -h | --help)
@@ -74,6 +84,9 @@ function __run__() {
     composeDown
     if [ "$REMOVE_IMAGES" = "true" ]; then
         removeImages
+    fi
+    if [ "$REMOVE_DATA" = "true" ]; then
+      removeData
     fi
     buildProjects
     if [ "$START_CONTAINER" = "true" ]; then

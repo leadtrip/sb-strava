@@ -41,8 +41,8 @@ public class StravaSyncService {
         this.httpSession = httpSession;
     }
 
-    @Async
-    @Scheduled(fixedRateString = "PT1H")
+    //@Async
+    //@Scheduled(fixedRateString = "PT1H", initialDelayString = "10000")
     public void scheduledSync() {
         log.info("Performing scheduled Strava activity sync");
         Long athleteId = (Long) httpSession.getAttribute(Constants.ATHLETE_ID);
@@ -53,6 +53,7 @@ public class StravaSyncService {
         }
     }
 
+    @Async
     public void syncAthlete(Long athleteId, int maxPages) {
         athleteRepository.findById(athleteId).ifPresent(athlete -> {
             for (int page = 1; page <= maxPages; page++) {
