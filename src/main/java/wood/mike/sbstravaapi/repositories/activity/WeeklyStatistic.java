@@ -26,11 +26,6 @@ public class WeeklyStatistic {
                 .with(WeekFields.ISO.weekOfYear(), week)
                 .with(WeekFields.ISO.dayOfWeek(), 1);
     }
-
-    public Long getTotalAsLong() {
-        return total.longValue();
-    }
-
 }
 
 

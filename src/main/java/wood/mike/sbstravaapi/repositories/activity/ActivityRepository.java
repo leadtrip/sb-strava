@@ -25,10 +25,13 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
             "ORDER BY YEAR(a.startDate), WEEK(a.startDate)")
     List<WeeklyStatistic> sumSufferScoreByWeek(@Param("athlete") Athlete athlete);
 
-    @Query("SELECT NEW wood.mike.sbstravaapi.repositories.activity.WeeklyStatistic(YEAR(a.startDate), WEEK(a.startDate), SUM(a.distance)) " +
+    @Query("SELECT NEW wood.mike.sbstravaapi.repositories.activity.WeeklyStatistic(" +
+            "YEAR(a.startDate), WEEK(a.startDate), SUM(a.distance)) " +
             "FROM Activity a " +
             "WHERE a.athlete = :athlete " +
             "GROUP BY YEAR(a.startDate), WEEK(a.startDate) " +
             "ORDER BY YEAR(a.startDate), WEEK(a.startDate)")
     List<WeeklyStatistic> sumDistanceByWeek(@Param("athlete") Athlete athlete);
+
+
 }

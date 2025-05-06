@@ -24,8 +24,8 @@ public class StatisticsService {
                 .map(stat -> stat.getWeekStartDate().format(DateTimeFormatter.ofPattern("dd MMM yyyy")))
                 .toList();
 
-        List<Long> values = weeklyStatistics.stream()
-                .map(WeeklyStatistic::getTotalAsLong)
+        List<Number> values = weeklyStatistics.stream()
+                .map(WeeklyStatistic::getTotal)
                 .toList();
 
         return Map.of(
