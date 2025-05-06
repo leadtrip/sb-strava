@@ -3,7 +3,6 @@ const chartRenderers = {
     distance: (labels, values) => renderBarChart(labels, values, v => Math.round(v / 1000), 'Distance (km)'),
 };
 
-
 let currentChart;
 
 function renderChart(reportType, labels, values) {
@@ -54,28 +53,106 @@ function renderBarChart(labels, values, valueConverter, label) {
 
     const min = Math.min(...values);
     const max = Math.max(...values);
+    const highlightIndex = 0;
 
-    const backgroundColors = values.map(v => getColorForValue(v, min, max));
+    const backgroundColors = values.map((v, i) =>
+        i === highlightIndex
+            ? 'rgba(0,0,0,0.85)'
+            : getColorForValue(v, min, max)
+    );
 
-    const chart = new Chart(ctx, {
+    const convertedValues = valueConverter ? values.map(valueConverter) : values;
+
+    return new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: labels,
+            labels,
             datasets: [{
-                label: label,
-                data: valueConverter ? values.map(valueConverter) : values,
+                label,
+                data: convertedValues,
                 backgroundColor: backgroundColors,
                 borderWidth: 2,
-                borderRadius: 5,
+                borderRadius: 20,
             }]
         },
         options: {
             indexAxis: 'y',
+            responsive: true,
+            animation: {
+                duration: 1000,
+                easing: 'easeOutBounce'
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        color: '#333',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.parsed.x;
+                            return `${label}: ${value}${label.includes('Distance') ? ' km' : ''}`;
+                        }
+                    }
+                },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'right',
+                    color: '#000',
+                    font: {
+                        size: 12,
+                        weight: 'bold'
+                    },
+                    formatter: function(value) {
+                        return value;
+                    }
+                }
+            },
             scales: {
-                x: { beginAtZero: true }
-            }
-        }
+                x: {
+                    position: 'top',
+                    beginAtZero: true
+                }
+            },
+            onClick: (e, elements) => {
+                if (elements.length > 0) {
+                    const index = elements[0].index;
+                    const initialDateString = labels[index];
+                    const {from, to} = getActivitySearchDates(initialDateString);
+                    window.location.href = `/activities/filter?from=${from}&to=${to}`;
+                }
+            },
+        },
+        plugins: [ChartDataLabels]
     });
+}
 
-    return chart;
+function getActivitySearchDates(dateString) {
+    const [day, month, year] = dateString.split(" ");
+
+    console.log("day", day, "month", month, "year", year)
+
+    const monthIndex = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].indexOf(month);
+
+    if (monthIndex === -1) {
+        return "Invalid Month"; // Handle invalid month
+    }
+    const from = new Date(year, monthIndex, parseInt(day, 10));
+
+    if (isNaN(from.getTime())) {
+        return "Invalid Date";
+    }
+
+    const to = new Date(from.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+    return {
+        from: from.toISOString().slice(0, 19),
+        to: to.toISOString().slice(0, 19)
+    };
 }
