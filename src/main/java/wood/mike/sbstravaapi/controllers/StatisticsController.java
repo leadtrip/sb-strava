@@ -1,21 +1,23 @@
 package wood.mike.sbstravaapi.controllers;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 import wood.mike.sbstravaapi.config.Constants;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
-import wood.mike.sbstravaapi.repositories.activity.WeeklySufferScore;
 import wood.mike.sbstravaapi.services.activity.StatisticsService;
 import wood.mike.sbstravaapi.services.athlete.AthleteService;
 
-import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+@Slf4j
 @Controller
 public class StatisticsController {
 
@@ -34,36 +36,24 @@ public class StatisticsController {
         return "layout";
     }
 
-    @GetMapping("/statistics/report")
-    public String loadReportFragment(@RequestParam("reportType") String reportType,
-                                     Model model,
-                                     HttpSession session) {
+    @GetMapping("/statistics/data/{reportType}")
+    @ResponseBody
+    public ResponseEntity<?> getReportData(
+            @PathVariable("reportType") String reportType,
+            HttpSession session) {
         Long athleteId = (Long) session.getAttribute(Constants.ATHLETE_ID);
         Optional<Athlete> athlete = athleteService.getAthlete(athleteId);
         if (athlete.isEmpty()) {
-            model.addAttribute("errorMessage", "Athlete not found");
-            return "statistics/statistics :: errorMessage";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Athlete not found"));
         }
 
         switch (reportType) {
-            case "weekly":
-                List<WeeklySufferScore> weeklyScores = statisticsService.getWeeklySufferScores(athlete.get());
-                model.addAttribute("weeklyScores", weeklyScores);   // adding this for tabular format, can be removed
-
-                List<String> labels = weeklyScores.stream()
-                        .map(score -> score.getWeekStartDate().format(DateTimeFormatter.ofPattern("dd MMM yyyy")))
-                        .collect(Collectors.toList());
-
-                List<Long> values = weeklyScores.stream()
-                        .map(WeeklySufferScore::getTotalScore)
-                        .collect(Collectors.toList());
-
-                model.addAttribute("labels", labels);
-                model.addAttribute("values", values);
-                return "statistics/statistics :: weekly";
+            case "load":
+                return ResponseEntity.ok(statisticsService.getWeeklySufferScores(athlete.get()));
             default:
-                model.addAttribute("errorMessage", "Unknown report type");
-                return "statistics/statistics :: errorMessage";
+                return ResponseEntity.badRequest().body(Map.of("error", "Unknown report type"));
         }
+
     }
 }

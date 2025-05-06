@@ -1,25 +1,18 @@
 <div th:fragment="content">
     <select class="custom-select" id="reportTypeSelect" aria-label="Select report">
         <option selected disabled>Select a report</option>
-        <option value="weekly">Weekly load</option>
+        <option value="load">Load</option>
     </select>
 
-    <div id="reportContainer" class="mt-4">
-        <!-- Report content here -->
-    </div>
+    <canvas id="chartCanvas" height="400" class="mt-4"></canvas>
 
     <script>
         document.getElementById('reportTypeSelect').addEventListener('change', function () {
             const reportType = this.value;
-            fetch(`/statistics/report?reportType=${reportType}`)
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById('reportContainer').innerHTML = html;
-                })
-                .catch(error => {
-                    console.error('Error loading report:', error);
-                    document.getElementById('reportContainer').innerHTML = '<p class="text-danger">Failed to load report.</p>';
-                });
+            fetch(`/statistics/data/${reportType}`)
+                .then(res => res.json())
+                .then(({ labels, values }) => renderChart(reportType, labels, values))
+                .catch(err => console.error('Chart load failed:', err));
         });
     </script>
 </div>

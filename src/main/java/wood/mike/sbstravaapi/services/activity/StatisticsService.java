@@ -5,7 +5,9 @@ import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.repositories.activity.ActivityRepository;
 import wood.mike.sbstravaapi.repositories.activity.WeeklySufferScore;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class StatisticsService {
@@ -16,7 +18,19 @@ public class StatisticsService {
         this.activityRepository = activityRepository;
     }
 
-    public List<WeeklySufferScore> getWeeklySufferScores(Athlete athlete) {
-        return this.activityRepository.sumSufferScoreByWeek(athlete);
+    public Map<String, List<?>> getWeeklySufferScores(Athlete athlete) {
+        List<WeeklySufferScore> weeklyScores =  this.activityRepository.sumSufferScoreByWeek(athlete).reversed();
+        List<String> labels = weeklyScores.stream()
+                .map(score -> score.getWeekStartDate().format(DateTimeFormatter.ofPattern("dd MMM yyyy")))
+                .toList();
+
+        List<Long> values = weeklyScores.stream()
+                .map(WeeklySufferScore::getTotalScore)
+                .toList();
+
+        return Map.of(
+                "labels", labels,
+                "values", values
+        );
     }
 }
