@@ -1,5 +1,5 @@
 const chartRenderers = {
-    load: renderSufferScoreChart,
+    load: renderLoadChart,
     distance: renderDistanceChart,
 };
 
@@ -19,7 +19,7 @@ function renderChart(reportType, labels, values) {
     currentChart = renderer(labels, values);
 }
 
-function renderSufferScoreChart(labels, values) {
+function renderLoadChart(labels, values) {
     const ctx = document.getElementById('chartCanvas');
     if (!ctx) return;
 
@@ -28,7 +28,7 @@ function renderSufferScoreChart(labels, values) {
         data: {
             labels,
             datasets: [{
-                label: 'Weekly Suffer Score',
+                label: 'Weekly load',
                 data: values,
                 backgroundColor: 'rgba(54, 162, 235, 0.6)',
             }]

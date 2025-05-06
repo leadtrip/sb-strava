@@ -18,12 +18,17 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     Long countByAthlete(Athlete athlete);
     Page<Activity> findByAthlete(Athlete athlete, Pageable pageable);
 
-    @Query("SELECT NEW wood.mike.sbstravaapi.repositories.activity.WeeklySufferScore(YEAR(a.startDate), WEEK(a.startDate), SUM(a.sufferScore)) " +
+    @Query("SELECT NEW wood.mike.sbstravaapi.repositories.activity.WeeklyStatistic(YEAR(a.startDate), WEEK(a.startDate), SUM(a.sufferScore)) " +
             "FROM Activity a " +
             "WHERE a.athlete = :athlete " +
             "GROUP BY YEAR(a.startDate), WEEK(a.startDate) " +
             "ORDER BY YEAR(a.startDate), WEEK(a.startDate)")
-    List<WeeklySufferScore> sumSufferScoreByWeek(@Param("athlete") Athlete athlete);
+    List<WeeklyStatistic> sumSufferScoreByWeek(@Param("athlete") Athlete athlete);
 
-
+    @Query("SELECT NEW wood.mike.sbstravaapi.repositories.activity.WeeklyStatistic(YEAR(a.startDate), WEEK(a.startDate), SUM(a.distance)) " +
+            "FROM Activity a " +
+            "WHERE a.athlete = :athlete " +
+            "GROUP BY YEAR(a.startDate), WEEK(a.startDate) " +
+            "ORDER BY YEAR(a.startDate), WEEK(a.startDate)")
+    List<WeeklyStatistic> sumDistanceByWeek(@Param("athlete") Athlete athlete);
 }

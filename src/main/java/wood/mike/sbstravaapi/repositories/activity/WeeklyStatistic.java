@@ -6,25 +6,29 @@ import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 
 @Getter
-public class WeeklySufferScore {
+public class WeeklyStatistic {
 
-    private final int year;
-    private final int week;
-    private final long totalScore;
+    private final Integer year;
+    private final Integer week;
+    private final Number total;
     private final LocalDate weekStartDate;
 
-    public WeeklySufferScore(int year, int week, long totalScore) {
+    public WeeklyStatistic(Integer year, Integer week, Number total) {
         this.year = year;
         this.week = week;
-        this.totalScore = totalScore;
+        this.total = total;
         this.weekStartDate = getStartOfWeek(year, week);
     }
 
-    private LocalDate getStartOfWeek(int year, int week) {
+    private LocalDate getStartOfWeek(Integer year, Integer week) {
         return LocalDate
                 .ofYearDay(year, 1)
                 .with(WeekFields.ISO.weekOfYear(), week)
                 .with(WeekFields.ISO.dayOfWeek(), 1);
+    }
+
+    public Long getTotalAsLong() {
+        return total.longValue();
     }
 
 }
