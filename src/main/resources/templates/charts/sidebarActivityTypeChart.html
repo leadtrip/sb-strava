@@ -1,0 +1,11 @@
+<div th:fragment="content">
+    <div style="width: 200px; height: 200px;">
+        <canvas id="activityTypeChart"></canvas>
+    </div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        let jsactivities = [[${activities}]];
+        /*]]>*/
+    </script>
+    <script>renderActivityTypeChart(jsactivities)</script>
+</div>

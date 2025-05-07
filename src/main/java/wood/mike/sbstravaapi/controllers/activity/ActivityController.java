@@ -84,6 +84,7 @@ public class ActivityController {
         model.addAttribute("totalPages", activityPage.getTotalPages());
         model.addAttribute("pageTitle", "All Activities");
         model.addAttribute("templateName", "activity/index");
+        model.addAttribute("leftSidebarFragment", "charts/sidebarActivityTypeChart");
 
         return "layout";
     }
@@ -121,6 +122,7 @@ public class ActivityController {
         model.addAttribute("totalPages", 1);
         model.addAttribute("pageTitle", "Filtered Activities");
         model.addAttribute("templateName", "activity/index");
+        model.addAttribute("leftSidebarFragment", "charts/sidebarActivityTypeChart");
 
         return "layout";
     }

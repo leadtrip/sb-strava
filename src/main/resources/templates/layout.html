@@ -6,6 +6,12 @@
     <title th:text="${pageTitle}">Default Title</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/main.css}">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script th:src="@{/js/chart.js}"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
@@ -37,16 +43,25 @@
     </div>
 </nav>
 
-<main class="container">
-    <h1 th:text="${pageTitle}"></h1>
-    <div th:replace="~{${templateName} :: ${fragmentName != null ? fragmentName : 'content'}}"></div>
+<main class="container d-flex gap-3">
+    <!-- Left sidebar -->
+    <aside class="d-none d-lg-block" style="width: 25%;" th:if="${leftSidebarFragment != null}">
+        <div th:replace="~{__${leftSidebarFragment}__ :: content}"></div>
+    </aside>
+
+    <!-- Main content -->
+    <section class="flex-grow-1">
+        <h1 th:text="${pageTitle}">Page Title</h1>
+        <div th:replace="~{${templateName} :: ${fragmentName != null ? fragmentName : 'content'}}"></div>
+    </section>
+
+    <!-- Right sidebar -->
+    <aside class="d-none d-lg-block" style="width: 25%;" th:if="${rightSidebarFragment != null}">
+        <div th:replace="~{__${rightSidebarFragment}__ :: content}"></div>
+    </aside>
 </main>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-<script th:src="@{/js/chart.js}"></script>
+
+
 </body>
 </html>

@@ -154,3 +154,45 @@ function getActivitySearchDates(dateString) {
         to: to.toISOString().slice(0, 19)
     };
 }
+
+function renderActivityTypeChart(activities) {
+    const typeCounts = activities.reduce((acc, activity) => {
+        acc[activity.sportType] = (acc[activity.sportType] || 0) + 1;
+        return acc;
+    }, {});
+
+    const labels = Object.keys(typeCounts);
+    const values = Object.values(typeCounts);
+
+    const ctx = document.getElementById('activityTypeChart').getContext('2d');
+
+    return new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: values,
+                backgroundColor: [
+                    '#4CAF50', // green
+                    '#2196F3', // blue
+                    '#FF9800', // orange
+                    '#E91E63', // pink
+                    '#9C27B0'  // purple
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Activity Type Breakdown'
+                }
+            }
+        }
+    });
+}
