@@ -102,9 +102,6 @@ public class ActivityController {
             return "layout";
         }
 
-        // Define the date format, assuming the format is like "yyyy-MM-dd HH:mm"
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
         LocalDateTime fromDate = LocalDateTime.parse(from);
         LocalDateTime toDate = LocalDateTime.parse(to);
 
