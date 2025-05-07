@@ -173,11 +173,11 @@ function renderActivityTypeChart(activities) {
             datasets: [{
                 data: values,
                 backgroundColor: [
-                    '#4CAF50', // green
-                    '#2196F3', // blue
-                    '#FF9800', // orange
-                    '#E91E63', // pink
-                    '#9C27B0'  // purple
+                    '#4CAF50',
+                    '#2196F3',
+                    '#FF9800',
+                    '#E91E63',
+                    '#9C27B0'
                 ],
                 borderWidth: 1
             }]

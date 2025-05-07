@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${pageTitle}">Default Title</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
@@ -15,7 +15,8 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="/">Strava App</a>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">sb-stranalyze</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -41,26 +42,32 @@
             </li>
         </ul>
     </div>
+    </div>
 </nav>
 
-<main class="container d-flex gap-3">
-    <!-- Left sidebar -->
-    <aside class="d-none d-lg-block" style="width: 25%;" th:if="${leftSidebarFragment != null}">
-        <div th:replace="~{__${leftSidebarFragment}__ :: content}"></div>
-    </aside>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Left sidebar -->
+        <div class="col-md-3 d-flex justify-content-center align-items-center">
+            <div th:if="${leftSidebarFragment != null}">
+                <div th:replace="~{__${leftSidebarFragment}__ :: content}"></div>
+            </div>
+        </div>
 
-    <!-- Main content -->
-    <section class="flex-grow-1">
-        <h1 th:text="${pageTitle}">Page Title</h1>
-        <div th:replace="~{${templateName} :: ${fragmentName != null ? fragmentName : 'content'}}"></div>
-    </section>
+        <!-- Main content -->
+        <div class="col-md-6">
+            <h1 th:text="${pageTitle}"></h1>
+            <div th:replace="~{${templateName} :: ${fragmentName != null ? fragmentName : 'content'}}"></div>
+        </div>
 
-    <!-- Right sidebar -->
-    <aside class="d-none d-lg-block" style="width: 25%;" th:if="${rightSidebarFragment != null}">
-        <div th:replace="~{__${rightSidebarFragment}__ :: content}"></div>
-    </aside>
-</main>
-
+        <!-- Right sidebar -->
+        <div class="col-md-3 d-flex justify-content-center align-items-center">
+            <div th:if="${rightSidebarFragment != null}">
+                <div th:replace="~{__${rightSidebarFragment}__ :: content}"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 </body>
