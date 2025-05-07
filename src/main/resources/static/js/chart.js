@@ -44,7 +44,7 @@ function getColorForValue(value, min, max) {
     const g = Math.round(lower.color[1] + rangePct * (upper.color[1] - lower.color[1]));
     const b = Math.round(lower.color[2] + rangePct * (upper.color[2] - lower.color[2]));
 
-    return `rgb(${r},${g},${b})`;
+    return `rgb(${r},${g},${b},0.4)`;
 }
 
 function renderBarChart(labels, values, valueConverter, label) {
@@ -57,7 +57,7 @@ function renderBarChart(labels, values, valueConverter, label) {
 
     const backgroundColors = values.map((v, i) =>
         i === highlightIndex
-            ? 'rgba(0,0,0,0.85)'
+            ? 'rgba(54, 162, 235, 0.4)'
             : getColorForValue(v, min, max)
     );
 
@@ -136,12 +136,10 @@ function renderBarChart(labels, values, valueConverter, label) {
 function getActivitySearchDates(dateString) {
     const [day, month, year] = dateString.split(" ");
 
-    console.log("day", day, "month", month, "year", year)
-
     const monthIndex = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].indexOf(month);
 
     if (monthIndex === -1) {
-        return "Invalid Month"; // Handle invalid month
+        return "Invalid Month";
     }
     const from = new Date(year, monthIndex, parseInt(day, 10));
 
