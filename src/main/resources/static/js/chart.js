@@ -161,8 +161,19 @@ function renderActivityTypeChart(activities) {
         return acc;
     }, {});
 
+    const activityColors = {
+        'VirtualRide': '#4CAF50',
+        'Ride': '#2196F3',
+        'Run': '#f6db2a',
+        'Swim': '#FF9800',
+        'Walk': '#E91E63',
+        'Hike': '#9C27B0',
+        'WeightTraining': '#FF5722',
+    }
+
     const labels = Object.keys(typeCounts);
     const values = Object.values(typeCounts);
+    const backgroundColors = labels.map(label => activityColors[label] || '#CCCCCC');
 
     const ctx = document.getElementById('activityTypeChart').getContext('2d');
 
@@ -172,13 +183,7 @@ function renderActivityTypeChart(activities) {
             labels: labels,
             datasets: [{
                 data: values,
-                backgroundColor: [
-                    '#4CAF50',
-                    '#2196F3',
-                    '#FF9800',
-                    '#E91E63',
-                    '#9C27B0'
-                ],
+                backgroundColor: backgroundColors,
                 borderWidth: 1
             }]
         },
