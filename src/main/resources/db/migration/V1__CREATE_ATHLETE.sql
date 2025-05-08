@@ -2,7 +2,7 @@ create table athlete
 (
     id INT NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
     strava_athlete_id BIGINT UNIQUE NOT NULL,
-    country VARCHAR(60) NOT NULL,
+    country VARCHAR(60) NULL,
     firstname VARCHAR(100) NOT NULL,
     ftp SMALLINT NULL,
     lastname VARCHAR(255) NOT NULL,

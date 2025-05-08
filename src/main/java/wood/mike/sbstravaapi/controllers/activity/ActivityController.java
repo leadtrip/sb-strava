@@ -5,12 +5,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
+import wood.mike.sbstravaapi.dtos.activity.ActivityRow;
 import wood.mike.sbstravaapi.entities.activity.Activity;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.repositories.activity.ActivityRepository;
@@ -18,11 +21,15 @@ import wood.mike.sbstravaapi.services.activity.ActivityService;
 import wood.mike.sbstravaapi.services.athlete.AthleteService;
 import wood.mike.sbstravaapi.services.strava.StravaService;
 import wood.mike.sbstravaapi.transformers.activity.ActivityTransformer;
+import wood.mike.sbstravaapi.utils.ActivityFormatter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -33,17 +40,20 @@ public class ActivityController {
     private final StravaService stravaService;
     private final ActivityRepository activityRepository;
     private final ActivityTransformer activityTransformer;
+    private final ActivityFormatter activityFormatter;
 
     public ActivityController(ActivityService activityService,
                               AthleteService athleteService,
                               StravaService stravaService,
                               ActivityRepository activityRepository,
-                              ActivityTransformer activityTransformer) {
+                              ActivityTransformer activityTransformer,
+                              ActivityFormatter activityFormatter) {
         this.activityService = activityService;
         this.athleteService = athleteService;
         this.stravaService = stravaService;
         this.activityRepository = activityRepository;
         this.activityTransformer = activityTransformer;
+        this.activityFormatter = activityFormatter;
     }
 
     @GetMapping("/activities")
@@ -137,5 +147,38 @@ public class ActivityController {
         model.addAttribute("activity", activity);
         return "layout";
     }
+
+    @GetMapping("/filteredActivities")
+    public String getFilteredActivities(Model model) {
+        model.addAttribute("pageTitle", "All Activities");
+        model.addAttribute("templateName", "activity/filteredActivities");
+        model.addAttribute("leftSidebarFragment", "charts/sidebarActivityTypeChart");
+        return "layout";
+    }
+
+    @GetMapping("/localactivities")
+    public ResponseEntity<Map<String, Object>> getActivities(
+            @RequestParam int draw,
+            @RequestParam int start,
+            @RequestParam int length,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
+            @RequestParam(required = false) String activityType
+    ) {
+        int page = start / length;
+
+        Page<Activity> activities = activityService.findFiltered(page, length, from, to, activityType);
+        List<ActivityRow> rows = activities.getContent().stream()
+                .map(activity -> new ActivityRow(activity, activityFormatter))
+                .collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("draw", draw);
+        response.put("recordsTotal", activityService.countAll());
+        response.put("recordsFiltered", activities.getTotalElements());
+        response.put("data", rows);
+        return ResponseEntity.ok(response);
+    }
+
 
 }
