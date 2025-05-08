@@ -1,4 +1,3 @@
-<!-- templates/fragments/activitiesTable.html -->
 <div th:fragment="activitiesTable">
     <div class="row mb-3">
         <div class="col-md-3">
@@ -49,7 +48,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: /*[[@{/localactivities}]]*/,
+                    url: /*[[@{/filteredactivities}]]*/,
                     data: function (d) {
                         d.from = $('#fromDate').val();
                         d.to = $('#toDate').val();
@@ -70,6 +69,12 @@
 
             $('#filterBtn').on('click', function () {
                 table.ajax.reload();
+            });
+
+            table.on('xhr.dt', function (e, settings, json, xhr) {
+                if (json && json.data) {
+                    renderActivityTypeChart(json.data);
+                }
             });
         });
         /*]]>*/

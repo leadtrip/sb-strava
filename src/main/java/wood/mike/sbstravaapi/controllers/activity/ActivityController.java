@@ -56,10 +56,10 @@ public class ActivityController {
         this.activityFormatter = activityFormatter;
     }
 
-    @GetMapping("/activities")
-    public String activities(@RequestParam(defaultValue = "0") int page,
-                             @RequestParam(defaultValue = "10") int size,
-                             Model model) {
+    @GetMapping("/stravaactivities")
+    public String getStravaactivities(@RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "10") int size,
+                                      Model model) {
         Optional<Athlete> athleteOpt = athleteService.getCurrentlyLoggedInAthlete();
 
         if (athleteOpt.isEmpty()) {
@@ -148,16 +148,16 @@ public class ActivityController {
         return "layout";
     }
 
-    @GetMapping("/filteredActivities")
-    public String getFilteredActivities(Model model) {
+    @GetMapping("/localactivities")
+    public String getLocalActivities(Model model) {
         model.addAttribute("pageTitle", "All Activities");
-        model.addAttribute("templateName", "activity/filteredActivities");
+        model.addAttribute("templateName", "activity/localActivities");
         model.addAttribute("leftSidebarFragment", "charts/sidebarActivityTypeChart");
         return "layout";
     }
 
-    @GetMapping("/localactivities")
-    public ResponseEntity<Map<String, Object>> getActivities(
+    @GetMapping("/filteredactivities")
+    public ResponseEntity<Map<String, Object>> getFilteredActivities(
             @RequestParam int draw,
             @RequestParam int start,
             @RequestParam int length,

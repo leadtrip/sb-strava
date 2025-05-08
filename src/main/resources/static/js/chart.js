@@ -1,3 +1,6 @@
+let activityTypeChartInstance = null;
+
+
 const chartRenderers = {
     load: (labels, values) => renderBarChart(labels, values, null, 'Load'),
     distance: (labels, values) => renderBarChart(labels, values, v => Math.round(v / 1000), 'Distance (km)'),
@@ -177,7 +180,11 @@ function renderActivityTypeChart(activities) {
 
     const ctx = document.getElementById('activityTypeChart').getContext('2d');
 
-    return new Chart(ctx, {
+    if (activityTypeChartInstance) {
+        activityTypeChartInstance.destroy();
+    }
+
+    activityTypeChartInstance = new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: labels,
