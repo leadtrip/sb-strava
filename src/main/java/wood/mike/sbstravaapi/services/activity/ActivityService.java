@@ -10,6 +10,7 @@ import wood.mike.sbstravaapi.entities.activity.Activity;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.repositories.activity.ActivityRepository;
 import wood.mike.sbstravaapi.repositories.activity.ActivitySpecification;
+import wood.mike.sbstravaapi.services.athlete.AthleteService;
 import wood.mike.sbstravaapi.services.strava.StravaService;
 import wood.mike.sbstravaapi.transformers.activity.ActivityTransformer;
 
@@ -22,11 +23,16 @@ public class ActivityService {
     private final ActivityRepository activityRepository;
     private final ActivityTransformer activityTransformer;
     private final StravaService stravaService;
+    private final AthleteService athleteService;
 
-    public ActivityService(ActivityRepository activityRepository, ActivityTransformer activityTransformer, StravaService stravaService) {
+    public ActivityService(ActivityRepository activityRepository,
+                           ActivityTransformer activityTransformer,
+                           StravaService stravaService,
+                           AthleteService athleteService) {
         this.activityRepository = activityRepository;
         this.activityTransformer = activityTransformer;
         this.stravaService = stravaService;
+        this.athleteService = athleteService;
     }
 
     public Activity getActivity(Long stravaActivityId) {
@@ -45,12 +51,14 @@ public class ActivityService {
 
     public Page<Activity> findFiltered(int page, int size, LocalDateTime from, LocalDateTime to, String type) {
         log.info("Searching for filtered activities between {} and {} with type {}", from, to, type);
+        Athlete athlete = athleteService.getCurrentlyLoggedInAthlete().orElseThrow(() -> new RuntimeException("Athlete not found"));
         Pageable pageable = PageRequest.of(page, size, Sort.by("startDate").descending());
-        return activityRepository.findAll(ActivitySpecification.withFilters(from, to, type), pageable);
+        return activityRepository.findAll(ActivitySpecification.withFilters(from, to, type, athlete), pageable);
     }
 
     public long countFiltered(LocalDateTime from, LocalDateTime to, String type) {
-        return activityRepository.count(ActivitySpecification.withFilters(from, to, type));
+        Athlete athlete = athleteService.getCurrentlyLoggedInAthlete().orElseThrow(() -> new RuntimeException("Athlete not found"));
+        return activityRepository.count(ActivitySpecification.withFilters(from, to, type, athlete));
     }
 
     public long countAll() {
