@@ -128,7 +128,7 @@ function renderBarChart(labels, values, valueConverter, label) {
                     const index = elements[0].index;
                     const initialDateString = labels[index];
                     const {from, to} = getActivitySearchDates(initialDateString);
-                    window.location.href = `/activities/filter?from=${from}&to=${to}`;
+                    window.location.href = `/localactivities?from=${from}&to=${to}`;
                 }
             },
         },
@@ -144,19 +144,31 @@ function getActivitySearchDates(dateString) {
     if (monthIndex === -1) {
         return "Invalid Month";
     }
-    const from = new Date(year, monthIndex, parseInt(day, 10));
 
+    const from = new Date(year, monthIndex, parseInt(day, 10), 0, 0, 0);
     if (isNaN(from.getTime())) {
         return "Invalid Date";
     }
 
-    const to = new Date(from.getTime() + 7 * 24 * 60 * 60 * 1000);
+    const to = new Date(from);
+    to.setDate(to.getDate() + 6);
+    to.setHours(23, 59, 0, 0);
 
     return {
-        from: from.toISOString().slice(0, 19),
-        to: to.toISOString().slice(0, 19)
+        from: formatDateLocalISO(from),
+        to: formatDateLocalISO(to)
     };
 }
+
+
+function formatDateLocalISO(date) {
+    return date.getFullYear() +
+        '-' + String(date.getMonth() + 1).padStart(2, '0') +
+        '-' + String(date.getDate()).padStart(2, '0') +
+        'T' + String(date.getHours()).padStart(2, '0') +
+        ':' + String(date.getMinutes()).padStart(2, '0');
+}
+
 
 function renderActivityTypeChart(activities) {
     const typeCounts = activities.reduce((acc, activity) => {

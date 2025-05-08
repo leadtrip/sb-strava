@@ -50,9 +50,10 @@
                 ajax: {
                     url: /*[[@{/filteredactivities}]]*/,
                     data: function (d) {
-                        d.from = $('#fromDate').val();
-                        d.to = $('#toDate').val();
-                        d.activityType = $('#activityType').val();
+                        const urlParams = new URLSearchParams(window.location.search);
+                        d.from = $('#fromDate').val() || urlParams.get('from');
+                        d.to = $('#toDate').val() || urlParams.get('to');
+                        d.activityType = $('#activityType').val() || urlParams.get('type');
                     }
                 },
                 columns: [
@@ -79,4 +80,24 @@
         });
         /*]]>*/
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URLSearchParams(window.location.search);
+
+            const fromDate = urlParams.get("from");
+            const toDate = urlParams.get("to");
+            const activityType = urlParams.get("type");
+
+            if (fromDate) {
+                document.getElementById("fromDate").value = fromDate;
+            }
+            if (toDate) {
+                document.getElementById("toDate").value = toDate;
+            }
+            if (activityType) {
+                document.getElementById("activityType").value = activityType;
+            }
+        });
+    </script>
+
 </div>

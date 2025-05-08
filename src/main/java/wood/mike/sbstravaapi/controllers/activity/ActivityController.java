@@ -92,51 +92,12 @@ public class ActivityController {
         model.addAttribute("activities", activityPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", activityPage.getTotalPages());
-        model.addAttribute("pageTitle", "All Activities");
+        model.addAttribute("pageTitle", "Activities");
         model.addAttribute("templateName", "activity/index");
         model.addAttribute("leftSidebarFragment", "charts/sidebarActivityTypeChart");
 
         return "layout";
     }
-
-    @GetMapping("/activities/filter")
-    public String filteredActivities(@RequestParam String from,
-                                     @RequestParam String to,
-                                     @RequestParam(required = false) String type,
-                                     Model model) {
-        Optional<Athlete> athleteOpt = athleteService.getCurrentlyLoggedInAthlete();
-
-        if (athleteOpt.isEmpty()) {
-            model.addAttribute("errorMessage", "Athlete not found");
-            model.addAttribute("pageTitle", "Error");
-            model.addAttribute("templateName", "error");
-            return "layout";
-        }
-
-        LocalDateTime fromDate = LocalDateTime.parse(from);
-        LocalDateTime toDate = LocalDateTime.parse(to);
-
-        Athlete athlete = athleteOpt.get();
-        List<Activity> filteredActivities;
-
-        if (type != null && !type.isBlank()) {
-            filteredActivities = activityRepository
-                    .findByAthleteAndStartDateBetweenAndSportTypeIgnoreCaseOrderByStartDateDesc(athlete, fromDate, toDate, type);
-        } else {
-            filteredActivities = activityRepository
-                    .findByAthleteAndStartDateBetweenOrderByStartDateDesc(athlete, fromDate, toDate);
-        }
-
-        model.addAttribute("activities", filteredActivities);
-        model.addAttribute("currentPage", 0);
-        model.addAttribute("totalPages", 1);
-        model.addAttribute("pageTitle", "Filtered Activities");
-        model.addAttribute("templateName", "activity/index");
-        model.addAttribute("leftSidebarFragment", "charts/sidebarActivityTypeChart");
-
-        return "layout";
-    }
-
 
 
     @GetMapping("/activity/{id}")
@@ -150,7 +111,7 @@ public class ActivityController {
 
     @GetMapping("/localactivities")
     public String getLocalActivities(Model model) {
-        model.addAttribute("pageTitle", "All Activities");
+        model.addAttribute("pageTitle", "Activities");
         model.addAttribute("templateName", "activity/localActivities");
         model.addAttribute("leftSidebarFragment", "charts/sidebarActivityTypeChart");
         return "layout";

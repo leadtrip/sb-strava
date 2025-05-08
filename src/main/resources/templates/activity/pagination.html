@@ -5,7 +5,7 @@
 
                 <!-- Previous -->
                 <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                    <a class="page-link" th:href="@{/activities(page=${currentPage - 1})}">Previous</a>
+0                    <a class="page-link" th:href="@{/stravaactivities(page=${currentPage - 1})}">Previous</a>
                 </li>
 
                 <li class="page-item"
@@ -14,11 +14,11 @@
                     T(java.lang.Math).max(0, currentPage - 4) + 9)}"
                     th:if="${i < totalPages}"
                 th:classappend="${i == currentPage} ? 'active'">
-                <a class="page-link" th:href="@{/activities(page=${i})}" th:text="${i + 1}">1</a>
+                <a class="page-link" th:href="@{/stravaactivities(page=${i})}" th:text="${i + 1}">1</a>
                 </li>
 
                 <li class="page-item">
-                    <a class="page-link" th:href="@{/activities(page=${currentPage + 1})}">Next</a>
+                    <a class="page-link" th:href="@{/stravaactivities(page=${currentPage + 1})}">Next</a>
                 </li>
 
             </ul>
