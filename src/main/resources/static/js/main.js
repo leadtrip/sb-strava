@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const totalPagesToSync = document.getElementById('totalPagesToSync')?.value;
 
             showSpinner(true);
+            e.target.disabled = true;
 
             fetch('/activity/syncactivities', {
                 method: 'POST',
@@ -50,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .finally(() => {
                     showSpinner(false);
+                    e.target.disabled = false;
                 });
         }
     });
