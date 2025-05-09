@@ -6,9 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import wood.mike.sbstravaapi.config.Constants;
+import wood.mike.sbstravaapi.dtos.activity.ActivityStatsDto;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
-import wood.mike.sbstravaapi.services.activity.ActivityService;
 import wood.mike.sbstravaapi.services.athlete.AthleteService;
+import wood.mike.sbstravaapi.services.strava.StravaService;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,14 +19,14 @@ import java.util.Optional;
 public class AthleteController {
 
     private final AthleteService athleteService;
-    private final ActivityService activityService;
+    private final StravaService stravaService;
     private final HttpSession httpSession;
 
     public AthleteController(AthleteService athleteService,
-                             ActivityService activityService,
+                             StravaService stravaService,
                              HttpSession httpSession) {
         this.athleteService = athleteService;
-        this.activityService = activityService;
+        this.stravaService = stravaService;
         this.httpSession = httpSession;
     }
 
@@ -34,9 +35,9 @@ public class AthleteController {
         Long athleteId = (Long) httpSession.getAttribute(Constants.ATHLETE_ID);
         Optional<Athlete> athlete = athleteService.getAthlete(athleteId);
         if (athlete.isPresent()) {
-            List<?> activities = activityService.getLatestActivities(athlete.get(), 10);
+            ActivityStatsDto activityStats = stravaService.getAthleteStats(athlete.get().getStravaAthleteId());
             model.addAttribute("athlete", athlete.get());
-            model.addAttribute("activities", activities);
+            model.addAttribute("activityStats", activityStats);
             model.addAttribute("pageTitle", "Athlete Profile");
             model.addAttribute("templateName", "athlete/profile");
         } else {

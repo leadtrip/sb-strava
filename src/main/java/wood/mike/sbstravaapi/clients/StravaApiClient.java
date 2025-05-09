@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.http.ResponseEntity;
 import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
+import wood.mike.sbstravaapi.dtos.activity.ActivityStatsDto;
 import wood.mike.sbstravaapi.dtos.athlete.AthleteDto;
 import wood.mike.sbstravaapi.dtos.athlete.AthleteTokenDto;
 
@@ -20,6 +21,9 @@ public interface StravaApiClient {
 
     @GetMapping("/athlete")
     ResponseEntity<AthleteDto> fetchAthlete();
+
+    @GetMapping("/athlete/{id}/stats")
+    ResponseEntity<ActivityStatsDto> fetchAthleteStats(Long athleteId);
 
     @GetMapping("/activities/{activityId}")
     ResponseEntity<ActivityDto> fetchActivity(@PathVariable String activityId);

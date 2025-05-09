@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import wood.mike.sbstravaapi.clients.StravaApiClient;
 import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
+import wood.mike.sbstravaapi.dtos.activity.ActivityStatsDto;
 import wood.mike.sbstravaapi.dtos.athlete.AthleteDto;
 import wood.mike.sbstravaapi.repositories.athlete.AthleteTokenRepository;
 
@@ -23,6 +24,10 @@ public class StravaService {
     public AthleteDto getAthleteData() {
         ResponseEntity<AthleteDto> response = stravaApiClient.fetchAthlete();
         return response.getBody();
+    }
+
+    public ActivityStatsDto getAthleteStats(Long athleteId) {
+        return stravaApiClient.fetchAthleteStats(athleteId).getBody();
     }
 
     public ActivityDto getActivityData(String activityId) {

@@ -12,13 +12,27 @@ public class ActivityFormatter {
             DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
 
     public String formatDuration(int seconds) {
-        return String.format("%02d:%02d:%02d",
-                seconds / 3600,
-                (seconds % 3600) / 60,
-                seconds % 60);
+        return formatDuration((double) seconds);
+    }
+
+    public String formatDuration(double seconds) {
+        int totalSeconds = (int) Math.floor(seconds);
+        int hours = totalSeconds / 3600;
+        int minutes = (totalSeconds % 3600) / 60;
+        int secs = totalSeconds % 60;
+
+        if (hours > 0) {
+            return String.format("%d:%02d:%02d", hours, minutes, secs);
+        } else {
+            return String.format("%02d:%02d", minutes, secs);
+        }
     }
 
     public String formatDistance(Float meters) {
+        return meters == null ? "-" : String.format("%.2f km", meters / 1000f);
+    }
+
+    public String formatDistance(Double meters) {
         return meters == null ? "-" : String.format("%.2f km", meters / 1000f);
     }
 

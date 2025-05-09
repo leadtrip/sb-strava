@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.http.ResponseEntity;
 import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
+import wood.mike.sbstravaapi.dtos.activity.ActivityStatsDto;
 import wood.mike.sbstravaapi.dtos.athlete.AthleteDto;
 import wood.mike.sbstravaapi.dtos.athlete.AthleteTokenDto;
 
@@ -70,6 +71,14 @@ public class StravaApiClientImpl implements StravaApiClient {
                 .uri("/athlete")
                 .retrieve()
                 .toEntity(AthleteDto.class);
+    }
+
+    @Override
+    public ResponseEntity<ActivityStatsDto> fetchAthleteStats(Long athleteId) {
+        return this.restClient.get()
+                .uri("/athletes/{id}/stats", athleteId)
+                .retrieve()
+                .toEntity(ActivityStatsDto.class);
     }
 
     @Override

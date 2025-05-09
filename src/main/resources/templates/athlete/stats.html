@@ -1,0 +1,122 @@
+<div th:fragment="stats">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="athlete-details">
+                <div class="row mb-3">
+                    <div class="col-sm-4"><span class="detail-label">Longest ride:</span></div>
+                    <div class="col-sm-8"><span class="detail-value" th:text="${@activityFormatter.formatDistance(activityStats.biggestRideDistance)}"></span></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4"><span class="detail-label">Biggest climb:</span></div>
+                    <div class="col-sm-8"><span class="detail-value" th:text="${@activityFormatter.roundWithUnit(activityStats.biggestClimbElevationGain,'m')}"></span></div>
+                </div>
+            </div>
+            <br>
+            <ul class="nav nav-pills" id="activityStatsTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="cycling-tab" data-bs-toggle="tab" data-bs-target="#cycling" type="button" role="tab" aria-controls="cycling" aria-selected="true">Cycling</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="running-tab" data-bs-toggle="tab" data-bs-target="#running" type="button" role="tab" aria-controls="running" aria-selected="false">Running</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="swimming-tab" data-bs-toggle="tab" data-bs-target="#swimming" type="button" role="tab" aria-controls="swimming" aria-selected="false">Swimming</button>
+                </li>
+            </ul>
+            <div class="tab-content mt-3" id="activityStatsContent">
+                <div class="tab-pane fade show active" id="cycling" role="tabpanel" aria-labelledby="cycling-tab">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Period</th>
+                            <th>Distance (km)</th>
+                            <th>Moving Time</th>
+                            <th>Elevation Gain (m)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Recent (4wks)</td>
+                            <td th:text="${@activityFormatter.formatDistance(activityStats.recentRideTotals.distance)}">0</td>
+                            <td th:text="${@activityFormatter.formatDuration(activityStats.recentRideTotals.movingTime)}">0</td>
+                            <td th:text="${@activityFormatter.roundWithUnit(activityStats.recentRideTotals.elevationGain,'m')}">0</td>
+                        </tr>
+                        <tr>
+                            <td>Year to Date</td>
+                            <td th:text="${@activityFormatter.formatDistance(activityStats.ytdRideTotals.distance)}">0</td>
+                            <td th:text="${@activityFormatter.formatDuration(activityStats.ytdRideTotals.movingTime)}">0</td>
+                            <td th:text="${@activityFormatter.roundWithUnit(activityStats.ytdRideTotals.elevationGain,'m')}">0</td>
+                        </tr>
+                        <tr>
+                            <td>All Time</td>
+                            <td th:text="${@activityFormatter.formatDistance(activityStats.allRideTotals.distance)}">0</td>
+                            <td th:text="${@activityFormatter.formatDuration(activityStats.allRideTotals.movingTime)}">0</td>
+                            <td th:text="${@activityFormatter.roundWithUnit(activityStats.allRideTotals.elevationGain,'m')}">0</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="running" role="tabpanel" aria-labelledby="running-tab">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Period</th>
+                            <th>Distance (km)</th>
+                            <th>Moving Time</th>
+                            <th>Elevation Gain (m)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Recent (4wks)</td>
+                            <td th:text="${@activityFormatter.formatDistance(activityStats.recentRunTotals.distance)}">0</td>
+                            <td th:text="${@activityFormatter.formatDuration(activityStats.recentRunTotals.movingTime)}">0</td>
+                            <td th:text="${@activityFormatter.roundWithUnit(activityStats.recentRunTotals.elevationGain,'m')}">0</td>
+                        </tr>
+                        <tr>
+                            <td>Year to Date</td>
+                            <td th:text="${@activityFormatter.formatDistance(activityStats.ytdRunTotals.distance)}">0</td>
+                            <td th:text="${@activityFormatter.formatDuration(activityStats.ytdRunTotals.movingTime)}">0</td>
+                            <td th:text="${@activityFormatter.roundWithUnit(activityStats.ytdRunTotals.elevationGain,'m')}">0</td>
+                        </tr>
+                        <tr>
+                            <td>All Time</td>
+                            <td th:text="${@activityFormatter.formatDistance(activityStats.allRunTotals.distance)}">0</td>
+                            <td th:text="${@activityFormatter.formatDuration(activityStats.allRunTotals.movingTime)}">0</td>
+                            <td th:text="${@activityFormatter.roundWithUnit(activityStats.allRunTotals.elevationGain,'m')}">0</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="swimming" role="tabpanel" aria-labelledby="swimming-tab">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Period</th>
+                            <th>Distance (m)</th>
+                            <th>Moving Time</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Recent (4wks)</td>
+                            <td th:text="${@activityFormatter.formatDistance(activityStats.recentSwimTotals.distance)}">0</td>
+                            <td th:text="${@activityFormatter.formatDuration(activityStats.recentSwimTotals.movingTime)}">0</td>
+                        </tr>
+                        <tr>
+                            <td>Year to Date</td>
+                            <td th:text="${@activityFormatter.formatDistance(activityStats.ytdSwimTotals.distance)}">0</td>
+                            <td th:text="${@activityFormatter.formatDuration(activityStats.ytdSwimTotals.movingTime)}">0</td>
+                        </tr>
+                        <tr>
+                            <td>All Time</td>
+                            <td th:text="${@activityFormatter.formatDistance(activityStats.allSwimTotals.distance)}">0</td>
+                            <td th:text="${@activityFormatter.formatDuration(activityStats.allSwimTotals.movingTime)}">0</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
