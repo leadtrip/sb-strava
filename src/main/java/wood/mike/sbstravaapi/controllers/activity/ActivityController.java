@@ -57,8 +57,8 @@ public class ActivityController {
         this.activityFormatter = activityFormatter;
     }
 
-    @GetMapping("/stravaactivities")
-    public String getStravaactivities(@RequestParam(defaultValue = "0") int page,
+    @GetMapping("/activity/strava")
+    public String getStravaActivities(@RequestParam(defaultValue = "0") int page,
                                       @RequestParam(defaultValue = "10") int size,
                                       Model model) {
         Optional<Athlete> athleteOpt = athleteService.getCurrentlyLoggedInAthlete();
@@ -110,7 +110,7 @@ public class ActivityController {
         return "layout";
     }
 
-    @GetMapping("/localactivities")
+    @GetMapping("/activity/local")
     public String getLocalActivities(Model model) {
         model.addAttribute("pageTitle", "Activities");
         model.addAttribute("templateName", "activity/localActivities");

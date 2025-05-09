@@ -128,7 +128,7 @@ function renderBarChart(labels, values, valueConverter, label) {
                     const index = elements[0].index;
                     const initialDateString = labels[index];
                     const {from, to} = getActivitySearchDates(initialDateString);
-                    window.location.href = `/localactivities?from=${from}&to=${to}`;
+                    window.location.href = `/activity/local?from=${from}&to=${to}`;
                 }
             },
         },
