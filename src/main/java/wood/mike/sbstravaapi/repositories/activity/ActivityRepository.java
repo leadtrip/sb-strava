@@ -19,9 +19,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Long>, JpaSp
     boolean existsByStravaActivityId(Long stravaActivityId);
     Long countByAthlete(Athlete athlete);
     Page<Activity> findByAthlete(Athlete athlete, Pageable pageable);
-    List<Activity> findByAthleteAndStartDateBetweenOrderByStartDateDesc(Athlete athlete, LocalDateTime from, LocalDateTime to);
-    List<Activity> findByAthleteAndStartDateBetweenAndSportTypeIgnoreCaseOrderByStartDateDesc(Athlete athlete, LocalDateTime from, LocalDateTime to, String type);
-
+    Optional<Activity> findFirstByAthleteOrderByStartDateAsc(Athlete athlete);
 
     @Query("SELECT NEW wood.mike.sbstravaapi.repositories.activity.WeeklyStatistic(YEAR(a.startDate), WEEK(a.startDate), SUM(a.sufferScore)) " +
             "FROM Activity a " +

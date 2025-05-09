@@ -23,6 +23,10 @@ public class AthleteService {
         return getAthlete((Long) httpSession.getAttribute(Constants.ATHLETE_ID));
     }
 
+    public Athlete getCurrentlyLoggedInAthleteOrThrow() {
+        return getCurrentlyLoggedInAthlete().orElseThrow(() -> new RuntimeException("Could not find currently logged in athlete"));
+    }
+
     public Optional<Athlete> getAthlete(Long id) {
         return athleteRepository.findById(id);
     }

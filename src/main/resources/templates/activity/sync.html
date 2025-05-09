@@ -1,0 +1,22 @@
+<div th:fragment="content">
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label for="totalPagesToSync">How many?</label>
+            <select id="totalPagesToSync" class="form-select">
+                <option value="1">30</option>
+                <option value="2">60</option>
+                <option value="3">90</option>
+                <option value="4">120</option>
+                <option value="5">150</option>
+                <option value="6">180</option>
+                <option value="7">210</option>
+                <option value="8">240</option>
+                <option value="9">270</option>
+                <option value="10">300</option>
+            </select>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <button id="syncBtn" class="btn btn-primary w-100">Sync</button>
+        </div>
+    </div>
+</div>

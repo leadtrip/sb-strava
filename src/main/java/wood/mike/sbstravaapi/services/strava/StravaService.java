@@ -39,4 +39,9 @@ public class StravaService {
         ResponseEntity<List<ActivityDto>> response = stravaApiClient.activitiesAfter(after);
         return response.getBody();
     }
+
+    public List<ActivityDto> getActivitiesBefore(Long before) {
+        ResponseEntity<List<ActivityDto>> response = stravaApiClient.activitiesBefore(before);
+        return response.getBody();
+    }
 }

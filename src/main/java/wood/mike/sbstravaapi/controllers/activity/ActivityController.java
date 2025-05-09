@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
 import wood.mike.sbstravaapi.dtos.activity.ActivityRow;
@@ -142,4 +143,16 @@ public class ActivityController {
     }
 
 
+    @GetMapping("/activity/sync")
+    public String sync(Model model) {
+        model.addAttribute("pageTitle", "Sync activities");
+        model.addAttribute("templateName", "activity/sync");
+        return "layout";
+    }
+
+    @PostMapping("/activity/syncactivities")
+    public ResponseEntity<Integer> syncActivities(@RequestParam int totalPagesToSync) {
+        Integer totalSynced = activityService.syncActivities(totalPagesToSync);
+        return ResponseEntity.ok(totalSynced);
+    }
 }

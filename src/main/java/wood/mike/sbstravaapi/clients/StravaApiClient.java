@@ -31,4 +31,7 @@ public interface StravaApiClient {
 
     @GetMapping("/activities")
     ResponseEntity<List<ActivityDto>> activitiesAfter(@RequestParam Long after);
+
+    @GetMapping("/activities")
+    ResponseEntity<List<ActivityDto>> activitiesBefore(@RequestParam Long before);
 }

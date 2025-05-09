@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
 import wood.mike.sbstravaapi.entities.activity.Activity;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.repositories.activity.ActivityRepository;
@@ -15,7 +16,9 @@ import wood.mike.sbstravaapi.services.strava.StravaService;
 import wood.mike.sbstravaapi.transformers.activity.ActivityTransformer;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Service
@@ -63,5 +66,25 @@ public class ActivityService {
 
     public long countAll() {
         return activityRepository.count();
+    }
+
+    public Integer syncActivities(int totalPagesToSync) {
+        Athlete athlete = athleteService.getCurrentlyLoggedInAthleteOrThrow();
+        AtomicInteger totalSynced = new AtomicInteger();
+        for (int i = 0; i < totalPagesToSync; i++) {
+            activityRepository.findFirstByAthleteOrderByStartDateAsc(athlete).ifPresent(lastActivity -> {
+                    LocalDateTime oldestStartDate = lastActivity.getStartDate();
+                    log.info("Oldest activity start date is {}", oldestStartDate );
+                    List<ActivityDto> activities = stravaService.getActivitiesBefore(oldestStartDate.toEpochSecond(ZoneOffset.UTC));
+                    log.info("Fetched {} activities", activities.size());
+                    for (ActivityDto activityDto : activities) {
+                        if (!activityRepository.existsByStravaActivityId(activityDto.getId())) {
+                            activityRepository.save(activityTransformer.toEntity(activityDto));
+                            totalSynced.getAndIncrement();
+                        }
+                    }
+                });
+        }
+        return totalSynced.get();
     }
 }

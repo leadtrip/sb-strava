@@ -101,4 +101,14 @@ public class StravaApiClientImpl implements StravaApiClient {
                 .retrieve()
                 .toEntity(new ParameterizedTypeReference<>() {});
     }
+
+    @Override
+    public ResponseEntity<List<ActivityDto>> activitiesBefore(Long before) {
+        return this.restClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/activities")
+                        .queryParam("before", before)
+                        .build())
+                .retrieve()
+                .toEntity(new ParameterizedTypeReference<>() {});
+    }
 }
