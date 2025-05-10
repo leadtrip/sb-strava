@@ -1,6 +1,5 @@
-package wood.mike.sbstravaapi.controllers;
+package wood.mike.sbstravaapi.controllers.statistics;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
-import wood.mike.sbstravaapi.config.Constants;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.services.activity.StatisticsService;
 import wood.mike.sbstravaapi.services.athlete.AthleteService;
