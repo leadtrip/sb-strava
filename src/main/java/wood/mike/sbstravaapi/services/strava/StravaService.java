@@ -7,6 +7,7 @@ import wood.mike.sbstravaapi.clients.StravaApiClient;
 import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
 import wood.mike.sbstravaapi.dtos.activity.ActivityStatsDto;
 import wood.mike.sbstravaapi.dtos.athlete.AthleteDto;
+import wood.mike.sbstravaapi.dtos.segments.SummarySegmentDto;
 import wood.mike.sbstravaapi.repositories.athlete.AthleteTokenRepository;
 
 import java.util.List;
@@ -48,5 +49,9 @@ public class StravaService {
     public List<ActivityDto> getActivitiesBefore(Long before) {
         ResponseEntity<List<ActivityDto>> response = stravaApiClient.activitiesBefore(before);
         return response.getBody();
+    }
+
+    public List<SummarySegmentDto> getSummarySegments(Integer page, Integer perPage) {
+        return stravaApiClient.fetchStarredSegments(page, perPage).getBody();
     }
 }

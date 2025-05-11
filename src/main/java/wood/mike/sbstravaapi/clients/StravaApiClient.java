@@ -8,6 +8,7 @@ import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
 import wood.mike.sbstravaapi.dtos.activity.ActivityStatsDto;
 import wood.mike.sbstravaapi.dtos.athlete.AthleteDto;
 import wood.mike.sbstravaapi.dtos.athlete.AthleteTokenDto;
+import wood.mike.sbstravaapi.dtos.segments.SummarySegmentDto;
 
 import java.util.List;
 
@@ -38,4 +39,9 @@ public interface StravaApiClient {
 
     @GetMapping("/activities")
     ResponseEntity<List<ActivityDto>> activitiesBefore(@RequestParam Long before);
+
+    @GetMapping("/segments/starred")
+    ResponseEntity<List<SummarySegmentDto>> fetchStarredSegments(
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "per_page", required = false) Integer perPage);
 }

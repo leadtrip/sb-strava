@@ -13,6 +13,7 @@ import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
 import wood.mike.sbstravaapi.dtos.activity.ActivityStatsDto;
 import wood.mike.sbstravaapi.dtos.athlete.AthleteDto;
 import wood.mike.sbstravaapi.dtos.athlete.AthleteTokenDto;
+import wood.mike.sbstravaapi.dtos.segments.SummarySegmentDto;
 
 import java.util.List;
 
@@ -119,5 +120,17 @@ public class StravaApiClientImpl implements StravaApiClient {
                         .build())
                 .retrieve()
                 .toEntity(new ParameterizedTypeReference<>() {});
+    }
+
+    @Override
+    public ResponseEntity<List<SummarySegmentDto>> fetchStarredSegments(Integer page, Integer perPage) {
+        return this.restClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/segments/starred")
+                        .queryParam("page", page)
+                        .queryParam("per_page", perPage)
+                        .build())
+                .retrieve()
+                .toEntity(new ParameterizedTypeReference<>() {
+                });
     }
 }

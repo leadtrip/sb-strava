@@ -20,6 +20,7 @@ public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "athlete_id")
     private Athlete athlete;

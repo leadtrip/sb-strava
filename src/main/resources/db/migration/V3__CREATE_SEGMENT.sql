@@ -13,6 +13,7 @@ CREATE TABLE summary_segment
 (
     id                           INT AUTO_INCREMENT NOT NULL,
     strava_segment_id            INT NOT NULL,
+    athlete_id                   INT NOT NULL,
     name                         VARCHAR(255) NULL,
     activity_type                VARCHAR(255) NULL,
     distance                     FLOAT NULL,
@@ -40,7 +41,9 @@ CREATE TABLE summary_segment_effort
     distance                         FLOAT NULL,
     is_kom                           BIT(1) NULL,
     CONSTRAINT pk_summary_segment_effort PRIMARY KEY (id)
-);
+)
+
+alter table summary_segment add constraint foreign key (athlete_id) references athlete (id);
 
 ALTER TABLE summary_pr_segment_effort
     ADD CONSTRAINT uc_summary_pr_segment_effort_pr_activity UNIQUE (pr_activity_id);

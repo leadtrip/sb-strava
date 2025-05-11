@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import wood.mike.sbstravaapi.entities.athlete.Athlete;
 
 @Entity
 @Table(name = "summary_segment")
@@ -20,6 +21,10 @@ public class SummarySegment {
 
     @Column(name = "strava_segment_id", unique = true, nullable = false)
     private Long stravaSegmentId;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "athlete_id")
+    private Athlete athlete;
 
     @Column(name = "name")
     private String name;
