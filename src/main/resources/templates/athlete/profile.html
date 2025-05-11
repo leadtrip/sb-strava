@@ -1,44 +1,15 @@
 <div th:fragment="content">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="text-center mb-4">
-                <img th:src="${athlete.profile}" alt="Athlete Profile" class="profile-img">
+    <div class="text-center mb-4">
+        <img th:src="${athlete.profile}" alt="Athlete Profile" class="profile-img">
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg">
+                <div th:replace="~{athlete/profile_details :: details}"></div>
             </div>
-            <div class="athlete-details">
-                <div class="row mb-3">
-                    <div class="col-sm-4"><span class="detail-label">Strava ID:</span></div>
-                    <div class="col-sm-8"><span class="detail-value" th:text="${athlete.stravaAthleteId}"></span></div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-sm-4"><span class="detail-label">First Name:</span></div>
-                    <div class="col-sm-8"><span class="detail-value" th:text="${athlete.firstname}"></span></div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-sm-4"><span class="detail-label">Last Name:</span></div>
-                    <div class="col-sm-8"><span class="detail-value" th:text="${athlete.lastname}"></span></div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-sm-4"><span class="detail-label">Country:</span></div>
-                    <div class="col-sm-8"><span class="detail-value" th:text="${athlete.country}"></span></div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-sm-4"><span class="detail-label">Sex:</span></div>
-                    <div class="col-sm-8"><span class="detail-value" th:text="${athlete.sex}"></span></div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-sm-4"><span class="detail-label">FTP:</span></div>
-                    <div class="col-sm-8"><span class="detail-value" th:text="${athlete.ftp}"></span></div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-sm-4"><span class="detail-label">Weight:</span></div>
-                    <div class="col-sm-8"><span class="detail-value" th:text="${athlete.weight}"></span></div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-sm-4"><span class="detail-label">Created:</span></div>
-                    <div class="col-sm-8"><span class="detail-value" th:text="${@activityFormatter.formatDateTime(athlete.createdAt)}"></span></div>
-                </div>
+            <div class="col-lg">
+                <div th:replace="~{athlete/stats :: stats}"></div>
             </div>
         </div>
     </div>
-    <div th:replace="~{athlete/stats :: stats}"></div>
 </div>
