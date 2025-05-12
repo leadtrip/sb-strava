@@ -16,7 +16,7 @@ public class SegmentController {
     }
 
     @GetMapping("/sync")
-    public ResponseEntity<Integer> syncStarredSegments(Model model) {
+    public String syncStarredSegments(Model model) {
         model.addAttribute("pageTitle", "Sync starred segments");
         model.addAttribute("templateName", "segments/sync");
         return "layout";
