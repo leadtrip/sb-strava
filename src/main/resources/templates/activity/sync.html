@@ -16,7 +16,15 @@
             </select>
         </div>
         <div class="col-md-3 d-flex align-items-end">
-            <button id="syncBtn" class="btn btn-primary w-100">Sync</button>
+            <button id="syncActivitiesBtn"
+                    class="btn btn-primary"
+                    data-action="sync"
+                    data-url="/activity/sync"
+                    data-method="POST"
+                    data-param-id="totalPagesToSync">
+                Sync
+            </button>
+
         </div>
     </div>
 </div>

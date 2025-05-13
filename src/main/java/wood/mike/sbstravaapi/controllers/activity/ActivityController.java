@@ -150,7 +150,7 @@ public class ActivityController {
         return "layout";
     }
 
-    @PostMapping("/activity/syncactivities")
+    @PostMapping("/activity/sync")
     public ResponseEntity<Integer> syncActivities(@RequestParam int totalPagesToSync) {
         Integer totalSynced = activityService.syncActivities(totalPagesToSync);
         return ResponseEntity.ok(totalSynced);

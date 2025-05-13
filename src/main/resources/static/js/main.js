@@ -22,37 +22,48 @@ function showGlobalAlert(message, type = 'info', timeout = 5000) {
     }, timeout);
 }
 
-
-
 function hideGlobalAlert() {
     document.getElementById('globalAlert')?.classList.add('d-none');
 }
 
-
 document.addEventListener('DOMContentLoaded', function () {
     document.body.addEventListener('click', function (e) {
-        if (e.target && e.target.id === 'syncBtn') {
-            const totalPagesToSync = document.getElementById('totalPagesToSync')?.value;
+        const button = e.target;
+        if (!button || button.dataset.action !== 'sync') return;
 
-            showSpinner(true);
-            e.target.disabled = true;
+        const url = button.dataset.url;
+        const method = button.dataset.method || 'POST';
+        const paramId = button.dataset.paramId;
 
-            fetch('/activity/syncactivities', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: `totalPagesToSync=${encodeURIComponent(totalPagesToSync)}`
-            })
-                .then(response => response.json())
-                .then(data => {
-                    showGlobalAlert(`Synced ${data} rows successfully!`, 'success');
-                })
-                .catch(error => {
-                    showGlobalAlert('Sync failed. Please try again.', 'danger');
-                })
-                .finally(() => {
-                    showSpinner(false);
-                    e.target.disabled = false;
-                });
+        let body = null;
+
+        if (paramId) {
+            const paramValue = document.getElementById(paramId)?.value;
+            body = `${paramId}=${encodeURIComponent(paramValue)}`;
         }
+
+        showSpinner(true);
+        button.disabled = true;
+
+        fetch(url, {
+            method: method,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: body
+        })
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+            })
+            .then(data => {
+                showGlobalAlert(`Sync completed: ${JSON.stringify(data)}`, 'success');
+            })
+            .catch(() => {
+                showGlobalAlert('Sync failed. Please try again.', 'danger');
+            })
+            .finally(() => {
+                showSpinner(false);
+                button.disabled = false;
+            });
     });
 });
+

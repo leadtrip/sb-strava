@@ -4,12 +4,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import wood.mike.sbstravaapi.services.segments.SegmentService;
 
-@Controller("segments")
+@Controller
 public class SegmentController {
 
-    private SegmentService segmentService;
+    private final SegmentService segmentService;
 
     public SegmentController(final SegmentService segmentService) {
         this.segmentService = segmentService;
@@ -20,5 +22,11 @@ public class SegmentController {
         model.addAttribute("pageTitle", "Sync starred segments");
         model.addAttribute("templateName", "segments/sync");
         return "layout";
+    }
+
+    @PostMapping("/segments/sync")
+    public ResponseEntity<Integer> syncActivities() {
+        Integer totalSynced = segmentService.syncStarredSegments(1, 100);
+        return ResponseEntity.ok(totalSynced);
     }
 }
