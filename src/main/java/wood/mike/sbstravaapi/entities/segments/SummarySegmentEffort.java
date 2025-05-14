@@ -24,7 +24,7 @@ public class SummarySegmentEffort {
     @Column(name = "strava_summary_segment_effort_id", unique = true, nullable = false)
     private Long stravaSummarySegmentEffortId;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "activity_id")
     private Activity activity;
 

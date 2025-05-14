@@ -48,13 +48,7 @@ CREATE TABLE summary_segment_effort
 alter table summary_segment add constraint foreign key (athlete_id) references athlete (id);
 
 ALTER TABLE summary_pr_segment_effort
-    ADD CONSTRAINT uc_summary_pr_segment_effort_pr_activity UNIQUE (activity_id);
-
-ALTER TABLE summary_pr_segment_effort
     ADD CONSTRAINT uc_summary_pr_segment_effort_strava_summary_pr_segment_effort UNIQUE (strava_summary_pr_segment_effort_id);
-
-ALTER TABLE summary_segment_effort
-    ADD CONSTRAINT uc_summary_segment_effort_activity UNIQUE (activity_id);
 
 ALTER TABLE summary_segment_effort
     ADD CONSTRAINT uc_summary_segment_effort_strava_summary_segment_effort UNIQUE (strava_summary_segment_effort_id);
