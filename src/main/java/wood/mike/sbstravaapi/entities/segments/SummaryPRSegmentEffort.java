@@ -25,15 +25,21 @@ public class SummaryPRSegmentEffort {
     private Long stravaSummaryPrSegmentEffortId;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pr_activity_id")
+    @JoinColumn(name = "activity_id")
     private Activity activity;
 
-    @Column(name = "pr_elapsed_time")
-    private Long prElapsedTime;
+    @Column(name = "elapsed_time")
+    private Long elapsedTime;
 
-    @Column(name = "pr_date")
-    private LocalDateTime prDate;
+    @Column(name = "start_date")
+    private LocalDateTime startDate;
 
-    @Column(name = "effort_count")
-    private Integer effortCount;
+    @Column(name = "start_date_local")
+    private LocalDateTime startDateLocal;
+
+    @Column(name = "distance")
+    private Float distance;
+
+    @Column(name = "is_kom")
+    private Boolean isKom;
 }

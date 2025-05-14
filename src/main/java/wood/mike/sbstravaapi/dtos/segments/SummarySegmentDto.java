@@ -2,8 +2,6 @@ package wood.mike.sbstravaapi.dtos.segments;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import wood.mike.sbstravaapi.entities.segments.SummaryPRSegmentEffort;
-import wood.mike.sbstravaapi.entities.segments.SummarySegmentEffort;
 
 @Data
 public class SummarySegmentDto {
@@ -21,8 +19,8 @@ public class SummarySegmentDto {
     private Float maximumGrade;
     @JsonProperty("elevation_high")
     private Float elevationHigh;
-    @JsonProperty("average_low")
-    private Float averageLow;
+    @JsonProperty("elevation_low")
+    private Float elevationLow;
     @JsonProperty("climb_category")
     private Integer climbCategory;
     @JsonProperty("city")
@@ -32,7 +30,7 @@ public class SummarySegmentDto {
     @JsonProperty("country")
     private String country;
     @JsonProperty("athlete_pr_effort")
-    private SummaryPRSegmentEffort summaryPRSegmentEffort;
+    private SummaryPRSegmentEffortDto summaryPRSegmentEffort;
     @JsonProperty("athlete_segment_stats")
-    private SummarySegmentEffort summarySegmentEffort;
+    private SummarySegmentEffortDto summarySegmentEffort;
 }

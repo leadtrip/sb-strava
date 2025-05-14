@@ -1,14 +1,3 @@
-CREATE TABLE summary_pr_segment_effort
-(
-    id                                  INT AUTO_INCREMENT NOT NULL,
-    strava_summary_pr_segment_effort_id BIGINT NOT NULL,
-    pr_activity_id                      BIGINT NULL,
-    pr_elapsed_time                     INT NULL,
-    pr_date                             datetime NULL,
-    effort_count                        INT NULL,
-    CONSTRAINT pk_summary_pr_segment_effort PRIMARY KEY (id)
-);
-
 CREATE TABLE summary_segment
 (
     id                           INT AUTO_INCREMENT NOT NULL,
@@ -20,7 +9,7 @@ CREATE TABLE summary_segment
     average_grade                FLOAT NULL,
     maximum_grade                FLOAT NULL,
     elevation_high               FLOAT NULL,
-    average_low                  FLOAT NULL,
+    elevation_low                FLOAT NULL,
     climb_category               INT NULL,
     city                         VARCHAR(255) NULL,
     state                        VARCHAR(255) NULL,
@@ -28,6 +17,19 @@ CREATE TABLE summary_segment
     summary_pr_segment_effort_id BIGINT NULL,
     summary_segment_effort_id    BIGINT NULL,
     CONSTRAINT pk_summary_segment PRIMARY KEY (id)
+);
+
+CREATE TABLE summary_pr_segment_effort
+(
+    id                                  INT AUTO_INCREMENT NOT NULL,
+    strava_summary_pr_segment_effort_id BIGINT NOT NULL,
+    activity_id                      BIGINT NULL,
+    elapsed_time                     INT NULL,
+    start_date                       datetime NULL,
+    start_date_local                 datetime NULL,
+    distance                         FLOAT NULL,
+    is_kom                           BIT(1) NULL,
+    CONSTRAINT pk_summary_pr_segment_effort PRIMARY KEY (id)
 );
 
 CREATE TABLE summary_segment_effort
@@ -46,7 +48,7 @@ CREATE TABLE summary_segment_effort
 alter table summary_segment add constraint foreign key (athlete_id) references athlete (id);
 
 ALTER TABLE summary_pr_segment_effort
-    ADD CONSTRAINT uc_summary_pr_segment_effort_pr_activity UNIQUE (pr_activity_id);
+    ADD CONSTRAINT uc_summary_pr_segment_effort_pr_activity UNIQUE (activity_id);
 
 ALTER TABLE summary_pr_segment_effort
     ADD CONSTRAINT uc_summary_pr_segment_effort_strava_summary_pr_segment_effort UNIQUE (strava_summary_pr_segment_effort_id);

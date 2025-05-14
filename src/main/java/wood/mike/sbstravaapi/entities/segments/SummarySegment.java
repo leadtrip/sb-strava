@@ -44,8 +44,8 @@ public class SummarySegment {
     @Column(name = "elevation_high")
     private Float elevationHigh;
 
-    @Column(name = "average_low")
-    private Float averageLow;
+    @Column(name = "elevation_low")
+    private Float elevationLow;
 
     @Column(name = "climb_category")
     private Integer climbCategory;
@@ -59,11 +59,11 @@ public class SummarySegment {
     @Column(name = "country")
     private String country;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "summary_pr_segment_effort_id")
     private SummaryPRSegmentEffort summaryPRSegmentEffort;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "summary_segment_effort_id")
     private SummarySegmentEffort summarySegmentEffort;
 }
