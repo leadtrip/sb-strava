@@ -16,15 +16,22 @@ public class SegmentController {
         this.segmentService = segmentService;
     }
 
-    @GetMapping("/sync")
-    public String syncStarredSegments(Model model) {
+    @GetMapping("/segments/list")
+    public String list(Model model) {
+        model.addAttribute("pageTitle", "Starred segments");
+        model.addAttribute("templateName", "segments/list");
+        return "layout";
+    }
+
+    @GetMapping("/segments/sync")
+    public String sync(Model model) {
         model.addAttribute("pageTitle", "Sync starred segments");
         model.addAttribute("templateName", "segments/sync");
         return "layout";
     }
 
-    @PostMapping("/segments/sync")
-    public ResponseEntity<Integer> syncActivities() {
+    @PostMapping("/segments/syncStarredSegments")
+    public ResponseEntity<Integer> syncStarredSegments() {
         Integer totalSynced = segmentService.syncStarredSegments(1, 100);
         return ResponseEntity.ok(totalSynced);
     }
