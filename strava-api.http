@@ -1,0 +1,10 @@
+### Variables
+@strava_api = https://www.strava.com/api/v3/
+@access_token = 911516cf726399e420cc6f8fba10321ec2620a16
+
+### Request
+GET {{strava_api}}segments/starred
+Authorization: Bearer {{access_token}}
+###
+GET {{strava_api}}activities/7651589452
+Authorization: Bearer {{access_token}}

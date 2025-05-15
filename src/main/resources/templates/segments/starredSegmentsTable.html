@@ -1,0 +1,82 @@
+<div th:fragment="starredSegmentsTable">
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label for="activityType">Activity Type</label>
+            <select id="activityType" class="form-select">
+                <option value="">All</option>
+                <option value="Run">Run</option>
+                <option value="Ride">Ride</option>
+                <option value="VirtualRide">Virtual ride</option>
+                <option value="Swim">Swim</option>
+                <option value="Walk">Walk</option>
+                <option value="Hike">Hike</option>
+                <option value="WeightTraining">Weight training</option>
+            </select>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <button id="filterBtn" class="btn btn-primary w-100">Apply Filters</button>
+        </div>
+    </div>
+
+    <table id="starredSegmentsTable" class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Activity Type</th>
+            <th>Distance</th>
+            <th>Average grade</th>
+            <th>Maximum grade</th>
+            <th>Elevation high</th>
+            <th>Climb category</th>
+            <th>Location</th>
+            <th>PR activity</th>
+        </tr>
+        </thead>
+    </table>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        $(document).ready(function () {
+            const table = $('#starredSegmentsTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: /*[[@{/segments/filtered}]]*/,
+                    data: function (d) {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        d.activityType = $('#activityType').val() || urlParams.get('type');
+                    }
+                },
+                columns: [
+                    { data: 'name' },
+                    { data: 'activityType' },
+                    { data: 'distance' },
+                    { data: 'averageGrade' },
+                    { data: 'maximumGrade' },
+                    { data: 'elevationHigh' },
+                    { data: 'climbCategory' },
+                    { data: 'location' },
+                    { data: 'prActivity' },
+                ]
+            });
+
+            $('#filterBtn').on('click', function () {
+                table.ajax.reload();
+            });
+
+        });
+        /*]]>*/
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URLSearchParams(window.location.search);
+
+            const activityType = urlParams.get("type");
+
+            if (activityType) {
+                document.getElementById("activityType").value = activityType;
+            }
+        });
+    </script>
+
+</div>
