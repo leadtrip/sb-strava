@@ -7,7 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import wood.mike.sbstravaapi.config.Constants;
 import wood.mike.sbstravaapi.dtos.activity.ActivityStatsDto;
+import wood.mike.sbstravaapi.entities.activity.ActivityStats;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
+import wood.mike.sbstravaapi.services.activity.ActivityStatsService;
 import wood.mike.sbstravaapi.services.athlete.AthleteService;
 import wood.mike.sbstravaapi.services.strava.StravaService;
 
@@ -21,13 +23,16 @@ public class AthleteController {
     private final AthleteService athleteService;
     private final StravaService stravaService;
     private final HttpSession httpSession;
+    private final ActivityStatsService activityStatsService;
 
     public AthleteController(AthleteService athleteService,
                              StravaService stravaService,
-                             HttpSession httpSession) {
+                             HttpSession httpSession,
+                             ActivityStatsService activityStatsService) {
         this.athleteService = athleteService;
         this.stravaService = stravaService;
         this.httpSession = httpSession;
+        this.activityStatsService = activityStatsService;
     }
 
     @GetMapping("/profile")
@@ -35,7 +40,7 @@ public class AthleteController {
         Long athleteId = (Long) httpSession.getAttribute(Constants.ATHLETE_ID);
         Optional<Athlete> athlete = athleteService.getAthlete(athleteId);
         if (athlete.isPresent()) {
-            ActivityStatsDto activityStats = stravaService.getAthleteStats(athlete.get().getStravaAthleteId());
+            ActivityStats activityStats = activityStatsService.fetchIfMissing();
             model.addAttribute("athlete", athlete.get());
             model.addAttribute("activityStats", activityStats);
             model.addAttribute("pageTitle", "Athlete Profile");
