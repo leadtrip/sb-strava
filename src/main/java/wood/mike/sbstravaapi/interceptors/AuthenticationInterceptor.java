@@ -16,7 +16,15 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         String requestURI = request.getRequestURI();
-        if (requestURI.equals("/login") || requestURI.equals("/oauth/callback")) {
+        if (requestURI.startsWith("/logout")) {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
+            response.sendRedirect("/login");
+            return false;
+        }
+        else if (requestURI.equals("/login") || requestURI.equals("/oauth/callback")) {
             return true;
         }
 
