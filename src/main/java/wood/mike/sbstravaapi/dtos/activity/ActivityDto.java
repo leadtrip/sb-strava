@@ -3,6 +3,7 @@ package wood.mike.sbstravaapi.dtos.activity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import wood.mike.sbstravaapi.dtos.athlete.AthleteDto;
+import wood.mike.sbstravaapi.dtos.polylinemap.PolylineMapDto;
 
 import java.time.LocalDateTime;
 
@@ -48,4 +49,6 @@ public class ActivityDto {
     private Integer weightedAverageWatts;
     @JsonProperty("suffer_score")
     private Integer sufferScore;
+    @JsonProperty("map")
+    private PolylineMapDto map;
 }

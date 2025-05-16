@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
+import wood.mike.sbstravaapi.entities.polylinemap.PolylineMap;
 
 import java.time.LocalDateTime;
 
@@ -20,6 +21,9 @@ public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Version
+    private Integer version;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "athlete_id")
@@ -81,4 +85,8 @@ public class Activity {
 
     @Column(name = "suffer_score")
     private Integer sufferScore;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "polyline_map_id")
+    private PolylineMap polylineMap;
 }
