@@ -9,6 +9,8 @@ import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.entities.polylinemap.PolylineMap;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "activity")
@@ -89,4 +91,7 @@ public class Activity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "polyline_map_id")
     private PolylineMap polylineMap;
+
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ActivityStreamData> streamData = new ArrayList<>();
 }

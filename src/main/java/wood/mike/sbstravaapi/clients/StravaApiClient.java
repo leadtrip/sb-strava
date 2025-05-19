@@ -1,5 +1,6 @@
 package wood.mike.sbstravaapi.clients;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,4 +45,9 @@ public interface StravaApiClient {
     ResponseEntity<List<SummarySegmentDto>> fetchStarredSegments(
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "per_page", required = false) Integer perPage);
+
+    @GetMapping("/activities/{activityId}/streams")
+    ResponseEntity<JsonNode> fetchActivityStreams(
+            @PathVariable String activityId,
+            @RequestParam(value = "keys", required = false) List<String> keys);
 }

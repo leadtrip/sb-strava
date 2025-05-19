@@ -1,10 +1,15 @@
-### Variables
+###
 @strava_api = https://www.strava.com/api/v3/
-@access_token = 911516cf726399e420cc6f8fba10321ec2620a16
+@access_token = 56bc6aa6ced1b6d160c869c22c7c1aaffdad2312
 
-### Request
+###
 GET {{strava_api}}segments/starred
 Authorization: Bearer {{access_token}}
+
 ###
-GET {{strava_api}}activities/7651589452
+GET {{strava_api}}activities/14515085750
+Authorization: Bearer {{access_token}}
+
+###
+GET {{strava_api}}activities/14515085750/streams?keys=heartrate,watts,time&key_by_type=true
 Authorization: Bearer {{access_token}}

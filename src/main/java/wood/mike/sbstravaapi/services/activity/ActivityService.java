@@ -30,26 +30,40 @@ public class ActivityService {
     private final StravaService stravaService;
     private final AthleteService athleteService;
     private final ActivityMapper activityMapper;
+    private final ActivityStreamDataService activityStreamDataService;
 
     public ActivityService(ActivityRepository activityRepository,
                            ActivityTransformer activityTransformer,
                            StravaService stravaService,
-                           AthleteService athleteService, ActivityMapper activityMapper) {
+                           AthleteService athleteService,
+                           ActivityMapper activityMapper,
+                           ActivityStreamDataService activityStreamDataService) {
         this.activityRepository = activityRepository;
         this.activityTransformer = activityTransformer;
         this.stravaService = stravaService;
         this.athleteService = athleteService;
         this.activityMapper = activityMapper;
+        this.activityStreamDataService = activityStreamDataService;
     }
 
     public Activity getActivity(Long stravaActivityId) {
-        return activityRepository.findByStravaActivityId(stravaActivityId).orElseGet(() -> {
-            log.info("Strava activity id {} not found in database, fetching from Strava", stravaActivityId);
-            Activity activity = activityTransformer.toEntity(stravaService.getActivityData(String.valueOf(stravaActivityId)));
-            activityRepository.save(activity);
-            return activity;
-        });
+        Activity activity = activityRepository.findByStravaActivityId(stravaActivityId)
+                .orElseGet(() -> {
+                    log.info("Strava activity id {} not found in database, fetching from Strava", stravaActivityId);
+                    Activity newActivity = activityTransformer.toEntity(stravaService.getActivityData(String.valueOf(stravaActivityId)));
+                    activityRepository.save(newActivity);
+                    return newActivity;
+                });
+
+        boolean hasStreams = activityStreamDataService.existsByActivityId(activity.getId());
+        if (!hasStreams) {
+            log.info("No stream data found for activity {}, fetching from Strava", stravaActivityId);
+            activityStreamDataService.fetchAndStoreActivityStreams(activity.getId(), String.valueOf(stravaActivityId));
+        }
+
+        return activity;
     }
+
 
     public List<Activity> getLatestActivities(Athlete athlete, int numberOfActivities) {
         Pageable pageable = PageRequest.of(0, numberOfActivities, Sort.by("startDate").descending());

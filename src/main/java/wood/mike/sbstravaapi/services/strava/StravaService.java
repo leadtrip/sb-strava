@@ -1,5 +1,6 @@
 package wood.mike.sbstravaapi.services.strava;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -53,5 +54,9 @@ public class StravaService {
 
     public List<SummarySegmentDto> getSummarySegments(Integer page, Integer perPage) {
         return stravaApiClient.fetchStarredSegments(page, perPage).getBody();
+    }
+
+    public JsonNode getActivityStreams(String activityId, List<String> keys) {
+        return stravaApiClient.fetchActivityStreams(activityId, keys).getBody();
     }
 }

@@ -1,0 +1,34 @@
+### Variables
+@xert_api = https://www.xertonline.com/oauth/
+@access_token = 2643f8f9b8c6949343a1ca91e6e9f3ce519ba76f
+@refresh_token = 354bc6ac9139729476a566175ca7c1f947d3cc00
+@username=mikew
+@password=epSah7J6s73o
+
+
+###
+POST {{xert_api}}token
+Authorization: Basic eGVydF9wdWJsaWM6eGVydF9wdWJsaWM=
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&username={{username}}&password={{password}}
+
+###
+GET {{xert_api}}training_info
+Authorization: Bearer {{access_token}}
+
+###
+GET {{xert_api}}workout
+Authorization: Bearer {{access_token}}
+
+###
+GET {{xert_api}}workouts
+Authorization: Bearer {{access_token}}
+
+###
+GET {{xert_api}}activity/mvk1s2ssdapx3t1f
+Authorization: Bearer {{access_token}}
+
+###
+GET {{xert_api}}activity?from=1747212148&to=1747384948
+Authorization: Bearer {{access_token}}

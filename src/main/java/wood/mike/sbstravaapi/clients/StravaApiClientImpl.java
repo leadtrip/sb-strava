@@ -1,5 +1,6 @@
 package wood.mike.sbstravaapi.clients;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
@@ -132,5 +133,15 @@ public class StravaApiClientImpl implements StravaApiClient {
                 .retrieve()
                 .toEntity(new ParameterizedTypeReference<>() {
                 });
+    }
+
+    @Override
+    public ResponseEntity<JsonNode> fetchActivityStreams(String activityId, List<String> keys) {
+        return this.restClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/activities/{activityId}/streams")
+                        .queryParam("keys", keys)
+                        .build(activityId))
+                .retrieve()
+                .toEntity(JsonNode.class);
     }
 }
