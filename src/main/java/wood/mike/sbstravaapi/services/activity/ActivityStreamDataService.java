@@ -28,7 +28,7 @@ public class ActivityStreamDataService {
     }
 
     public void fetchAndStoreActivityStreams(Long activityId, String stravaId) {
-        List<String> keys = List.of("heartrate", "power");
+        List<String> keys = List.of("heartrate", "watts");
         JsonNode respBody = stravaService.getActivityStreams(stravaId, keys);
 
         if (respBody == null || respBody.isEmpty()) return;
