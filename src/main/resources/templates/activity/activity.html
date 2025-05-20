@@ -11,43 +11,43 @@
             </div>
             <div class="row data-row">
                 <div class="col-sm-4"><span class="activity-detail-label">Start Date:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${@activityFormatter.formatDateTime(activity.startDate)}"></span></div>
+                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.startDate}"></span></div>
             </div>
             <div class="row data-row">
                 <div class="col-sm-4"><span class="activity-detail-label">Distance:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${@activityFormatter.formatDistance(activity.distance)}"></span></div>
+                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.distance}"></span></div>
             </div>
             <div class="row data-row">
                 <div class="col-sm-4"><span class="activity-detail-label">Moving Time:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${@activityFormatter.formatDuration(activity.movingTime)}"></span></div>
+                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.movingTime}"></span></div>
             </div>
             <div class="row data-row">
                 <div class="col-sm-4"><span class="activity-detail-label">Elapsed Time:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${@activityFormatter.formatDuration(activity.elapsedTime)}"></span></div>
+                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.elapsedTime}"></span></div>
             </div>
             <div class="row data-row">
                 <div class="col-sm-4"><span class="activity-detail-label">Total Elevation Gain:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${@activityFormatter.roundWithUnit(activity.totalElevationGain,'m')}"></span></div>
+                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.totalElevationGain}"></span></div>
             </div>
             <div class="row data-row">
                 <div class="col-sm-4"><span class="activity-detail-label">Average Speed:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${@activityFormatter.formatSpeed(activity.averageSpeed)}"></span></div>
+                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.averageSpeed}"></span></div>
             </div>
             <div class="row data-row">
                 <div class="col-sm-4"><span class="activity-detail-label">Max Speed:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${@activityFormatter.formatSpeed(activity.maxSpeed)}"></span></div>
+                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.maxSpeed}"></span></div>
             </div>
             <div class="row data-row">
                 <div class="col-sm-4"><span class="activity-detail-label">Kilojoules:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${@activityFormatter.roundWithUnit(activity.kilojoules,'kJ')}"></span></div>
+                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.kilojoules}"></span></div>
             </div>
             <div class="row data-row">
                 <div class="col-sm-4"><span class="activity-detail-label">Average Watts:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${@activityFormatter.roundWithUnit(activity.averageWatts,'w')}"></span></div>
+                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.averageWatts}"></span></div>
             </div>
             <div class="row data-row">
                 <div class="col-sm-4"><span class="activity-detail-label">Max Watts:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${@activityFormatter.roundWithUnit(activity.maxWatts,'w')}"></span></div>
+                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.maxWatts}"></span></div>
             </div>
             <div class="row data-row">
                 <div class="col-sm-4"><span class="activity-detail-label">Suffer Score:</span></div>
@@ -56,6 +56,9 @@
         </div>
     </div>
 
-    <div th:replace="~{polylinemap/polyline :: polylinemap(${activity.polylineMap.summaryPolyline})}"></div>
+    <div th:replace="~{polylinemap/polyline :: polylinemap(${activity.summaryPolyline})}"></div>
+    <br>
+    <div th:replace="~{activity/activityStream :: stream(${activity})}"></div>
+
 
 </div>

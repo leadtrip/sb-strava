@@ -103,7 +103,7 @@ public class ActivityController {
 
     @GetMapping("/activity/{id}")
     public String getActivity(@PathVariable("id") long id, Model model) {
-        Activity activity = activityService.getActivity(id);
+        ActivityRow activity = new ActivityRow(activityService.getActivity(id), activityFormatter);
         model.addAttribute("pageTitle", "Activity Details");
         model.addAttribute("templateName", "activity/activity");
         model.addAttribute("activity", activity);

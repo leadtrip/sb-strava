@@ -1,58 +1,62 @@
-<div th:if="${heartRateData != null or powerData != null}" class="p-4 rounded-xl shadow bg-white">
-    <h2 class="text-xl font-semibold mb-4">Heart Rate & Power</h2>
-    <canvas id="activityLineChart" height="120"></canvas>
-</div>
+<div th:fragment="stream(activity)">
+    <div th:if="${activity != null}" class="p-4 rounded-xl shadow bg-white">
+        <h2 class="text-xl font-semibold mb-4">Heart Rate & Power</h2>
+        <canvas id="activityLineChart" height="120"></canvas>
+    </div>
 
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    const heartRateData = /*[[${heartRateData}]]*/ [];
-    const powerData = /*[[${powerData}]]*/ [];
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const heartRateData = /*[[${activity.getStreamData("heartrate")}]]*/ [];
+        const powerData = /*[[${activity.getStreamData("watts")}]]*/ [];
+        const timeData = /*[[${activity.getStreamData("time")}]]*/ [];
 
-    const labels = Array.from({length: Math.max(heartRateData.length, powerData.length)}, (_, i) => i);
+        const labels = Array.from({length: Math.max(heartRateData.length, powerData.length)}, (_, i) => i);
 
-    const ctx = document.getElementById('activityLineChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Heart Rate (bpm)',
-                    data: heartRateData,
-                    borderColor: 'rgb(255, 99, 132)',
-                    fill: false,
-                    tension: 0.1
-                },
-                {
-                    label: 'Power (watts)',
-                    data: powerData,
-                    borderColor: 'rgb(54, 162, 235)',
-                    fill: false,
-                    tension: 0.1
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            interaction: {
-                mode: 'index',
-                intersect: false
+        const ctx = document.getElementById('activityLineChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: timeData.map(t => (t / 60).toFixed(1) + ' min'),
+                datasets: [
+                    {
+                        label: 'Heart Rate (bpm)',
+                        data: heartRateData,
+                        borderColor: 'rgb(255, 99, 132)',
+                        fill: false,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Power (watts)',
+                        data: powerData,
+                        borderColor: 'rgb(54, 162, 235)',
+                        fill: false,
+                        tension: 0.1
+                    }
+                ]
             },
-            plugins: {
-                tooltip: {
+            options: {
+                responsive: true,
+                interaction: {
                     mode: 'index',
                     intersect: false
-                }
-            },
-            scales: {
-                x: {
-                    title: { display: true, text: 'Sample Index' }
                 },
-                y: {
-                    beginAtZero: true
+                plugins: {
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Time (minutes)' },
+                        ticks: { maxTicksLimit: 10 }
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
-    /*]]>*/
-</script>
+        });
+        /*]]>*/
+    </script>
+</div>

@@ -142,6 +142,7 @@ public class StravaApiClientImpl implements StravaApiClient {
                         .path("/activities/{activityId}/streams")
                         .queryParam("keys", String.join(",", keys))
                         .queryParam("key_by_type", "true")
+                        .queryParam("resolution", "low")
                         .build(activityId))
                 .retrieve()
                 .toEntity(JsonNode.class);
