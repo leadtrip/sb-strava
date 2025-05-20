@@ -16,7 +16,7 @@
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: timeData.map(t => (t / 60).toFixed(1) + ' min'),
+                labels: timeData.map(t => (t / 60).toFixed() + ' min'),
                 datasets: [
                     {
                         label: 'Heart Rate (bpm)',
