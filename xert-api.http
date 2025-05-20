@@ -2,8 +2,8 @@
 @xert_api = https://www.xertonline.com/oauth/
 @access_token = 2643f8f9b8c6949343a1ca91e6e9f3ce519ba76f
 @refresh_token = 354bc6ac9139729476a566175ca7c1f947d3cc00
-@username=mikew
-@password=epSah7J6s73o
+@username=
+@password=
 
 
 ###
