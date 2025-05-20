@@ -1,73 +1,82 @@
 <div th:fragment="content">
     <div class="container mt-5">
-        <div class="activity-details">
-            <div class="row data-row">
-                <div class="col-sm-4"><span class="activity-detail-label">Name:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.name}"></span></div>
+        <div class="card activity-card">
+            <div class="card-header activity-header text-white bg-primary">
+                <h2 class="card-title mb-0" th:text="${activity.name}">Activity Name</h2>
+                <p class="card-subtitle mb-0">
+                    <span th:text="${activity.sportType}">Sport Type</span> - <span th:text="${activity.startDate}">Start Date</span>
+                </p>
             </div>
-            <div class="row data-row">
-                <div class="col-sm-4"><span class="activity-detail-label">Sport Type:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.sportType}"></span></div>
-            </div>
-            <div class="row data-row">
-                <div class="col-sm-4"><span class="activity-detail-label">Start Date:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.startDate}"></span></div>
-            </div>
-            <div class="row data-row">
-                <div class="col-sm-4"><span class="activity-detail-label">Distance:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.distance}"></span></div>
-            </div>
-            <div class="row data-row">
-                <div class="col-sm-4"><span class="activity-detail-label">Moving Time:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.movingTime}"></span></div>
-            </div>
-            <div class="row data-row">
-                <div class="col-sm-4"><span class="activity-detail-label">Elapsed Time:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.elapsedTime}"></span></div>
-            </div>
-            <div class="row data-row">
-                <div class="col-sm-4"><span class="activity-detail-label">Total Elevation Gain:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.totalElevationGain}"></span></div>
-            </div>
-            <div class="row data-row">
-                <div class="col-sm-4"><span class="activity-detail-label">Average Speed:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.averageSpeed}"></span></div>
-            </div>
-            <div class="row data-row">
-                <div class="col-sm-4"><span class="activity-detail-label">Max Speed:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.maxSpeed}"></span></div>
-            </div>
-            <div class="row data-row">
-                <div class="col-sm-4"><span class="activity-detail-label">Kilojoules:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.kilojoules}"></span></div>
-            </div>
-            <div class="row data-row">
-                <div class="col-sm-4"><span class="activity-detail-label">Average Watts:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.averageWatts}"></span></div>
-            </div>
-            <div class="row data-row">
-                <div class="col-sm-4"><span class="activity-detail-label">Max Watts:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.maxWatts}"></span></div>
-            </div>
-            <div class="row data-row">
-                <div class="col-sm-4"><span class="activity-detail-label">Suffer Score:</span></div>
-                <div class="col-sm-8"><span class="activity-detail-value" th:text="${activity.sufferScore}"></span></div>
+            <div class="card-body activity-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h4 class="section-title">Performance</h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Distance: <span class="activity-detail-value" th:text="${activity.distance}"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Moving Time: <span class="activity-detail-value" th:text="${activity.movingTime}"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Elapsed Time: <span class="activity-detail-value" th:text="${activity.elapsedTime}"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Total Elevation Gain: <span class="activity-detail-value" th:text="${activity.totalElevationGain}"></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-6 mt-4 mt-lg-0">
+                        <h4 class="section-title">Speed & Power</h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Average Speed: <span class="activity-detail-value" th:text="${activity.averageSpeed}"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Max Speed: <span class="activity-detail-value" th:text="${activity.maxSpeed}"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Average Watts: <span class="activity-detail-value" th:text="${activity.averageWatts}"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Max Watts: <span class="activity-detail-value" th:text="${activity.maxWatts}"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <h4 class="section-title">Other Insights</h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Kilojoules: <span class="activity-detail-value" th:text="${activity.kilojoules}"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Suffer Score: <span class="activity-detail-value" th:text="${activity.sufferScore}"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <nav>
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="nav-map-tab" data-bs-toggle="tab" data-bs-target="#nav-map" type="button" role="tab" aria-controls="nav-map" aria-selected="true">Map</button>
-            <button class="nav-link" id="nav-analysis-tab" data-bs-toggle="tab" data-bs-target="#nav-analysis" type="button" role="tab" aria-controls="nav-analysis" aria-selected="false">Analysis</button>
-        </div>
-    </nav>
-    <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="nav-map" role="tabpanel" aria-labelledby="nav-map-tab">
-            <div th:replace="~{polylinemap/polyline :: polylinemap(${activity.summaryPolyline})}"></div>
-        </div>
-        <div class="tab-pane fade" id="nav-analysis" role="tabpanel" aria-labelledby="nav-analysis-tab">
-            <div th:replace="~{activity/activityStream :: stream(${activity})}"></div>
+    <div class="container mt-4">
+        <div class="card activity-secondary-card">
+            <nav class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active" id="nav-map-tab" data-bs-toggle="tab" data-bs-target="#nav-map" type="button" role="tab" aria-controls="nav-map" aria-selected="true">Map</button>
+                <button class="nav-link" id="nav-analysis-tab" data-bs-toggle="tab" data-bs-target="#nav-analysis" type="button" role="tab" aria-controls="nav-analysis" aria-selected="false">Analysis</button>
+            </nav>
+            <div class="card-body tab-content activity-tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-map" role="tabpanel" aria-labelledby="nav-map-tab">
+                    <div th:replace="~{polylinemap/polyline :: polylinemap(${activity.summaryPolyline})}"></div>
+                </div>
+                <div class="tab-pane fade" id="nav-analysis" role="tabpanel" aria-labelledby="nav-analysis-tab">
+                    <div th:replace="~{activity/activityStream :: stream(${activity})}"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
