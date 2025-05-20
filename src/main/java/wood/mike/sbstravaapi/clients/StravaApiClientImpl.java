@@ -138,10 +138,13 @@ public class StravaApiClientImpl implements StravaApiClient {
     @Override
     public ResponseEntity<JsonNode> fetchActivityStreams(String activityId, List<String> keys) {
         return this.restClient.get()
-                .uri(uriBuilder -> uriBuilder.path("/activities/{activityId}/streams")
-                        .queryParam("keys", keys)
+                .uri(uriBuilder -> uriBuilder
+                        .path("/activities/{activityId}/streams")
+                        .queryParam("keys", String.join(",", keys))
+                        .queryParam("key_by_type", "true")
                         .build(activityId))
                 .retrieve()
                 .toEntity(JsonNode.class);
     }
+
 }
