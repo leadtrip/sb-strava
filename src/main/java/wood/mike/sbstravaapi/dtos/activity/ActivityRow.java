@@ -85,4 +85,12 @@ public class ActivityRow {
                 .toList();
     }
 
+    public StreamAnalysisData getStreamAnalysisData(String streamType) {
+        List<Integer> streamData = getStreamData(streamType);
+        Integer max = streamData.stream().max(Integer::compareTo).orElse(0);
+        Integer average = streamData.isEmpty() ? 0 : streamData.stream().reduce(0, Integer::sum) / streamData.size();
+        return new StreamAnalysisData(streamData, max, average);
+    }
+
+    public record StreamAnalysisData(List<Integer> streamData, Integer max, Integer average) { }
 }

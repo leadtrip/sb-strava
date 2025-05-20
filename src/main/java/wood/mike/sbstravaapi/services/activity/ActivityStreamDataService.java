@@ -11,6 +11,7 @@ import wood.mike.sbstravaapi.services.strava.StravaService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -29,9 +30,10 @@ public class ActivityStreamDataService {
 
     public void fetchAndStoreActivityStreams(Long activityId, String stravaId) {
         List<String> keys = List.of("heartrate", "watts", "time", "distance");
-        JsonNode respBody = stravaService.getActivityStreams(stravaId, keys);
+        Optional<JsonNode> optionalBody = stravaService.getActivityStreams(stravaId, keys);
 
-        if (respBody == null || respBody.isEmpty()) return;
+        if (optionalBody.isEmpty() || optionalBody.get().isEmpty()) return;
+        JsonNode respBody = optionalBody.get();
 
         Activity activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new EntityNotFoundException("Activity not found"));

@@ -6,33 +6,38 @@
 
     <script th:inline="javascript">
         /*<![CDATA[*/
-        const heartRateData = /*[[${activity.getStreamData("heartrate")}]]*/ [];
-        const powerData = /*[[${activity.getStreamData("watts")}]]*/ [];
-        const timeData = /*[[${activity.getStreamData("time")}]]*/ [];
+        const heartRateData = /*[[${activity.getStreamAnalysisData("heartrate")}]]*/ [];
+        const powerData = /*[[${activity.getStreamAnalysisData("watts")}]]*/ [];
+        const timeData = /*[[${activity.getStreamAnalysisData("time")}]]*/ [];
 
-        const labels = Array.from({length: Math.max(heartRateData.length, powerData.length)}, (_, i) => i);
+        function getDataSets() {
+            const dataSets = [];
+            if (heartRateData.streamData.length > 0) {
+                dataSets.push({
+                    label: `Heart Rate - avg: ${heartRateData.average} max: ${heartRateData.max}`,
+                    data: heartRateData.streamData,
+                    borderColor: 'rgb(255, 99, 132)',
+                    fill: false,
+                    tension: 0.1
+                });
+            }
+            if (powerData.streamData.length > 0) {
+                dataSets.push({
+                    label: `Power - avg: ${powerData.average} max: ${powerData.max}`,
+                    data: powerData.streamData,
+                    borderColor: 'rgb(54, 162, 235)',
+                    fill: false,
+                })
+            }
+            return dataSets;
+        }
 
         const ctx = document.getElementById('activityLineChart').getContext('2d');
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: timeData.map(t => (t / 60).toFixed() + ' min'),
-                datasets: [
-                    {
-                        label: 'Heart Rate (bpm)',
-                        data: heartRateData,
-                        borderColor: 'rgb(255, 99, 132)',
-                        fill: false,
-                        tension: 0.1
-                    },
-                    {
-                        label: 'Power (watts)',
-                        data: powerData,
-                        borderColor: 'rgb(54, 162, 235)',
-                        fill: false,
-                        tension: 0.1
-                    }
-                ]
+                labels: timeData.streamData.map(t => (t / 60).toFixed() + ' min'),
+                datasets: getDataSets()
             },
             options: {
                 elements: {

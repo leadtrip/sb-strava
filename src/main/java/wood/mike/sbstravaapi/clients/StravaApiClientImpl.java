@@ -6,6 +6,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import wood.mike.sbstravaapi.dtos.athlete.AthleteTokenDto;
 import wood.mike.sbstravaapi.dtos.segments.SummarySegmentDto;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class StravaApiClientImpl implements StravaApiClient {
@@ -136,16 +138,21 @@ public class StravaApiClientImpl implements StravaApiClient {
     }
 
     @Override
-    public ResponseEntity<JsonNode> fetchActivityStreams(String activityId, List<String> keys) {
-        return this.restClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/activities/{activityId}/streams")
-                        .queryParam("keys", String.join(",", keys))
-                        .queryParam("key_by_type", "true")
-                        .queryParam("resolution", "medium")
-                        .build(activityId))
-                .retrieve()
-                .toEntity(JsonNode.class);
+    public Optional<JsonNode> fetchActivityStreams(String activityId, List<String> keys) {
+        try {
+            return Optional.ofNullable(this.restClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/activities/{activityId}/streams")
+                            .queryParam("keys", String.join(",", keys))
+                            .queryParam("key_by_type", "true")
+                            .queryParam("resolution", "medium")
+                            .build(activityId))
+                    .retrieve()
+                    .body(JsonNode.class));
+        } catch (HttpClientErrorException.NotFound e) {
+            return Optional.empty();
+        }
     }
+
 
 }

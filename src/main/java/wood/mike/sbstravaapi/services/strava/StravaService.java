@@ -12,6 +12,7 @@ import wood.mike.sbstravaapi.dtos.segments.SummarySegmentDto;
 import wood.mike.sbstravaapi.repositories.athlete.AthleteTokenRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StravaService {
@@ -56,7 +57,7 @@ public class StravaService {
         return stravaApiClient.fetchStarredSegments(page, perPage).getBody();
     }
 
-    public JsonNode getActivityStreams(String activityId, List<String> keys) {
-        return stravaApiClient.fetchActivityStreams(activityId, keys).getBody();
+    public Optional<JsonNode> getActivityStreams(String activityId, List<String> keys) {
+        return stravaApiClient.fetchActivityStreams(activityId, keys);
     }
 }

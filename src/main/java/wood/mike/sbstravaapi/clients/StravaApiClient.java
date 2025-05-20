@@ -12,6 +12,7 @@ import wood.mike.sbstravaapi.dtos.athlete.AthleteTokenDto;
 import wood.mike.sbstravaapi.dtos.segments.SummarySegmentDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StravaApiClient {
 
@@ -47,7 +48,7 @@ public interface StravaApiClient {
             @RequestParam(value = "per_page", required = false) Integer perPage);
 
     @GetMapping("/activities/{activityId}/streams")
-    ResponseEntity<JsonNode> fetchActivityStreams(
+    Optional<JsonNode> fetchActivityStreams(
             @PathVariable String activityId,
             @RequestParam(value = "keys", required = false) List<String> keys);
 }
