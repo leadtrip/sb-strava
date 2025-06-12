@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import wood.mike.sbstravaapi.entities.activity.Activity;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +16,6 @@ public interface ActivityRepository extends JpaRepository<Activity, Long>, JpaSp
     List<Activity> findByAthleteOrderByStartDateDesc(Athlete athlete, Pageable pageable);
     Optional<Activity> findByStravaActivityId(Long stravaActivityId);
     boolean existsByStravaActivityId(Long stravaActivityId);
-    Long countByAthlete(Athlete athlete);
     Page<Activity> findByAthlete(Athlete athlete, Pageable pageable);
     Optional<Activity> findFirstByAthleteOrderByStartDateAsc(Athlete athlete);
 
