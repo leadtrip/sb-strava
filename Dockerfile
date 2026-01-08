@@ -7,7 +7,7 @@ RUN gradle dependencies --no-daemon
 COPY src /app/src
 RUN gradle build -x test --no-daemon
 
-FROM openjdk:21-slim
+FROM eclipse-temurin:21-jdk
 WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar app.jar
 EXPOSE 9050
