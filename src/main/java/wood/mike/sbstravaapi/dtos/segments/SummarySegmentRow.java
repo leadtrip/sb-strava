@@ -47,6 +47,9 @@ public class SummarySegmentRow {
     }
 
     public String getPrActivity() {
-        return "<a href='/activity/" + summarySegment.getSummaryPRSegmentEffort().getActivity().getStravaActivityId() + "'>" + activityFormatter.formatDateTime(summarySegment.getSummaryPRSegmentEffort().getActivity().getStartDate())  + "</a>";
+        if (summarySegment.getSummaryPRSegmentEffort() != null) {
+            return "<a href='/activity/" + summarySegment.getSummaryPRSegmentEffort().getActivity().getStravaActivityId() + "'>" + activityFormatter.formatDateTime(summarySegment.getSummaryPRSegmentEffort().getActivity().getStartDate()) + "</a>";
+        }
+        return "PR for segment not found";
     }
 }
