@@ -6,6 +6,7 @@ import org.mapstruct.Mapping;
 import wood.mike.sbstravaapi.dtos.segments.SummaryPRSegmentEffortDto;
 import wood.mike.sbstravaapi.entities.activity.Activity;
 import wood.mike.sbstravaapi.entities.segments.SummaryPRSegmentEffort;
+import wood.mike.sbstravaapi.repositories.activity.ActivitySource;
 import wood.mike.sbstravaapi.services.activity.ActivityService;
 
 @Mapper(componentModel = "spring")
@@ -19,7 +20,7 @@ public abstract class SummaryPRSegmentEffortMapper {
     );
 
     protected Activity map(Long activityId, @Context ActivityService activityService) {
-        return activityId == null ? null : activityService.getActivity(activityId);
+        return activityId == null ? null : activityService.getActivity(activityId, ActivitySource.SEGMENT_PR);
     }
 }
 

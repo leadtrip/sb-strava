@@ -18,6 +18,7 @@ import wood.mike.sbstravaapi.dtos.activity.ActivityRow;
 import wood.mike.sbstravaapi.entities.activity.Activity;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.repositories.activity.ActivityRepository;
+import wood.mike.sbstravaapi.repositories.activity.ActivitySource;
 import wood.mike.sbstravaapi.services.activity.ActivityService;
 import wood.mike.sbstravaapi.services.athlete.AthleteService;
 import wood.mike.sbstravaapi.services.strava.StravaService;
@@ -103,7 +104,7 @@ public class ActivityController {
 
     @GetMapping("/activity/{id}")
     public String getActivity(@PathVariable("id") long id, Model model) {
-        ActivityRow activity = new ActivityRow(activityService.getActivity(id), activityFormatter);
+        ActivityRow activity = new ActivityRow(activityService.getActivity(id, ActivitySource.SYNC), activityFormatter);
         model.addAttribute("pageTitle", "Activity Details");
         model.addAttribute("templateName", "activity/activity");
         model.addAttribute("activity", activity);

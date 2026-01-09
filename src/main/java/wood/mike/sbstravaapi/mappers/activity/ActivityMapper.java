@@ -19,6 +19,7 @@ public interface ActivityMapper {
     @Mapping(target = "polylineMap.id", ignore = true)
     @Mapping(source = "map", target = "polylineMap")
     @Mapping(target = "streamData", ignore = true)
+    @Mapping(target = "source", ignore = true)
     Activity toEntity(ActivityDto dto);
 
     @Mapping(target = "id", ignore = true)
@@ -28,5 +29,6 @@ public interface ActivityMapper {
     @Mapping(target = "polylineMap.id", ignore = true)
     @Mapping(source = "map", target = "polylineMap")
     @Mapping(target = "streamData", ignore = true)
+    @Mapping(target = "source", ignore = true)
     void updateActivityFromDto(ActivityDto dto, @MappingTarget Activity entity);
 }

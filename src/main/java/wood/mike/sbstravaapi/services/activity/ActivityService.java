@@ -11,6 +11,7 @@ import wood.mike.sbstravaapi.entities.activity.Activity;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.mappers.activity.ActivityMapper;
 import wood.mike.sbstravaapi.repositories.activity.ActivityRepository;
+import wood.mike.sbstravaapi.repositories.activity.ActivitySource;
 import wood.mike.sbstravaapi.repositories.activity.ActivitySpecification;
 import wood.mike.sbstravaapi.services.athlete.AthleteService;
 import wood.mike.sbstravaapi.services.strava.StravaService;
@@ -46,24 +47,35 @@ public class ActivityService {
         this.activityStreamDataService = activityStreamDataService;
     }
 
-    public Activity getActivity(Long stravaActivityId) {
-        Activity activity = activityRepository.findByStravaActivityId(stravaActivityId)
+    public Activity getActivity(Long stravaActivityId, ActivitySource source) {
+
+        Activity activity = activityRepository
+                .findByStravaActivityId(stravaActivityId)
                 .orElseGet(() -> {
-                    log.info("Strava activity id {} not found in database, fetching from Strava", stravaActivityId);
-                    Activity newActivity = activityTransformer.toEntity(stravaService.getActivityData(String.valueOf(stravaActivityId)));
-                    activityRepository.save(newActivity);
-                    return newActivity;
+                    log.info("Strava activity {} not found, fetching from Strava as {}", stravaActivityId, source);
+
+                    Activity newActivity =
+                            activityTransformer.toEntity(
+                                    stravaService.getActivityData(String.valueOf(stravaActivityId))
+                            );
+
+                    newActivity.setSource(source);
+                    return activityRepository.save(newActivity);
                 });
 
-        boolean hasStreams = activityStreamDataService.existsByActivityId(activity.getId());
-        if (!hasStreams) {
-            log.info("No stream data found for activity {}, fetching from Strava", stravaActivityId);
-            activityStreamDataService.fetchAndStoreActivityStreams(activity.getId(), String.valueOf(stravaActivityId));
+        if (source == ActivitySource.SYNC) {
+            boolean hasStreams = activityStreamDataService.existsByActivityId(activity.getId());
+            if (!hasStreams) {
+                log.info("No stream data found for activity {}, fetching from Strava", stravaActivityId);
+                activityStreamDataService.fetchAndStoreActivityStreams(
+                        activity.getId(),
+                        String.valueOf(stravaActivityId)
+                );
+            }
         }
 
         return activity;
     }
-
 
     public List<Activity> getLatestActivities(Athlete athlete, int numberOfActivities) {
         Pageable pageable = PageRequest.of(0, numberOfActivities, Sort.by("startDate").descending());
@@ -92,7 +104,7 @@ public class ActivityService {
 
         for (int i = 0; i < totalPagesToSync; i++) {
             LocalDateTime oldestStartDate = activityRepository
-                    .findFirstByAthleteOrderByStartDateAsc(athlete)
+                    .findFirstByAthleteAndSourceOrderByStartDateAsc(athlete, ActivitySource.SYNC)
                     .map(Activity::getStartDate)
                     .orElse(LocalDateTime.now());
 

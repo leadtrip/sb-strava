@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.entities.polylinemap.PolylineMap;
+import wood.mike.sbstravaapi.repositories.activity.ActivitySource;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -87,6 +88,10 @@ public class Activity {
 
     @Column(name = "suffer_score")
     private Integer sufferScore;
+
+    @Column(name = "source", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ActivitySource source = ActivitySource.SYNC;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "polyline_map_id")
