@@ -5,15 +5,22 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
 import wood.mike.sbstravaapi.entities.activity.Activity;
+import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.mappers.activity.ActivityMapper;
 import wood.mike.sbstravaapi.repositories.activity.ActivityRepository;
+import wood.mike.sbstravaapi.repositories.activity.ActivitySource;
 import wood.mike.sbstravaapi.services.activity.ActivityService;
 import wood.mike.sbstravaapi.services.activity.ActivityStreamDataService;
 import wood.mike.sbstravaapi.services.athlete.AthleteService;
 import wood.mike.sbstravaapi.services.strava.StravaService;
 import wood.mike.sbstravaapi.transformers.activity.ActivityTransformer;
 
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.ZoneOffset;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -80,5 +87,35 @@ public class ActivityServiceTest {
 
         Activity activity = activityService.getActivity(stravaActivityId, SYNC);
         assertThat(activity.getStravaActivityId()).isEqualTo(stravaActivityId);
+    }
+
+    @Test
+    public void testSyncActivities() {
+        Athlete bob = new Athlete();
+        LocalDateTime activityStartDate = LocalDateTime.of(2025, Month.APRIL, 1, 10, 0);
+        Activity oldestSyncedActivity = new Activity();
+        oldestSyncedActivity.setSource(SYNC);
+        oldestSyncedActivity.setStartDate(activityStartDate);
+
+        ActivityDto stravaActivity1 = new ActivityDto();
+        stravaActivity1.setId(1L);
+        ActivityDto stravaActivity2 = new ActivityDto();
+        stravaActivity2.setId(2L);
+        List<ActivityDto> stravaActivities = List.of(stravaActivity1, stravaActivity2);
+
+        when(athleteService.getCurrentlyLoggedInAthleteOrThrow()).thenReturn(bob);
+        when(activityRepository.findFirstByAthleteAndSourceOrderByStartDateAsc(bob, SYNC)).thenReturn(Optional.of(oldestSyncedActivity));
+        when(stravaService.getActivitiesBefore(activityStartDate.toEpochSecond(ZoneOffset.UTC))).thenReturn(stravaActivities);
+        when(activityRepository.findByStravaActivityId(anyLong())).thenReturn(Optional.empty());
+        when(activityTransformer.toEntity(any())).thenAnswer(dto -> {
+            ActivityDto activityDto = dto.getArgument(0);
+            Activity activity = new Activity();
+            activity.setStravaActivityId(activityDto.getId());
+            return activity;
+        });
+
+        assertThat(activityService.syncActivities(1)).isEqualTo(2);
+
+        verify(activityTransformer, times(stravaActivities.size())).toEntity(any());
     }
 }
