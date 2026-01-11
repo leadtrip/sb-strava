@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import wood.mike.sbstravaapi.filters.activity.ActivityFilter;
 import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
 import wood.mike.sbstravaapi.entities.activity.Activity;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
@@ -20,6 +21,7 @@ import wood.mike.sbstravaapi.transformers.activity.ActivityTransformer;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -77,12 +79,38 @@ public class ActivityService {
         return activity;
     }
 
-    public Page<Activity> findFiltered(int page, int size, LocalDateTime from, LocalDateTime to, String type) {
-        log.info("Searching for filtered activities between {} and {} with type {}", from, to, type);
-        Athlete athlete = athleteService.getCurrentlyLoggedInAthlete().orElseThrow(() -> new RuntimeException("Athlete not found"));
-        Pageable pageable = PageRequest.of(page, size, Sort.by("startDate").descending());
-        return activityRepository.findAll(ActivitySpecification.withFilters(from, to, type, athlete), pageable);
+    public Page<Activity> findFiltered(int page, int size, ActivityFilter filter) {
+        Athlete athlete = athleteService.getCurrentlyLoggedInAthlete()
+                .orElseThrow(() -> new RuntimeException("Athlete not found"));
+
+        log.info("Filtering activities with: {}", filter.toString());
+
+        Map<String, String> sortMap = Map.of(
+                "startDate", "startDate",
+                "nameAsLink", "name",
+                "distance", "distance",
+                "elapsedTime", "elapsedTime",
+                "totalElevationGain", "totalElevationGain",
+                "sportType", "sportType",
+                "averageWatts", "averageWatts",
+                "sufferScore", "sufferScore"
+        );
+
+        String jpaField = sortMap.getOrDefault(filter.getSortField(), "startDate");
+
+        Sort sort = Sort.by(
+                filter.getSortDir() == null || "desc".equalsIgnoreCase(filter.getSortDir()) ? Sort.Direction.DESC : Sort.Direction.ASC,
+                jpaField
+        );
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        return activityRepository.findAll(
+                ActivitySpecification.withFilters(filter, athlete),
+                pageable
+        );
     }
+
 
     public long countAll() {
         return activityRepository.count();

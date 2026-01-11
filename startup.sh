@@ -16,8 +16,10 @@ function composeDown() {
 
 function composeUp() {
     echo "Bringing Docker Compose environment up..."
-    docker compose up -d
+    docker compose build --no-cache
+    docker compose up
 }
+
 
 function removeImages() {
     echo "Removing Docker images..."

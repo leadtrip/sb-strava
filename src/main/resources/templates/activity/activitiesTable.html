@@ -21,6 +21,16 @@
                 <option value="WeightTraining">Weight training</option>
             </select>
         </div>
+        <div class="col-md-3">
+            <label>Distance</label>
+            <div class="input-group">
+                <input id="targetDistance" type="number" step="1" class="form-control" placeholder="100">
+                <span class="input-group-text">km ±</span>
+                <input id="targetDistanceTolerance" type="number" step="1" class="form-control" value="5">
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
         <div class="col-md-3 d-flex align-items-end">
             <button id="filterBtn" class="btn btn-primary w-100">Apply Filters</button>
         </div>
@@ -50,10 +60,20 @@
                 ajax: {
                     url: /*[[@{/filteredactivities}]]*/,
                     data: function (d) {
+                        const order = d.order?.[0];
+                        if (order) {
+                            const colIndex = order.column;
+                            const dir = order.dir;
+
+                            d.sortField = d.columns[colIndex].data;
+                            d.sortDir = dir;
+                        }
                         const urlParams = new URLSearchParams(window.location.search);
                         d.from = $('#fromDate').val() || urlParams.get('from');
                         d.to = $('#toDate').val() || urlParams.get('to');
                         d.activityType = $('#activityType').val() || urlParams.get('type');
+                        d.targetDistance = $('#targetDistance').val();
+                        d.targetDistanceTolerance = $('#targetDistanceTolerance').val();
                     }
                 },
                 columns: [
@@ -65,6 +85,9 @@
                     { data: 'sportType' },
                     { data: 'averageWatts' },
                     { data: 'sufferScore' }
+                ],
+                columnDefs: [
+                    { orderSequence: ["asc", "desc"], targets: "_all" }
                 ]
             });
 

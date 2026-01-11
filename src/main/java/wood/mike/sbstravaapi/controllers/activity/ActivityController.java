@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +16,7 @@ import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
 import wood.mike.sbstravaapi.dtos.activity.ActivityRow;
 import wood.mike.sbstravaapi.entities.activity.Activity;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
+import wood.mike.sbstravaapi.filters.activity.ActivityFilter;
 import wood.mike.sbstravaapi.repositories.activity.ActivityRepository;
 import wood.mike.sbstravaapi.repositories.activity.ActivitySource;
 import wood.mike.sbstravaapi.services.activity.ActivityService;
@@ -25,13 +25,10 @@ import wood.mike.sbstravaapi.services.strava.StravaService;
 import wood.mike.sbstravaapi.transformers.activity.ActivityTransformer;
 import wood.mike.sbstravaapi.utils.ActivityFormatter;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -120,28 +117,26 @@ public class ActivityController {
     }
 
     @GetMapping("/filteredactivities")
-    public ResponseEntity<Map<String, Object>> getFilteredActivities(
-            @RequestParam int draw,
-            @RequestParam int start,
-            @RequestParam int length,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
-            @RequestParam(required = false) String activityType
-    ) {
-        int page = start / length;
+    public ResponseEntity<Map<String, Object>> getFilteredActivities(ActivityFilter filter) {
 
-        Page<Activity> activities = activityService.findFiltered(page, length, from, to, activityType);
+        int page = filter.getStart() / filter.getLength();
+
+        Page<Activity> activities =
+                activityService.findFiltered(page, filter.getLength(), filter);
+
         List<ActivityRow> rows = activities.getContent().stream()
                 .map(activity -> new ActivityRow(activity, activityFormatter))
-                .collect(Collectors.toList());
+                .toList();
 
         Map<String, Object> response = new HashMap<>();
-        response.put("draw", draw);
+        response.put("draw", filter.getDraw());
         response.put("recordsTotal", activityService.countAll());
         response.put("recordsFiltered", activities.getTotalElements());
         response.put("data", rows);
+
         return ResponseEntity.ok(response);
     }
+
 
 
     @GetMapping("/activity/sync")
