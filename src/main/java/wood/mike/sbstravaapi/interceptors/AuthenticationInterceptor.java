@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import wood.mike.sbstravaapi.config.Constants;
 
+import static wood.mike.sbstravaapi.config.Constants.REDIRECT_AFTER_LOGIN;
+
 @Slf4j
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
@@ -31,6 +33,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute(Constants.ATHLETE_ID) == null) {
             log.info("No session exists for user, redirecting to /login");
+            String fullUrl = request.getRequestURI();
+
+            if (request.getQueryString() != null) {
+                fullUrl += "?" + request.getQueryString();
+            }
+
+            request.getSession().setAttribute(REDIRECT_AFTER_LOGIN, fullUrl);
             response.sendRedirect("/login");
             return false;
         }

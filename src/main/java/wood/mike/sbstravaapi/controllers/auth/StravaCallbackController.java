@@ -14,6 +14,8 @@ import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.services.athlete.AthleteTokenService;
 import wood.mike.sbstravaapi.services.strava.StravaSyncService;
 
+import static wood.mike.sbstravaapi.config.Constants.REDIRECT_AFTER_LOGIN;
+
 @Slf4j
 @Controller
 public class StravaCallbackController {
@@ -40,6 +42,13 @@ public class StravaCallbackController {
             Athlete athlete = athleteTokenService.createOrUpdate(athleteTokenDto);
             request.getSession().setAttribute(Constants.ATHLETE_ID, athlete.getId());
             stravaSyncService.syncAthlete(athlete.getId(), 1);
+
+            String redirect = (String) request.getSession()
+                    .getAttribute(REDIRECT_AFTER_LOGIN);
+            if (redirect != null) {
+                request.getSession().removeAttribute(REDIRECT_AFTER_LOGIN);
+                return new RedirectView(redirect);
+            }
             return new RedirectView("/profile");
         } else {
             log.error("Error retrieving athlete data: {}", responseEntity.getStatusCode());
