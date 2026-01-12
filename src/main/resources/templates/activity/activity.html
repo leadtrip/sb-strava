@@ -65,18 +65,44 @@
 
     <div class="container mt-4">
         <div class="card activity-secondary-card">
-            <nav class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-map-tab" data-bs-toggle="tab" data-bs-target="#nav-map" type="button" role="tab" aria-controls="nav-map" aria-selected="true">Map</button>
-                <button class="nav-link" id="nav-analysis-tab" data-bs-toggle="tab" data-bs-target="#nav-analysis" type="button" role="tab" aria-controls="nav-analysis" aria-selected="false">Analysis</button>
-            </nav>
-            <div class="card-body tab-content activity-tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-map" role="tabpanel" aria-labelledby="nav-map-tab">
-                    <div th:replace="~{polylinemap/polyline :: polylinemap(${activity.summaryPolyline})}"></div>
+            <th:block th:with="hasMap=${activity.summaryPolyline != null and !#strings.isEmpty(activity.summaryPolyline)}">
+                <nav class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link"
+                            th:if="${hasMap}"
+                            th:classappend="${hasMap} ? 'active'"
+                            id="nav-map-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#nav-map"
+                            type="button"
+                            role="tab">
+                        Map
+                    </button>
+                    <button class="nav-link"
+                            th:classappend="${!hasMap} ? 'active'"
+                            id="nav-analysis-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#nav-analysis"
+                            type="button"
+                            role="tab">
+                        Analysis
+                    </button>
+                </nav>
+                <div class="card-body tab-content activity-tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade"
+                         th:if="${hasMap}"
+                         th:classappend="${hasMap} ? 'show active'"
+                         id="nav-map"
+                         role="tabpanel">
+                        <div th:replace="~{polylinemap/polyline :: polylinemap(${activity.summaryPolyline})}"></div>
+                    </div>
+                    <div class="tab-pane fade"
+                         th:classappend="${!hasMap} ? 'show active'"
+                         id="nav-analysis"
+                         role="tabpanel">
+                        <div th:replace="~{activity/activityStream :: stream(${activity})}"></div>
+                    </div>
                 </div>
-                <div class="tab-pane fade" id="nav-analysis" role="tabpanel" aria-labelledby="nav-analysis-tab">
-                    <div th:replace="~{activity/activityStream :: stream(${activity})}"></div>
-                </div>
-            </div>
+            </th:block>
         </div>
     </div>
 </div>
