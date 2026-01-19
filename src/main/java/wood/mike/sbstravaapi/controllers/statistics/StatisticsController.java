@@ -38,12 +38,10 @@ public class StatisticsController {
     @ResponseBody
     public ResponseEntity<?> getReportData(
             @PathVariable("reportType") String reportType) {
-        Optional<Athlete> athlete = athleteService.getCurrentlyLoggedInAthlete();
-        return athlete.<ResponseEntity<?>>map(value -> switch (reportType) {
-            case "load", "distance" -> ResponseEntity.ok(statisticsService.getWeeklyStatistics(reportType, value));
+        Athlete athlete = athleteService.getCurrentlyLoggedInAthleteOrThrow();
+        return switch (reportType) {
+            case "load", "distance" -> ResponseEntity.ok(statisticsService.getWeeklyStatistics(reportType, athlete));
             default -> ResponseEntity.badRequest().body(Map.of("error", "Unknown report type"));
-        }).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Map.of("error", "Athlete not found")));
-
+        };
     }
 }

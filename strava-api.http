@@ -1,7 +1,7 @@
 ###
 @strava_api = https://www.strava.com/api/v3/
-@access_token = 72c31f571f8b9611227512b9f1ee95520150a3cd
-@activity_id = 14536520130
+@access_token = 479e8c85796c0f6887e93f7c2cfd0045a1640888
+@activity_id = 17089727840
 
 ###
 GET {{strava_api}}segments/starred

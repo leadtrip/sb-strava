@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+
+  flyway:
+    enabled: true
+
+strava:
+  client:
+    id: test-client-id
+    secret: test-client-secret
+  redirect-uri: http://localhost/test/callback
+

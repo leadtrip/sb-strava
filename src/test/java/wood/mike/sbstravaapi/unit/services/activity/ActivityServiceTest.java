@@ -10,7 +10,6 @@ import wood.mike.sbstravaapi.entities.activity.Activity;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.mappers.activity.ActivityMapper;
 import wood.mike.sbstravaapi.repositories.activity.ActivityRepository;
-import wood.mike.sbstravaapi.repositories.activity.ActivitySource;
 import wood.mike.sbstravaapi.services.activity.ActivityService;
 import wood.mike.sbstravaapi.services.activity.ActivityStreamDataService;
 import wood.mike.sbstravaapi.services.athlete.AthleteService;
