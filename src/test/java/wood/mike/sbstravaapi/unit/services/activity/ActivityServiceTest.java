@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
+import wood.mike.sbstravaapi.dtos.activity.SyncActivitiesRequest;
 import wood.mike.sbstravaapi.entities.activity.Activity;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.mappers.activity.ActivityMapper;
@@ -113,7 +114,7 @@ public class ActivityServiceTest {
             return activity;
         });
 
-        assertThat(activityService.syncActivities(1)).isEqualTo(2);
+        assertThat(activityService.syncActivities(new SyncActivitiesRequest(1, null))).isEqualTo(2);
 
         verify(activityTransformer, times(stravaActivities.size())).toEntity(any());
     }
