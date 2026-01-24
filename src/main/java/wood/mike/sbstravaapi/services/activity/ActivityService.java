@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import wood.mike.sbstravaapi.dtos.activity.SyncActivitiesRequest;
 import wood.mike.sbstravaapi.filters.activity.ActivityFilter;
 import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
 import wood.mike.sbstravaapi.entities.activity.Activity;
@@ -116,7 +117,14 @@ public class ActivityService {
         return activityRepository.count();
     }
 
-    public Integer syncActivities(int totalPagesToSync) {
+    public Integer syncActivities(SyncActivitiesRequest syncActivitiesRequest) {
+        if(syncActivitiesRequest.fromDate() != null) {
+            return syncGapsFrom(syncActivitiesRequest);
+        }
+        return syncActivitiesOlderThanOldest(syncActivitiesRequest.totalPagesToSync());
+    }
+
+    private Integer syncActivitiesOlderThanOldest(final int totalPagesToSync) {
         Athlete athlete = athleteService.getCurrentlyLoggedInAthleteOrThrow();
         AtomicInteger totalSynced = new AtomicInteger();
 
@@ -153,6 +161,26 @@ public class ActivityService {
             }
         }
 
+        return totalSynced.get();
+    }
+
+    private Integer syncGapsFrom(final SyncActivitiesRequest syncActivitiesRequest) {
+        LocalDateTime fromDate = syncActivitiesRequest.fromDate().atStartOfDay();
+        AtomicInteger totalSynced = new AtomicInteger();
+        for (int i = 0; i < syncActivitiesRequest.totalPagesToSync(); i++) {
+            List<ActivityDto> activities = stravaService.getActivitiesAfter(fromDate.toEpochSecond(ZoneOffset.UTC));
+            log.info("Fetched {} activities created after {}", activities.size(), fromDate);
+            for (ActivityDto activityDto : activities) {
+                Optional<Activity> existingActivityOptional = activityRepository.findByStravaActivityId(activityDto.getId());
+                Activity activityToSave;
+                if (existingActivityOptional.isEmpty()) {
+                    activityToSave = activityRepository.save(activityTransformer.toEntity(activityDto));
+                    log.info("Created new activity: {}", activityToSave.getStravaActivityId());
+                    totalSynced.getAndIncrement();
+                }
+                fromDate = activityDto.getStartDate();
+            }
+        }
         return totalSynced.get();
     }
 

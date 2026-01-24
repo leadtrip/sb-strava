@@ -1,4 +1,5 @@
 <div th:fragment="content">
+    <p>With no from date selected, activities created before the current oldest activity will be synced, with a date selected activities created after that date will be synced.</p>
     <div class="row mb-3">
         <div class="col-md-3">
             <label for="totalPagesToSync">How many?</label>
@@ -15,13 +16,14 @@
                 <option value="10">300</option>
             </select>
         </div>
+        <div class="col-md-3">
+            <label for="fromDate">From</label>
+            <input type="date" id="fromDate" class="form-control">
+        </div>
         <div class="col-md-3 d-flex align-items-end">
             <button id="syncActivitiesBtn"
                     class="btn btn-primary"
-                    data-action="sync"
-                    data-url="/activity/syncactivities"
-                    data-method="POST"
-                    data-param-id="totalPagesToSync">
+                    data-action="sync">
                 Sync
             </button>
 

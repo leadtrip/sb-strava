@@ -31,24 +31,25 @@ document.addEventListener('DOMContentLoaded', function () {
         const button = e.target;
         if (!button || button.dataset.action !== 'sync') return;
 
-        const url = button.dataset.url;
-        const method = button.dataset.method || 'POST';
-        const paramId = button.dataset.paramId;
+        const body = {
+            totalPagesToSync: Number(
+                document.getElementById('totalPagesToSync').value
+            )
+        };
 
-        let body = null;
-
-        if (paramId) {
-            const paramValue = document.getElementById(paramId)?.value;
-            body = `${paramId}=${encodeURIComponent(paramValue)}`;
+        if (document.getElementById('fromDate')) {
+            body.fromDate = document.getElementById('fromDate').value;
         }
 
         showSpinner(true);
         button.disabled = true;
 
-        fetch(url, {
-            method: method,
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: body
+        fetch('/activity/syncactivities', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
         })
             .then(response => {
                 if (!response.ok) throw new Error('Network response was not ok');
