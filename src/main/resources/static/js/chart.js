@@ -51,8 +51,16 @@ function getColorForValue(value, min, max) {
 }
 
 function renderBarChart(labels, values, valueConverter, label) {
-    const ctx = document.getElementById('chartCanvas');
-    if (!ctx) return;
+    const canvas = document.getElementById('chartCanvas');
+    if (!canvas) return;
+
+    const container = document.getElementById('chartContainer');
+    canvas.width = container.clientWidth;
+    container.style.overflowY = 'auto';
+
+    const barHeight = 30;
+    const barSpacing = 10;
+    canvas.height = labels.length * (barHeight + barSpacing);
 
     const min = Math.min(...values);
     const max = Math.max(...values);
@@ -66,7 +74,7 @@ function renderBarChart(labels, values, valueConverter, label) {
 
     const convertedValues = valueConverter ? values.map(valueConverter) : values;
 
-    return new Chart(ctx, {
+    return new Chart(canvas, {
         type: 'bar',
         data: {
             labels,
@@ -76,11 +84,14 @@ function renderBarChart(labels, values, valueConverter, label) {
                 backgroundColor: backgroundColors,
                 borderWidth: 2,
                 borderRadius: 20,
+                barThickness: 20,
+                maxBarThickness: 30
             }]
         },
         options: {
             indexAxis: 'y',
-            responsive: true,
+            responsive: false,
+            maintainAspectRatio: false,
             animation: {
                 duration: 1000,
                 easing: 'easeOutBounce'
@@ -121,6 +132,11 @@ function renderBarChart(labels, values, valueConverter, label) {
                 x: {
                     position: 'top',
                     beginAtZero: true
+                },
+                y: {
+                    ticks: {
+                        autoSkip: false
+                    }
                 }
             },
             onClick: (e, elements) => {

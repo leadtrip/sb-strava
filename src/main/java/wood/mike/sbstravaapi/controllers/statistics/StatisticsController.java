@@ -37,7 +37,7 @@ public class StatisticsController {
     @GetMapping("/statistics/data/{reportType}")
     @ResponseBody
     public ResponseEntity<?> getReportData(
-            @PathVariable("reportType") String reportType) {
+            @PathVariable String reportType) {
         Athlete athlete = athleteService.getCurrentlyLoggedInAthleteOrThrow();
         return switch (reportType) {
             case "load", "distance" -> ResponseEntity.ok(statisticsService.getWeeklyStatistics(reportType, athlete));

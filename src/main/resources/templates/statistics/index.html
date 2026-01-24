@@ -5,7 +5,9 @@
         <option value="distance">Distance</option>
     </select>
 
-    <canvas id="chartCanvas" height="800" class="mt-4"></canvas>
+    <div id="chartContainer" style="height: 500px; overflow-y: hidden;">
+        <canvas id="chartCanvas" class="mt-4" style="width: 100%"></canvas>
+    </div>
 
     <script>
         document.getElementById('reportTypeSelect').addEventListener('change', function () {
