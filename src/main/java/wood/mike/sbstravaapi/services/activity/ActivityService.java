@@ -119,12 +119,12 @@ public class ActivityService {
 
     public Integer syncActivities(SyncActivitiesRequest syncActivitiesRequest) {
         if(syncActivitiesRequest.fromDate() != null) {
-            return syncGapsFrom(syncActivitiesRequest);
+            return syncActivitiesCreatedAfter(syncActivitiesRequest);
         }
-        return syncActivitiesOlderThanOldest(syncActivitiesRequest.totalPagesToSync());
+        return syncActivitiesCreatedBeforeOldest(syncActivitiesRequest.totalPagesToSync());
     }
 
-    private Integer syncActivitiesOlderThanOldest(final int totalPagesToSync) {
+    private Integer syncActivitiesCreatedBeforeOldest(final int totalPagesToSync) {
         Athlete athlete = athleteService.getCurrentlyLoggedInAthleteOrThrow();
         AtomicInteger totalSynced = new AtomicInteger();
 
@@ -164,7 +164,7 @@ public class ActivityService {
         return totalSynced.get();
     }
 
-    private Integer syncGapsFrom(final SyncActivitiesRequest syncActivitiesRequest) {
+    private Integer syncActivitiesCreatedAfter(final SyncActivitiesRequest syncActivitiesRequest) {
         LocalDateTime fromDate = syncActivitiesRequest.fromDate().atStartOfDay();
         AtomicInteger totalSynced = new AtomicInteger();
         for (int i = 0; i < syncActivitiesRequest.totalPagesToSync(); i++) {

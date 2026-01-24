@@ -90,7 +90,7 @@ public class ActivityServiceTest {
     }
 
     @Test
-    public void testSyncActivities() {
+    public void testSyncActivities_older() {
         Athlete bob = new Athlete();
         LocalDateTime activityStartDate = LocalDateTime.of(2025, Month.APRIL, 1, 10, 0);
         Activity oldestSyncedActivity = new Activity();
