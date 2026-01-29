@@ -40,7 +40,7 @@ public class AthleteController {
         Long athleteId = (Long) httpSession.getAttribute(Constants.ATHLETE_ID);
         Optional<Athlete> athlete = athleteService.getAthlete(athleteId);
         if (athlete.isPresent()) {
-            ActivityStats activityStats = activityStatsService.fetchIfMissing();
+            ActivityStats activityStats = activityStatsService.fetchAndSync();
             model.addAttribute("athlete", athlete.get());
             model.addAttribute("activityStats", activityStats);
             model.addAttribute("pageTitle", "Athlete Profile");

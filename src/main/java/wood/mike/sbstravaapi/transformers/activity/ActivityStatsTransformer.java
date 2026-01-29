@@ -22,4 +22,8 @@ public class ActivityStatsTransformer {
         entity.setAthlete(athleteService.getCurrentlyLoggedInAthleteOrThrow());
         return entity;
     }
+
+    public void updateEntityFromDto(ActivityStatsDto dto, ActivityStats entity) {
+        activityStatsMapper.updateEntityFromDto(dto, entity);
+    }
 }
