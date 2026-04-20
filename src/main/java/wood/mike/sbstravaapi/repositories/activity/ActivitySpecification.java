@@ -1,6 +1,7 @@
 package wood.mike.sbstravaapi.repositories.activity;
 
 import jakarta.persistence.criteria.Predicate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import wood.mike.sbstravaapi.filters.activity.ActivityFilter;
 import wood.mike.sbstravaapi.entities.activity.Activity;
@@ -10,7 +11,10 @@ import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class ActivitySpecification {
+
+    private static final Integer KM_MULTIPLIER = 1000;
 
     public static Specification<Activity> withFilters(
             ActivityFilter filter, Athlete athlete) {
@@ -33,12 +37,24 @@ public class ActivitySpecification {
             }
 
             if (filter.getTargetDistance() != null) {
-                double tolerance = filter.getTargetDistanceTolerance() != null ? filter.getTargetDistanceTolerance() : 5.0;
+                double minMeters;
+                double maxMeters;
 
-                double min = (filter.getTargetDistance() - tolerance) * 1000;
-                double max = (filter.getTargetDistance() + tolerance) * 1000;
+                if (filter.getTargetDistanceTolerance() != null) {
+                    minMeters = (filter.getTargetDistance() - filter.getTargetDistanceTolerance()) * KM_MULTIPLIER;
+                    maxMeters = (filter.getTargetDistance() + filter.getTargetDistanceTolerance()) * KM_MULTIPLIER;
 
-                predicates.add(cb.between(root.get("distance"), min, max));
+                    predicates.add(cb.between(root.get("distance"), minMeters, maxMeters));
+                } else {
+                    double baseKm = Math.floor(filter.getTargetDistance());
+                    minMeters = baseKm * KM_MULTIPLIER;
+                    maxMeters = (baseKm + 1.0) * KM_MULTIPLIER;
+
+                    predicates.add(cb.greaterThanOrEqualTo(root.get("distance"), minMeters));
+                    predicates.add(cb.lessThan(root.get("distance"), maxMeters));
+                }
+
+                log.info("Target distance meters: min={}, max={}", minMeters, maxMeters);
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));

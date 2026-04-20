@@ -2,6 +2,8 @@ package wood.mike.sbstravaapi.utils;
 
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -29,7 +31,14 @@ public class ActivityFormatter {
     }
 
     public String formatDistance(Float meters) {
-        return meters == null ? "-" : String.format("%.2f km", meters / 1000f);
+        if (meters == null) {
+            return "-";
+        }
+
+        BigDecimal kms = new BigDecimal(meters / 1000f);
+        BigDecimal truncatedKms = kms.setScale(2, RoundingMode.DOWN);
+
+        return String.format("%.2f km", truncatedKms);
     }
 
     public String formatDistance(Double meters) {

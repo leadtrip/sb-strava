@@ -22,11 +22,20 @@
             </select>
         </div>
         <div class="col-md-3">
-            <label>Distance</label>
+            <label for="targetDistance">
+                Distance
+                <i class="bi bi-info-circle text-muted"
+                   style="cursor: pointer;"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="top"
+                   data-bs-custom-class="custom-tooltip"
+                   data-bs-title="Enter a distance to find activities in that kilometer range. Add a tolerance to expand the search (e.g., 10km +/- 2km).">
+                </i>
+            </label>
             <div class="input-group">
                 <input id="targetDistance" type="number" step="1" class="form-control" placeholder="100">
                 <span class="input-group-text">km ±</span>
-                <input id="targetDistanceTolerance" type="number" step="1" class="form-control" value="5">
+                <input id="targetDistanceTolerance" type="number" step="1" class="form-control" placeholder="tolerance">
             </div>
         </div>
     </div>
@@ -104,6 +113,9 @@
         /*]]>*/
     </script>
     <script>
+        document.querySelectorAll('[data-bs-toggle="tooltip"]')
+            .forEach(el => new bootstrap.Tooltip(el));
+
         document.addEventListener("DOMContentLoaded", function () {
             const urlParams = new URLSearchParams(window.location.search);
 
