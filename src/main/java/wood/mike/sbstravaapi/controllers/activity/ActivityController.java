@@ -1,6 +1,7 @@
 package wood.mike.sbstravaapi.controllers.activity;
 
 import jakarta.annotation.Nullable;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
 import wood.mike.sbstravaapi.dtos.activity.ActivityRow;
@@ -146,7 +148,7 @@ public class ActivityController {
     }
 
     @PostMapping("/activity/syncactivities")
-    public ResponseEntity<Integer> syncActivities(@RequestBody SyncActivitiesRequest request) {
+    public ResponseEntity<Integer> syncActivities(@RequestBody @Valid SyncActivitiesRequest request) {
         log.info("Syncing activities, total pages {}, from date {}", request.totalPagesToSync(), request.fromDate());
         Integer totalSynced = activityService.syncActivities(request);
         return ResponseEntity.ok(totalSynced);

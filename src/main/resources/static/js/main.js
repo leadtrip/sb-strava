@@ -31,35 +31,41 @@ document.addEventListener('DOMContentLoaded', function () {
         const button = e.target;
         if (!button || button.dataset.action !== 'sync') return;
 
-        const body = {
-            totalPagesToSync: Number(
+        const url = button.dataset.url;
+
+        const body = {};
+
+        if(button.dataset.type === 'activities') {
+            body.totalPagesToSync = Number(
                 document.getElementById('totalPagesToSync').value
             )
-        };
 
-        if (document.getElementById('fromDate')) {
-            body.fromDate = document.getElementById('fromDate').value;
+            if (document.getElementById('fromDate')) {
+                body.fromDate = document.getElementById('fromDate').value;
+            }
         }
 
         showSpinner(true);
         button.disabled = true;
 
-        fetch('/activity/syncactivities', {
+        fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body)
         })
-            .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
-                return response.json();
+            .then(async response => {
+                if (response.ok) {
+                    return response.json();
+                }
+
+                const errorMessage = await response.text();
+                throw new Error(errorMessage || 'An unknown error occurred');
             })
             .then(data => {
-                showGlobalAlert(`Sync completed: ${JSON.stringify(data)}`, 'success');
+                showGlobalAlert(`Sync completed: ${data} items synced`, 'success');
             })
-            .catch(() => {
-                showGlobalAlert('Sync failed. Please try again.', 'danger');
+            .catch((error) => {
+                showGlobalAlert(error.message, 'danger');
             })
             .finally(() => {
                 showSpinner(false);
