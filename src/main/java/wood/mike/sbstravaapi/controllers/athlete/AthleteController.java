@@ -6,14 +6,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import wood.mike.sbstravaapi.config.Constants;
-import wood.mike.sbstravaapi.dtos.activity.ActivityStatsDto;
 import wood.mike.sbstravaapi.entities.activity.ActivityStats;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.services.activity.ActivityStatsService;
 import wood.mike.sbstravaapi.services.athlete.AthleteService;
 import wood.mike.sbstravaapi.services.strava.StravaService;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j

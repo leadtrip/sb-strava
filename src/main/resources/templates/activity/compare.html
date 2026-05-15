@@ -1,0 +1,132 @@
+<div th:fragment="content">
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label for="reportTypeSelect">Metric</label>
+            <select class="form-select" id="reportTypeSelect" aria-label="Select report">
+                <option value="load">Load</option>
+                <option value="distance">Distance</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="fromDate">Start Date</label>
+            <input type="date" id="fromDate" name="fromDate"
+                   th:value="${fromDate}" class="form-control">
+        </div>
+        <div class="col-md-3">
+            <label for="toDate">End Date</label>
+            <input type="date" id="toDate" name="toDate"
+                   th:value="${toDate}" class="form-control">
+        </div>
+        <div class="col-md-3">
+            <label for="activityType">Activity Type</label>
+            <select id="activityType" class="form-select">
+                <option value="">All</option>
+                <option value="Run">Run</option>
+                <option value="Ride">Ride</option>
+                <option value="VirtualRide">Virtual ride</option>
+                <option value="Swim">Swim</option>
+                <option value="Walk">Walk</option>
+                <option value="Hike">Hike</option>
+                <option value="WeightTraining">Weight training</option>
+            </select>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label for="compareSelect">Compare with:</label>
+            <select class="form-select" id="compareSelect">
+                <option value="none">None</option>
+                <option value="previous">Previous Period</option>
+                <option th:each="year : ${comparisonYears}"
+                        th:value="'year-' + ${year}"
+                        th:text="${year} + ' Year' + (${year} > 1 ? 's' : '') + ' Ago'">
+                </option>
+            </select>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <button id="filterBtn" class="btn btn-primary w-100">Apply</button>
+        </div>
+    </div>
+
+    <div style="margin-top: 10px;">
+        <div id="chartContainer" style="height: 800px; overflow-y: hidden;">
+            <canvas id="chartCanvas" class="mt-4" style="width: 100%"></canvas>
+        </div>
+    </div>
+
+    <script>
+
+        document.getElementById('filterBtn').addEventListener('click', async function () {
+            const reportType = document.getElementById('reportTypeSelect').value;
+            const fromStr = document.getElementById('fromDate').value;
+            const toStr = document.getElementById('toDate').value;
+            const compareOption = document.getElementById('compareSelect').value;
+
+            // 1. Fetch and render Primary Data
+            const primaryData = await fetchStats(reportType, fromStr, toStr);
+            renderChart(reportType + 'Compare', primaryData.labels, primaryData.values);
+
+            // 2. Handle Comparison
+            if (compareOption !== 'none' && fromStr && toStr) {
+                let compFrom = new Date(fromStr);
+                let compTo = new Date(toStr);
+                let label = "";
+
+                if (compareOption === 'previous') {
+                    const diffTime = Math.abs(new Date(toStr) - new Date(fromStr));
+                    // Add 1 day to the diff to make it inclusive
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+                    compFrom.setDate(compFrom.getDate() - diffDays);
+                    compTo.setDate(compTo.getDate() - diffDays);
+                    label = "Previous Period";
+                }
+                else if (compareOption.startsWith('year-')) {
+                    const numYears = parseInt(compareOption.split('-')[1]);
+
+                    compFrom.setFullYear(compFrom.getFullYear() - numYears);
+                    compTo.setFullYear(compTo.getFullYear() - numYears);
+                    label = `${numYears} Year${numYears > 1 ? 's' : ''} Ago`;
+                }
+
+                const compData = await fetchStats(reportType, formatDate(compFrom), formatDate(compTo));
+
+                addDatasetToChart(label, compData.values, 'rgba(150, 150, 150, 0.7)');
+            }
+        });
+
+        function formatDate(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        async function fetchStats(type, from, to) {
+            const res = await fetch(`/statistics/data/${type}?fromDate=${from}&toDate=${to}`);
+            return res.json();
+        }
+
+        function addDatasetToChart(label, data, color) {
+            const primaryCount = currentChart.data.labels.length;
+            let adjustedData = data;
+
+            if (data.length < primaryCount) {
+                // If comparison data is shorter, pad the START with nulls
+                // (assuming the user wants to see the most recent weeks aligned)
+                const padding = new Array(primaryCount - data.length).fill(null);
+                adjustedData = padding.concat(data);
+            }
+
+            const newDataset = {
+                label: label,
+                data: adjustedData,
+                borderColor: color,
+                backgroundColor: 'transparent',
+                borderDash: [5, 5],
+                tension: 0.4,
+                pointRadius: 0
+            };
+
+            currentChart.data.datasets.push(newDataset);
+            currentChart.update();
+        }
+    </script>
+</div>

@@ -5,6 +5,8 @@ import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.repositories.activity.ActivityRepository;
 import wood.mike.sbstravaapi.repositories.activity.WeeklyStatistic;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +20,11 @@ public class StatisticsService {
         this.activityRepository = activityRepository;
     }
 
-    public Map<String, List<?>> getWeeklyStatistics(String reportType, Athlete athlete) {
-        List<WeeklyStatistic> weeklyStatistics =  fetchWeeklyStats(reportType, athlete).reversed();
+    public Map<String, List<?>> getWeeklyStatistics(String reportType, Athlete athlete, LocalDate from, LocalDate to) {
+        LocalDateTime start = (from != null) ? from.atStartOfDay() : null;
+        LocalDateTime end = (to != null) ? to.atTime(23, 59, 59) : null;
+
+        List<WeeklyStatistic> weeklyStatistics = fetchWeeklyStats(reportType, athlete, start, end).reversed();
         List<String> labels = weeklyStatistics.stream()
                 .map(stat -> stat.getWeekStartDate().format(DateTimeFormatter.ofPattern("dd MMM yyyy")))
                 .toList();
@@ -34,10 +39,10 @@ public class StatisticsService {
         );
     }
 
-    List<WeeklyStatistic> fetchWeeklyStats(String reportType, Athlete athlete) {
+    List<WeeklyStatistic> fetchWeeklyStats(String reportType, Athlete athlete, LocalDateTime     from, LocalDateTime to) {
         return switch (reportType) {
-            case "load" -> this.activityRepository.sumSufferScoreByWeek(athlete);
-            case "distance" -> this.activityRepository.sumDistanceByWeek(athlete);
+            case "load" -> this.activityRepository.sumSufferScoreByWeek(athlete, from, to);
+            case "distance" -> this.activityRepository.sumDistanceByWeek(athlete, from, to);
             default -> throw new RuntimeException("Unknown report type");
         };
     }

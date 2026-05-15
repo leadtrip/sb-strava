@@ -3,6 +3,7 @@ package wood.mike.sbstravaapi.controllers.activity;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,14 +27,19 @@ import wood.mike.sbstravaapi.services.strava.StravaService;
 import wood.mike.sbstravaapi.transformers.activity.ActivityTransformer;
 import wood.mike.sbstravaapi.utils.ActivityFormatter;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 @Slf4j
 @Controller
 public class ActivityController {
+
+    @Value("${strava.compare.maxPages:10}")
+    private int maxYears;
 
     private final ActivityService activityService;
     private final AthleteService athleteService;
@@ -138,8 +144,6 @@ public class ActivityController {
         return ResponseEntity.ok(response);
     }
 
-
-
     @GetMapping("/activity/sync")
     public String sync(Model model) {
         model.addAttribute("pageTitle", "Sync activities");
@@ -154,4 +158,19 @@ public class ActivityController {
         return ResponseEntity.ok(totalSynced);
     }
 
+    @GetMapping("/activity/compare")
+    public String compare(Model model) {
+        LocalDate endDate = LocalDate.now();
+        LocalDate startDate = endDate.minusWeeks(12);
+        List<Integer> years = IntStream.rangeClosed(1, maxYears).boxed().toList();
+
+        model.addAttribute("pageTitle", "Compare activity periods");
+        model.addAttribute("templateName", "activity/compare");
+
+        model.addAttribute("fromDate", startDate);
+        model.addAttribute("toDate", endDate);
+        model.addAttribute("comparisonYears", years);
+
+        return "layout";
+    }
 }

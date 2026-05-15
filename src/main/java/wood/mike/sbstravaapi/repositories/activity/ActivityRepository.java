@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import wood.mike.sbstravaapi.entities.activity.Activity;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,17 +26,26 @@ public interface ActivityRepository extends JpaRepository<Activity, Long>, JpaSp
     @Query("SELECT NEW wood.mike.sbstravaapi.repositories.activity.WeeklyStatistic(YEAR(a.startDate), WEEK(a.startDate), SUM(a.sufferScore)) " +
             "FROM Activity a " +
             "WHERE a.athlete = :athlete " +
+            "AND (:fromDate IS NULL OR a.startDate >= :fromDate) " +
+            "AND (:toDate IS NULL OR a.startDate <= :toDate) " +
             "GROUP BY YEAR(a.startDate), WEEK(a.startDate) " +
             "ORDER BY YEAR(a.startDate), WEEK(a.startDate)")
-    List<WeeklyStatistic> sumSufferScoreByWeek(@Param("athlete") Athlete athlete);
+    List<WeeklyStatistic> sumSufferScoreByWeek(
+            @Param("athlete") Athlete athlete,
+            @Param("fromDate") LocalDateTime fromDate,
+            @Param("toDate") LocalDateTime toDate);
 
     @Query("SELECT NEW wood.mike.sbstravaapi.repositories.activity.WeeklyStatistic(" +
             "YEAR(a.startDate), WEEK(a.startDate), SUM(a.distance)) " +
             "FROM Activity a " +
             "WHERE a.athlete = :athlete " +
+            "AND (:fromDate IS NULL OR a.startDate >= :fromDate) " +
+            "AND (:toDate IS NULL OR a.startDate <= :toDate) " +
             "GROUP BY YEAR(a.startDate), WEEK(a.startDate) " +
             "ORDER BY YEAR(a.startDate), WEEK(a.startDate)")
-    List<WeeklyStatistic> sumDistanceByWeek(@Param("athlete") Athlete athlete);
+    List<WeeklyStatistic> sumDistanceByWeek(@Param("athlete") Athlete athlete,
+                                            @Param("fromDate") LocalDateTime fromDate,
+                                            @Param("toDate") LocalDateTime toDate);
 
 
 }

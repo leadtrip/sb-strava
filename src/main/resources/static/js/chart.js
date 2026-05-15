@@ -4,6 +4,8 @@ let activityTypeChartInstance = null;
 const chartRenderers = {
     load: (labels, values) => renderBarChart(labels, values, null, 'Load'),
     distance: (labels, values) => renderBarChart(labels, values, v => Math.round(v / 1000), 'Distance (km)'),
+    loadCompare: (labels, values) => renderLineChart(labels, values, null, 'Load'),
+    distanceCompare: (labels, values) => renderLineChart(labels, values, v => Math.round(v / 1000), 'Distance (km)'),
 };
 
 let currentChart;
@@ -48,6 +50,52 @@ function getColorForValue(value, min, max) {
     const b = Math.round(lower.color[2] + rangePct * (upper.color[2] - lower.color[2]));
 
     return `rgb(${r},${g},${b},0.4)`;
+}
+
+function renderLineChart(labels, values, valueConverter, label) {
+    const canvas = document.getElementById('chartCanvas');
+    if (!canvas) return;
+
+    const container = document.getElementById('chartContainer');
+    canvas.width = container.clientWidth;
+    container.style.overflowY = 'auto';
+
+    const convertedValues = valueConverter ? values.map(valueConverter) : values;
+
+    return new Chart(canvas, {
+        type: 'line',
+        data: {
+            labels: labels.reverse(),
+            datasets: [{
+                label: label,
+                data: convertedValues.reverse(),
+                tension: 0.4,
+                pointRadius: 2,
+                hitRadius: 10
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: label
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        autoSkip: true,
+                        maxRotation: 45,
+                        minRotation: 0
+                    }
+                }
+            }
+        },
+    });
 }
 
 function renderBarChart(labels, values, valueConverter, label) {
