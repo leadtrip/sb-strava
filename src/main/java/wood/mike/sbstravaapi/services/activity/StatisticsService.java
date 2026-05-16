@@ -22,6 +22,7 @@ public class StatisticsService {
     public StatisticsService(ActivityRepository activityRepository) {
         this.activityRepository = activityRepository;
     }
+
     public Map<String, List<?>> getWeeklyStatistics(String reportType, Athlete athlete, LocalDate from, LocalDate to, String activityType) {
         if (from == null || to == null) {
             return getLegacyAllTimeStats(reportType, athlete, activityType);
