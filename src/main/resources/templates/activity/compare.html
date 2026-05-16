@@ -116,19 +116,11 @@
         }
 
         function addDatasetToChart(label, data, color) {
-            const primaryCount = currentChart.data.labels.length;
-            let adjustedData = data;
-
-            if (data.length < primaryCount) {
-                // If comparison data is shorter, pad the START with nulls
-                // (assuming the user wants to see the most recent weeks aligned)
-                const padding = new Array(primaryCount - data.length).fill(null);
-                adjustedData = padding.concat(data);
-            }
+            if (!currentChart) return;
 
             const newDataset = {
                 label: label,
-                data: adjustedData,
+                data: data,
                 borderColor: color,
                 backgroundColor: 'transparent',
                 borderDash: [5, 5],

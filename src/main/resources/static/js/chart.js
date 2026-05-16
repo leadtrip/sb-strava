@@ -65,10 +65,10 @@ function renderLineChart(labels, values, valueConverter, label) {
     return new Chart(canvas, {
         type: 'line',
         data: {
-            labels: labels.reverse(),
+            labels: labels,
             datasets: [{
                 label: label,
-                data: convertedValues.reverse(),
+                data: convertedValues,
                 tension: 0.4,
                 pointRadius: 2,
                 hitRadius: 10
