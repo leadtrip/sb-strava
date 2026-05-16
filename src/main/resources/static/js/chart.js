@@ -83,7 +83,17 @@ function renderLineChart(labels, values, valueConverter, label) {
                 title: {
                     display: true,
                     text: label
+                },
+                tooltip: {
+                    enabled: false,
+                    external: externalTooltipHandler,
+                    mode: 'index',
+                    intersect: false
                 }
+            },
+            interaction: {
+                mode: 'index',
+                intersect: false
             },
             scales: {
                 x: {
@@ -96,6 +106,73 @@ function renderLineChart(labels, values, valueConverter, label) {
             }
         },
     });
+}
+
+function externalTooltipHandler(context) {
+    const {chart, tooltip} = context;
+    let tooltipEl = chart.canvas.parentNode.querySelector('div.custom-chart-tooltip');
+
+    if (!tooltipEl) {
+        tooltipEl = document.createElement('div');
+        tooltipEl.className = 'custom-chart-tooltip';
+        tooltipEl.style.background = 'rgba(0, 0, 0, 0.85)';
+        tooltipEl.style.borderRadius = '6px';
+        tooltipEl.style.color = 'white';
+        tooltipEl.style.opacity = 1;
+        tooltipEl.style.pointerEvents = 'none';
+        tooltipEl.style.position = 'absolute';
+        tooltipEl.style.transition = 'all .1s ease';
+        tooltipEl.style.padding = '12px';
+        tooltipEl.style.zIndex = '100';
+        tooltipEl.style.minWidth = '180px';
+        tooltipEl.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+        chart.canvas.parentNode.appendChild(tooltipEl);
+    }
+
+    if (tooltip.opacity === 0) {
+        tooltipEl.style.opacity = 0;
+        return;
+    }
+
+    if (tooltip.body) {
+        const titleLines = tooltip.title || [];
+        const bodyLines = tooltip.body.map(b => b.lines);
+
+        let innerHtml = '<div style="font-weight: bold; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 4px;">';
+        titleLines.forEach(title => {
+            innerHtml += `<span>Week of ${title}</span>`;
+        });
+        innerHtml += '</div><div style="font-size: 13px;">';
+
+        bodyLines.forEach((body, i) => {
+            const colors = tooltip.labelColors[i];
+            const rawString = body[0];
+            const numberOnly = rawString.includes(':') ? rawString.split(':')[1].trim() : rawString;
+            const style = `
+                display: inline-block;
+                background: ${colors.borderColor};
+                border-color: ${colors.borderColor};
+                border-width: 2px;
+                width: 10px;
+                height: 10px;
+                margin-right: 8px;
+                border-radius: 50%;
+            `;
+            const indicator = `<span style="${style}"></span>`;
+            innerHtml += `<div style="margin-bottom: 4px; display: flex; align-items: center; font-size: 14px;">${indicator}${numberOnly}</div>`;
+        });
+        innerHtml += '</div>';
+
+        tooltipEl.innerHTML = innerHtml;
+    }
+
+    const {offsetLeft: positionX, offsetTop: positionY} = chart.canvas;
+
+    tooltipEl.style.opacity = 1;
+    tooltipEl.style.left = positionX + tooltip.caretX + 'px';
+    tooltipEl.style.top = positionY + tooltip.caretY + 'px';
+
+    tooltipEl.style.transform = 'translate(-50%, -105%)';
 }
 
 function renderBarChart(labels, values, valueConverter, label) {

@@ -42,9 +42,10 @@ public class StatisticsController {
     public ResponseEntity<?> getReportData(
             @PathVariable String reportType,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
-
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+            @RequestParam(required = false) String activityType) {
+        log.info("Fetching {} statistics from: {} to: {} for activity type: {}", reportType, fromDate, toDate, activityType);
         Athlete athlete = athleteService.getCurrentlyLoggedInAthleteOrThrow();
-        return ResponseEntity.ok(statisticsService.getWeeklyStatistics(reportType, athlete, fromDate, toDate));
+        return ResponseEntity.ok(statisticsService.getWeeklyStatistics(reportType, athlete, fromDate, toDate, activityType));
     }
 }

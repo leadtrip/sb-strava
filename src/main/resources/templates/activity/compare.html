@@ -10,11 +10,16 @@
         <div class="col-md-3">
             <label for="fromDate">Start Date</label>
             <input type="date" id="fromDate" name="fromDate"
-                   th:value="${fromDate}" class="form-control">
+                   th:value="${fromDate}"
+                   min="2012-01-02"
+                   step="7"
+                   class="form-control">
         </div>
         <div class="col-md-3">
             <label for="toDate">End Date</label>
             <input type="date" id="toDate" name="toDate"
+                   min="2012-01-02"
+                   step="7"
                    th:value="${toDate}" class="form-control">
         </div>
         <div class="col-md-3">
@@ -49,7 +54,7 @@
     </div>
 
     <div style="margin-top: 10px;">
-        <div id="chartContainer" style="height: 800px; overflow-y: hidden;">
+        <div id="chartContainer" style="height: 800px; overflow-y: hidden; position: relative;">
             <canvas id="chartCanvas" class="mt-4" style="width: 100%"></canvas>
         </div>
     </div>
@@ -60,13 +65,12 @@
             const reportType = document.getElementById('reportTypeSelect').value;
             const fromStr = document.getElementById('fromDate').value;
             const toStr = document.getElementById('toDate').value;
+            const activityType = document.getElementById('activityType').value;
             const compareOption = document.getElementById('compareSelect').value;
 
-            // 1. Fetch and render Primary Data
-            const primaryData = await fetchStats(reportType, fromStr, toStr);
+            const primaryData = await fetchStats(reportType, fromStr, toStr, activityType);
             renderChart(reportType + 'Compare', primaryData.labels, primaryData.values);
 
-            // 2. Handle Comparison
             if (compareOption !== 'none' && fromStr && toStr) {
                 let compFrom = new Date(fromStr);
                 let compTo = new Date(toStr);
@@ -89,9 +93,11 @@
                     label = `${numYears} Year${numYears > 1 ? 's' : ''} Ago`;
                 }
 
-                const compData = await fetchStats(reportType, formatDate(compFrom), formatDate(compTo));
+                const compData = await fetchStats(reportType, formatDate(compFrom), formatDate(compTo), activityType);
 
-                addDatasetToChart(label, compData.values, 'rgba(150, 150, 150, 0.7)');
+                const compValues = (reportType === 'distance') ? compData.values.map(v => Math.round(v / 1000)) : compData.values;
+
+                addDatasetToChart(label, compValues, 'rgba(150, 150, 150, 0.7)');
             }
         });
 
@@ -99,8 +105,13 @@
             return date.toISOString().split('T')[0];
         }
 
-        async function fetchStats(type, from, to) {
-            const res = await fetch(`/statistics/data/${type}?fromDate=${from}&toDate=${to}`);
+        async function fetchStats(type, from, to, sport) {
+            let url = `/statistics/data/${type}?`;
+            if (from) url += `fromDate=${from}&`;
+            if (to) url += `toDate=${to}&`;
+            if (sport) url += `activityType=${sport}`;
+
+            const res = await fetch(url);
             return res.json();
         }
 

@@ -20,11 +20,12 @@ public class StatisticsService {
         this.activityRepository = activityRepository;
     }
 
-    public Map<String, List<?>> getWeeklyStatistics(String reportType, Athlete athlete, LocalDate from, LocalDate to) {
+    public Map<String, List<?>> getWeeklyStatistics(String reportType, Athlete athlete, LocalDate from, LocalDate to, String activityType) {
         LocalDateTime start = (from != null) ? from.atStartOfDay() : null;
         LocalDateTime end = (to != null) ? to.atTime(23, 59, 59) : null;
 
-        List<WeeklyStatistic> weeklyStatistics = fetchWeeklyStats(reportType, athlete, start, end).reversed();
+        List<WeeklyStatistic> weeklyStatistics = fetchWeeklyStats(reportType, athlete, start, end, activityType).reversed();
+
         List<String> labels = weeklyStatistics.stream()
                 .map(stat -> stat.getWeekStartDate().format(DateTimeFormatter.ofPattern("dd MMM yyyy")))
                 .toList();
@@ -39,10 +40,10 @@ public class StatisticsService {
         );
     }
 
-    List<WeeklyStatistic> fetchWeeklyStats(String reportType, Athlete athlete, LocalDateTime     from, LocalDateTime to) {
+    private List<WeeklyStatistic> fetchWeeklyStats(String reportType, Athlete athlete, LocalDateTime from, LocalDateTime to, String activityType) {
         return switch (reportType) {
-            case "load" -> this.activityRepository.sumSufferScoreByWeek(athlete, from, to);
-            case "distance" -> this.activityRepository.sumDistanceByWeek(athlete, from, to);
+            case "load" -> this.activityRepository.sumSufferScoreByWeek(athlete, from, to, activityType);
+            case "distance" -> this.activityRepository.sumDistanceByWeek(athlete, from, to, activityType);
             default -> throw new RuntimeException("Unknown report type");
         };
     }
