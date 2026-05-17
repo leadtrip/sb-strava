@@ -89,6 +89,9 @@ public class Activity {
     @Column(name = "suffer_score")
     private Integer sufferScore;
 
+    @Column(name = "device_name")
+    private String deviceName;
+
     @Column(name = "source", nullable = false)
     @Enumerated(EnumType.STRING)
     private ActivitySource source = ActivitySource.SYNC;

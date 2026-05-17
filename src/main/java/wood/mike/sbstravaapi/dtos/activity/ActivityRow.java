@@ -73,6 +73,8 @@ public class ActivityRow {
         return activity.getSufferScore();
     }
 
+    public String getDeviceName() {return activity.getDeviceName();}
+
     public String getSummaryPolyline() {
         return activity.getPolylineMap().getSummaryPolyline();
     }

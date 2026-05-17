@@ -28,15 +28,6 @@ public class ActivityStatsService {
         this.activityStatsTransformer = activityStatsTransformer;
     }
 
-    public ActivityStats fetchIfMissing() {
-        Athlete athlete = athleteService.getCurrentlyLoggedInAthleteOrThrow();
-        if(activityStatsRepository.findByAthlete(athlete).isEmpty()) {
-            ActivityStatsDto activityStats = stravaService.getAthleteStats(athlete.getStravaAthleteId());
-            activityStatsRepository.save(activityStatsTransformer.toEntity(activityStats));
-        }
-        return activityStatsRepository.findByAthlete(athlete).get();
-    }
-
     @Transactional
     public ActivityStats fetchAndSync() {
         Athlete athlete = athleteService.getCurrentlyLoggedInAthleteOrThrow();

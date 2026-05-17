@@ -50,6 +50,8 @@ public class ActivityDto {
     private Integer weightedAverageWatts;
     @JsonProperty("suffer_score")
     private Integer sufferScore;
+    @JsonProperty("device_name")
+    private String deviceName;
     @JsonProperty("map")
     private PolylineMapDto map;
     @JsonProperty("source")
