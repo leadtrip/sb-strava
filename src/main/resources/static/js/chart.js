@@ -137,7 +137,7 @@ function externalTooltipHandler(context) {
         tooltipEl.style.opacity = 1;
         tooltipEl.style.pointerEvents = 'none';
         tooltipEl.style.position = 'absolute';
-        tooltipEl.style.transition = 'all .1s ease';
+        tooltipEl.style.transition = 'transform 0.1s ease, left 0.1s ease, top 0.1s ease';
         tooltipEl.style.padding = '12px';
         tooltipEl.style.zIndex = '100';
         tooltipEl.style.minWidth = '180px';
@@ -183,12 +183,37 @@ function externalTooltipHandler(context) {
     }
 
     const {offsetLeft: positionX, offsetTop: positionY} = chart.canvas;
+    const canvasRect = chart.canvas.getBoundingClientRect();
+
+    const caretX = positionX + tooltip.caretX;
+    const caretY = positionY + tooltip.caretY;
+
+    const isRightHalf = tooltip.caretX > (canvasRect.width / 2);
+    const isBottomHalf = tooltip.caretY > (canvasRect.height / 2);
+
+    let translateX = '0%';
+    let translateY = '0%';
+    let offsetX = 15;
+    let offsetY = 15;
+
+    if (isRightHalf) {
+        translateX = '-100%';
+        tooltipEl.style.left = (caretX - offsetX) + 'px';
+    } else {
+        translateX = '0%';
+        tooltipEl.style.left = (caretX + offsetX) + 'px';
+    }
+
+    if (isBottomHalf) {
+        translateY = '-100%';
+        tooltipEl.style.top = (caretY - offsetY) + 'px';
+    } else {
+        translateY = '0%';
+        tooltipEl.style.top = (caretY + offsetY) + 'px';
+    }
 
     tooltipEl.style.opacity = 1;
-    tooltipEl.style.left = positionX + tooltip.caretX + 'px';
-    tooltipEl.style.top = positionY + tooltip.caretY + 'px';
-
-    tooltipEl.style.transform = 'translate(-50%, -105%)';
+    tooltipEl.style.transform = `translate(${translateX}, ${translateY})`;
 }
 
 function renderBarChart(labels, values, valueConverter, label) {
