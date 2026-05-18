@@ -69,7 +69,7 @@
             const compareOption = document.getElementById('compareSelect').value;
 
             const primaryData = await fetchStats(reportType, fromStr, toStr, activityType);
-            renderChart(reportType + 'Compare', primaryData.labels, primaryData.values);
+            renderChart(reportType + 'Compare', primaryData.labels, primaryData.values, primaryData.urls);
 
             if (compareOption !== 'none' && fromStr && toStr) {
                 let compFrom = new Date(fromStr);
@@ -86,18 +86,21 @@
                     label = "Previous Period";
                 }
                 else if (compareOption.startsWith('year-')) {
-                    const numYears = parseInt(compareOption.split('-')[1]);
-
-                    compFrom.setFullYear(compFrom.getFullYear() - numYears);
-                    compTo.setFullYear(compTo.getFullYear() - numYears);
+                    const numYears = parseInt(compareOption.split('-')[1], 10);
                     label = `${numYears} Year${numYears > 1 ? 's' : ''} Ago`;
+
+                    // Fetch the mathematically perfect ISO week matches directly from Java
+                    const alignmentRes = await fetch(`/statistics/util/shift-iso?from=${fromStr}&to=${toStr}&yearsAgo=${numYears}`);
+                    const perfectDates = await alignmentRes.json();
+
+                    compFrom = new Date(perfectDates.from);
+                    compTo = new Date(perfectDates.to);
                 }
 
                 const compData = await fetchStats(reportType, formatDate(compFrom), formatDate(compTo), activityType);
-
                 const compValues = (reportType === 'distance') ? compData.values.map(v => Math.round(v / 1000)) : compData.values;
 
-                addDatasetToChart(label, compValues, 'rgba(150, 150, 150, 0.7)');
+                addDatasetToChart(label, compValues, 'rgba(150, 150, 150, 0.7)', compData.urls);
             }
         });
 
@@ -115,17 +118,20 @@
             return res.json();
         }
 
-        function addDatasetToChart(label, data, color) {
+        function addDatasetToChart(label, data, color, urls) {
             if (!currentChart) return;
 
             const newDataset = {
                 label: label,
                 data: data,
+                activityUrls: urls,
                 borderColor: color,
                 backgroundColor: 'transparent',
                 borderDash: [5, 5],
                 tension: 0.4,
-                pointRadius: 0
+                pointRadius: 4,
+                hitRadius: 10,
+                hoverRadius: 8
             };
 
             currentChart.data.datasets.push(newDataset);

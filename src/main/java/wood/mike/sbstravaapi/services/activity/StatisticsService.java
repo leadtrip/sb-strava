@@ -41,8 +41,8 @@ public class StatisticsService {
 
         List<String> labels = new ArrayList<>();
         List<Number> values = new ArrayList<>();
+        List<String> urls = new ArrayList<>();
 
-        // we have to massage the data to fill in gaps where there are no values for a given week
         LocalDate currentWeekStart = from;
         while (!currentWeekStart.isAfter(to)) {
             int year = currentWeekStart.get(IsoFields.WEEK_BASED_YEAR);
@@ -51,14 +51,31 @@ public class StatisticsService {
             String key = year + "-" + week;
 
             labels.add(currentWeekStart.format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
-            values.add(dbMap.getOrDefault(key, 0));     // if there was no activity this week supply zero
+            values.add(dbMap.getOrDefault(key, 0));
+
+            LocalDateTime weekFrom = currentWeekStart.atStartOfDay();
+            LocalDateTime weekTo = currentWeekStart.plusDays(6).atTime(23, 59, 0);
+
+            String fromIso = weekFrom.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME).substring(0, 16);
+            String toIso = weekTo.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME).substring(0, 16);
+
+            StringBuilder urlBuilder = new StringBuilder(
+                    String.format("/activity/local?from=%s&to=%s", fromIso, toIso)
+            );
+
+            if (activityType != null && !activityType.trim().isEmpty()) {
+                urlBuilder.append("&type=").append(activityType.trim());
+            }
+
+            urls.add(urlBuilder.toString());
 
             currentWeekStart = currentWeekStart.plusWeeks(1);
         }
 
         return Map.of(
                 "labels", labels,
-                "values", values
+                "values", values,
+                "urls", urls
         );
     }
 

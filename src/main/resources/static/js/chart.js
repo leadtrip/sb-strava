@@ -2,15 +2,15 @@ let activityTypeChartInstance = null;
 
 
 const chartRenderers = {
-    load: (labels, values) => renderBarChart(labels, values, null, 'Load'),
-    distance: (labels, values) => renderBarChart(labels, values, v => Math.round(v / 1000), 'Distance (km)'),
-    loadCompare: (labels, values) => renderLineChart(labels, values, null, 'Load'),
-    distanceCompare: (labels, values) => renderLineChart(labels, values, v => Math.round(v / 1000), 'Distance (km)'),
+    load: (labels, values, urls) => renderBarChart(labels, values, null, 'Load'),
+    distance: (labels, values, urls) => renderBarChart(labels, values, v => Math.round(v / 1000), 'Distance (km)'),
+    loadCompare: (labels, values, urls) => renderLineChart(labels, values, null, 'Load', urls),
+    distanceCompare: (labels, values, urls) => renderLineChart(labels, values, v => Math.round(v / 1000), 'Distance (km)', urls),
 };
 
 let currentChart;
 
-function renderChart(reportType, labels, values) {
+function renderChart(reportType, labels, values, urls) {
     const renderer = chartRenderers[reportType];
     if (!renderer) {
         console.warn(`No chart renderer defined for reportType: ${reportType}`);
@@ -21,7 +21,7 @@ function renderChart(reportType, labels, values) {
         currentChart.destroy();
     }
 
-    currentChart = renderer(labels, values);
+    currentChart = renderer(labels, values, urls);
 }
 
 const COLOR_SCALE = [
@@ -52,7 +52,7 @@ function getColorForValue(value, min, max) {
     return `rgb(${r},${g},${b},0.4)`;
 }
 
-function renderLineChart(labels, values, valueConverter, label) {
+function renderLineChart(labels, values, valueConverter, label, urls) {
     const canvas = document.getElementById('chartCanvas');
     if (!canvas) return;
 
@@ -69,9 +69,11 @@ function renderLineChart(labels, values, valueConverter, label) {
             datasets: [{
                 label: label,
                 data: convertedValues,
+                activityUrls: urls,
                 tension: 0.4,
-                pointRadius: 2,
-                hitRadius: 10
+                pointRadius: 4,
+                hitRadius: 10,
+                hoverRadius: 8
             }]
         },
         options: {
@@ -92,7 +94,7 @@ function renderLineChart(labels, values, valueConverter, label) {
                 }
             },
             interaction: {
-                mode: 'index',
+                mode: 'nearest',
                 intersect: false
             },
             scales: {
@@ -101,6 +103,20 @@ function renderLineChart(labels, values, valueConverter, label) {
                         autoSkip: true,
                         maxRotation: 45,
                         minRotation: 0
+                    }
+                }
+            },
+            onClick: (e, elements, chart) => {
+                if (elements.length > 0) {
+                    const activeElement = elements[0];
+                    const datasetIndex = activeElement.datasetIndex;
+                    const dataIndex = activeElement.index;
+
+                    const targetDataset = chart.data.datasets[datasetIndex];
+                    const targetUrl = targetDataset.activityUrls[dataIndex];
+
+                    if (targetUrl) {
+                        window.open(targetUrl, '_blank');
                     }
                 }
             }

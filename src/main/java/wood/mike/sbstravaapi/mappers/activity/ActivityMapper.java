@@ -20,6 +20,7 @@ public interface ActivityMapper {
     @Mapping(source = "map", target = "polylineMap")
     @Mapping(target = "streamData", ignore = true)
     @Mapping(target = "source", ignore = true)
+    @Mapping(target = "athlete.id", ignore = true)
     Activity toEntity(ActivityDto dto);
 
     @Mapping(target = "id", ignore = true)
