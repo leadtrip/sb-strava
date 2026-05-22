@@ -27,6 +27,7 @@ import wood.mike.sbstravaapi.services.strava.StravaService;
 import wood.mike.sbstravaapi.transformers.activity.ActivityTransformer;
 import wood.mike.sbstravaapi.utils.ActivityFormatter;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -160,15 +161,15 @@ public class ActivityController {
 
     @GetMapping("/activity/compare")
     public String compare(Model model) {
-        LocalDate endDate = LocalDate.now();
-        LocalDate startDate = endDate.minusWeeks(12);
+        LocalDate toDate = LocalDate.now().plusWeeks(1).with(DayOfWeek.MONDAY);
+        LocalDate fromDate = toDate.minusWeeks(12).with(DayOfWeek.MONDAY);
         List<Integer> years = IntStream.rangeClosed(1, maxYears).boxed().toList();
 
         model.addAttribute("pageTitle", "Compare activity periods");
         model.addAttribute("templateName", "activity/compare");
 
-        model.addAttribute("fromDate", startDate);
-        model.addAttribute("toDate", endDate);
+        model.addAttribute("fromDate", fromDate);
+        model.addAttribute("toDate", toDate);
         model.addAttribute("comparisonYears", years);
 
         return "layout";

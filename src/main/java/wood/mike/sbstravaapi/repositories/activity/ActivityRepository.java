@@ -23,7 +23,8 @@ public interface ActivityRepository extends JpaRepository<Activity, Long>, JpaSp
             ActivitySource source
     );
 
-    @Query("SELECT NEW wood.mike.sbstravaapi.repositories.activity.WeeklyStatistic(YEAR(a.startDate), WEEK(a.startDate), SUM(a.sufferScore)) " +
+    @Query("SELECT NEW wood.mike.sbstravaapi.repositories.activity.WeeklyStatistic(" +
+            "YEAR(a.startDate), WEEK(a.startDate), SUM(a.sufferScore)) " +
             "FROM Activity a " +
             "WHERE a.athlete = :athlete " +
             "AND (:fromDate IS NULL OR a.startDate >= :fromDate) " +

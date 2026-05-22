@@ -78,12 +78,22 @@
                 let label = "";
 
                 if (compareOption === 'previous') {
-                    const diffTime = Math.abs(new Date(toStr) - new Date(fromStr));
-                    // Add 1 day to the diff to make it inclusive
+                    const originalFrom = new Date(fromStr);
+                    const originalTo = new Date(toStr);
+
+                    const diffTime = Math.abs(originalTo - originalFrom);
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
                     compFrom.setDate(compFrom.getDate() - diffDays);
-                    compTo.setDate(compTo.getDate() - diffDays);
+
+                    const dayOfWeekDrift = compFrom.getDay() - originalFrom.getDay();
+                    if (dayOfWeekDrift !== 0) {
+                        compFrom.setDate(compFrom.getDate() - dayOfWeekDrift);
+                    }
+
+                    compTo = new Date(compFrom);
+                    compTo.setDate(compTo.getDate() + (diffDays - 1));
+
                     label = "Previous Period";
                 }
                 else if (compareOption.startsWith('year-')) {

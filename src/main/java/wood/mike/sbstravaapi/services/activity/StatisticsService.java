@@ -72,6 +72,10 @@ public class StatisticsService {
             currentWeekStart = currentWeekStart.plusWeeks(1);
         }
 
+        labels.removeLast();
+        values.removeLast();
+        urls.removeLast();
+
         return Map.of(
                 "labels", labels,
                 "values", values,
