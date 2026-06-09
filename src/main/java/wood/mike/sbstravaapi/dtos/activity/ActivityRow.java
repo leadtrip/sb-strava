@@ -77,6 +77,8 @@ public class ActivityRow {
         return activityFormatter.roundWithUnit(activity.getKilojoules(),"kJ");
     }
 
+    public String getCalories() {return activityFormatter.round(activity.getCalories());}
+
     public Integer getSufferScore() {
         return activity.getSufferScore();
     }

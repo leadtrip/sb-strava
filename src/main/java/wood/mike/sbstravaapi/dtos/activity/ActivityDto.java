@@ -42,6 +42,8 @@ public class ActivityDto {
     private String gearId;
     @JsonProperty("kilojoules")
     private Float kilojoules;
+    @JsonProperty("calories")
+    private Float calories;
     @JsonProperty("average_watts")
     private Float averageWatts;
     @JsonProperty("max_watts")

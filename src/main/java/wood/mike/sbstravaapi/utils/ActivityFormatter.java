@@ -56,6 +56,11 @@ public class ActivityFormatter {
         return rounded + " " + unit;
     }
 
+    public String round(Number number) {
+        if (number == null) return "-";
+        return String.valueOf(Math.round(number.doubleValue()));
+    }
+
     public String formatSpeed(Float metersPerSecond) {
         if (metersPerSecond == null) return "-";
         float kmPerHour = metersPerSecond * 3.6f;

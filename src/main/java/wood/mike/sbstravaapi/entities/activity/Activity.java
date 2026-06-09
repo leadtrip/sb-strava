@@ -77,6 +77,9 @@ public class Activity {
     @Column(name = "kilojoules")
     private Float kilojoules;
 
+    @Column(name = "calories")
+    private Float calories;
+
     @Column(name = "average_watts")
     private Float averageWatts;
 

@@ -1,6 +1,6 @@
 ###
 @strava_api = https://www.strava.com/api/v3/
-@access_token = d10b22ace6447416836edc27549437215b4ee703
+@access_token = 0bee017564b7b7d3c73dd2a2f074017e9791ac37
 @activity_id = 18806054507
 
 ###
