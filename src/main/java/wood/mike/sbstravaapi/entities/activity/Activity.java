@@ -108,4 +108,61 @@ public class Activity {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "external_id", length = 100)
+    private String externalId;
+
+    @Column(name = "upload_id")
+    private Long uploadId;
+
+    @Column(name = "achievement_count")
+    private Integer achievementCount;
+
+    @Column(name = "kudos_count")
+    private Integer kudosCount;
+
+    @Column(name = "comment_count")
+    private Integer commentCount;
+
+    @Column(name = "athlete_count")
+    private Integer athleteCount;
+
+    @Column(name = "photo_count")
+    private Integer photoCount;
+
+    @Column(name = "total_photo_count")
+    private Integer totalPhotoCount;
+
+    @Column(name = "trainer")
+    private Boolean trainer;
+
+    @Column(name = "commute")
+    private Boolean commute;
+
+    @Column(name = "`manual`")
+    private Boolean manual;
+
+    @Column(name = "`private`")
+    private Boolean isPrivate;
+
+    @Column(name = "flagged")
+    private Boolean flagged;
+
+    @Column(name = "has_kudoed")
+    private Boolean hasKudoed;
+
+    @Column(name = "hide_from_home")
+    private Boolean hideFromHome;
+
+    @Column(name = "device_watts")
+    private Boolean deviceWatts;
+
+    @Column(name = "workout_type")
+    private Integer workoutType;
+
+    @Column(name = "upload_id_str", length = 100)
+    private String uploadIdStr;
+
+    @Column(name = "embed_token", length = 100)
+    private String embedToken;
 }

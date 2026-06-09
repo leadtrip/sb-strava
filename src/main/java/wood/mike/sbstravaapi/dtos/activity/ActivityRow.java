@@ -6,6 +6,7 @@ import wood.mike.sbstravaapi.utils.ActivityFormatter;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class ActivityRow {
 
@@ -77,7 +78,10 @@ public class ActivityRow {
         return activityFormatter.roundWithUnit(activity.getKilojoules(),"kJ");
     }
 
-    public String getCalories() {return activityFormatter.round(activity.getCalories());}
+    public String getCalories() {
+        Float value = activity.getCalories() != null ? activity.getCalories() : activity.getKilojoules() != null ? activity.getKilojoules() : 0;
+        return activityFormatter.round(value);
+    }
 
     public Integer getSufferScore() {
         return activity.getSufferScore();
