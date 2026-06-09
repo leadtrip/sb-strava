@@ -56,4 +56,6 @@ public class ActivityDto {
     private PolylineMapDto map;
     @JsonProperty("source")
     private ActivitySource source;
+    @JsonProperty("description")
+    private String description;
 }

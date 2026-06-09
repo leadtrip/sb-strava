@@ -102,4 +102,7 @@ public class Activity {
 
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ActivityStreamData> streamData = new ArrayList<>();
+
+    @Column(name = "description")
+    private String description;
 }

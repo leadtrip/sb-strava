@@ -1,7 +1,7 @@
 ###
 @strava_api = https://www.strava.com/api/v3/
-@access_token = 60dc6bb64f1144dd0a1a2a45488ae4512553e08e
-@activity_id = 17125415243
+@access_token = d10b22ace6447416836edc27549437215b4ee703
+@activity_id = 18806054507
 
 ###
 GET {{strava_api}}segments/starred
@@ -13,6 +13,10 @@ Authorization: Bearer {{access_token}}
 
 ###
 GET {{strava_api}}activities/{{activity_id}}/streams?keys=heartrate,watts,time,distance&key_by_type=true&resolution=low
+Authorization: Bearer {{access_token}}
+
+###
+GET {{strava_api}}activities/{{activity_id}}/laps
 Authorization: Bearer {{access_token}}
 
 ###

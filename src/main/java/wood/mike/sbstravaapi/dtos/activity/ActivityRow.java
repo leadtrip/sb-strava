@@ -26,7 +26,15 @@ public class ActivityRow {
     }
 
     public String getNameAsLink() {
-        return "<a href='/activity/" + activity.getStravaActivityId() + "'>" + activity.getName() + "</a>";
+        return "<a href='/activity/" + activity.getStravaActivityId() + "'>" + activity.getName() + "</a><br>" + getOptDescription();
+    }
+
+    public String getOptDescription() {
+        return activity.getDescription() != null ? "<span class=\"act-desc\">" + activity.getDescription() + "</span>" : "";
+    }
+
+    public String getDescription() {
+        return activity.getDescription();
     }
 
     public String getDistance() {
