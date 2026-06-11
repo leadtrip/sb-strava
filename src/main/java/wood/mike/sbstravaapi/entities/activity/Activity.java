@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.entities.polylinemap.PolylineMap;
+import wood.mike.sbstravaapi.entities.segments.SegmentEffort;
 import wood.mike.sbstravaapi.repositories.activity.ActivitySource;
 
 import java.time.LocalDateTime;
@@ -165,4 +166,11 @@ public class Activity {
 
     @Column(name = "embed_token", length = 100)
     private String embedToken;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "activity_id")
+    private List<SegmentEffort> segmentEfforts = new ArrayList<>();
+
+    @Column(name = "segment_efforts_fetched", nullable = false)
+    private boolean segmentEffortsFetched = false;
 }

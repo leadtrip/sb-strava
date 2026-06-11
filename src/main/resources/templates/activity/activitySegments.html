@@ -1,0 +1,28 @@
+<div th:fragment="segments(activity)">
+    <div th:if="${activity != null}" class="p-4 rounded-xl shadow bg-white">
+        <h2 class="text-xl font-semibold mb-4">Segments</h2>
+    </div>
+
+    <table th:fragment="activitySegments" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Start Date</th>
+            <th>Distance</th>
+            <th>Elapsed Time</th>
+            <th>Average heart rate</th>
+            <th>Max heart rate</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="segment : ${activity.segmentEfforts}">
+            <td><a th:href="@{/segment/{id}(id=${segment.id})}" th:text="${segment.name}"></a></td>
+            <td th:text="${@activityFormatter.formatDateTime(segment.startDate)}"></td>
+            <td th:text="${@activityFormatter.formatDistance(segment.distance)}"></td>
+            <td th:text="${@activityFormatter.formatDuration(segment.elapsedTime)}"></td>
+            <td th:text="${segment.averageHeartrate}"></td>
+            <td th:text="${segment.maxHeartrate}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,17 +1,32 @@
 package wood.mike.sbstravaapi.mappers.activity;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import lombok.extern.slf4j.Slf4j;
+import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
 import wood.mike.sbstravaapi.entities.activity.Activity;
+import wood.mike.sbstravaapi.entities.segments.SegmentEffort;
 import wood.mike.sbstravaapi.mappers.polylinemap.PolylineMapMapper;
+import wood.mike.sbstravaapi.mappers.segments.SegmentEffortMapper;
+import wood.mike.sbstravaapi.services.athlete.AthleteService;
+import wood.mike.sbstravaapi.services.segments.SummarySegmentService;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(
         componentModel = "spring",
-        uses = { PolylineMapMapper.class }
+        uses = {
+                PolylineMapMapper.class,
+                SegmentEffortMapper.class
+        }
 )
-public interface ActivityMapper {
+@Slf4j
+public abstract class ActivityMapper {
+
+    @Autowired
+    protected SegmentEffortMapper segmentEffortMapper;
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "version", ignore = true)
@@ -21,7 +36,39 @@ public interface ActivityMapper {
     @Mapping(target = "streamData", ignore = true)
     @Mapping(target = "source", ignore = true)
     @Mapping(target = "athlete.id", ignore = true)
-    Activity toEntity(ActivityDto dto);
+    @Mapping(target = "segmentEfforts", ignore = true)
+    public abstract Activity toEntity(
+            ActivityDto dto,
+            @Context AthleteService athleteService,
+            @Context SummarySegmentService summarySegmentService
+    );
+
+    @AfterMapping
+    protected void mapSegmentEfforts(
+            ActivityDto dto,
+            @MappingTarget Activity activity,
+            @Context AthleteService athleteService,
+            @Context SummarySegmentService summarySegmentService
+    ) {
+        if (dto.getSegmentEfforts() == null) return;
+        log.info("Mapping {} segment efforts for Strava activity {}", dto.getSegmentEfforts().size(), dto.getId());
+
+        List<SegmentEffort> efforts = dto.getSegmentEfforts().stream()
+                .map(effortDto -> segmentEffortMapper.toEntity(
+                        effortDto,
+                        activity,
+                        athleteService,
+                        summarySegmentService
+                ))
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        if (activity.getSegmentEfforts() == null) {
+            activity.setSegmentEfforts(efforts);
+        } else {
+            activity.getSegmentEfforts().clear();
+            activity.getSegmentEfforts().addAll(efforts);
+        }
+    }
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "version", ignore = true)
@@ -31,5 +78,11 @@ public interface ActivityMapper {
     @Mapping(source = "map", target = "polylineMap")
     @Mapping(target = "streamData", ignore = true)
     @Mapping(target = "source", ignore = true)
-    void updateActivityFromDto(ActivityDto dto, @MappingTarget Activity entity);
+    @Mapping(target = "segmentEfforts", ignore = true)
+    public abstract void updateActivityFromDto(
+            ActivityDto dto,
+            @MappingTarget Activity entity,
+            @Context AthleteService athleteService,
+            @Context SummarySegmentService summarySegmentService
+    );
 }

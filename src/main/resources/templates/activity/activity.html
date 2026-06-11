@@ -107,6 +107,11 @@
                          role="tabpanel">
                         <div th:replace="~{activity/activityStream :: stream(${activity})}"></div>
                     </div>
+                    <div class="tab-pane fade"
+                         id="nav-segments"
+                         role="tabpanel">
+                        <div th:replace="~{activity/activitySegments :: segments(${activity})}"></div>
+                    </div>
                 </div>
             </th:block>
         </div>

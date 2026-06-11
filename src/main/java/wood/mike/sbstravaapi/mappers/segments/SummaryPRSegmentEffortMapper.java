@@ -11,16 +11,8 @@ import wood.mike.sbstravaapi.services.activity.ActivityService;
 
 @Mapper(componentModel = "spring")
 public abstract class SummaryPRSegmentEffortMapper {
-
     @Mapping(target = "id", ignore = true)
-    @Mapping(source = "activityId", target = "activity")
-    public abstract SummaryPRSegmentEffort toEntity(
-            SummaryPRSegmentEffortDto dto,
-            @Context ActivityService activityService
-    );
-
-    protected Activity map(Long activityId, @Context ActivityService activityService) {
-        return activityId == null ? null : activityService.getActivity(activityId, ActivitySource.SEGMENT_PR);
-    }
+    @Mapping(target = "activity", ignore = true)
+    public abstract SummaryPRSegmentEffort toEntity(SummaryPRSegmentEffortDto dto);
 }
 

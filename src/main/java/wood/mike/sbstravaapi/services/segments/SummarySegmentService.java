@@ -16,6 +16,7 @@ import wood.mike.sbstravaapi.services.strava.StravaService;
 import wood.mike.sbstravaapi.transformers.segments.SummarySegmentTransformer;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -56,5 +57,9 @@ public class SummarySegmentService {
 
     public long countAll() {
         return summarySegmentRepository.count();
+    }
+
+    public Optional<SummarySegment> findByStravaSegmentId(Long stravaSegmentId) {
+        return summarySegmentRepository.findByStravaSegmentId(stravaSegmentId);
     }
 }

@@ -15,7 +15,10 @@ import wood.mike.sbstravaapi.mappers.activity.ActivityMapper;
 import wood.mike.sbstravaapi.repositories.activity.ActivityRepository;
 import wood.mike.sbstravaapi.repositories.activity.ActivitySource;
 import wood.mike.sbstravaapi.repositories.activity.ActivitySpecification;
+import wood.mike.sbstravaapi.repositories.segments.SegmentEffortRepository;
 import wood.mike.sbstravaapi.services.athlete.AthleteService;
+import wood.mike.sbstravaapi.services.segments.SegmentEffortService;
+import wood.mike.sbstravaapi.services.segments.SummarySegmentService;
 import wood.mike.sbstravaapi.services.strava.StravaService;
 import wood.mike.sbstravaapi.transformers.activity.ActivityTransformer;
 
@@ -26,6 +29,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.apache.coyote.http11.Constants.a;
+
 @Slf4j
 @Service
 public class ActivityService {
@@ -35,37 +40,39 @@ public class ActivityService {
     private final AthleteService athleteService;
     private final ActivityMapper activityMapper;
     private final ActivityStreamDataService activityStreamDataService;
+    private final SummarySegmentService summarySegmentService;
+    private final SegmentEffortService segmentEffortService;
 
     public ActivityService(ActivityRepository activityRepository,
                            ActivityTransformer activityTransformer,
                            StravaService stravaService,
                            AthleteService athleteService,
                            ActivityMapper activityMapper,
-                           ActivityStreamDataService activityStreamDataService) {
+                           ActivityStreamDataService activityStreamDataService,
+                           SummarySegmentService summarySegmentService,
+                           SegmentEffortService segmentEffortService) {
         this.activityRepository = activityRepository;
         this.activityTransformer = activityTransformer;
         this.stravaService = stravaService;
         this.athleteService = athleteService;
         this.activityMapper = activityMapper;
         this.activityStreamDataService = activityStreamDataService;
+        this.summarySegmentService = summarySegmentService;
+        this.segmentEffortService = segmentEffortService;
     }
 
     public Activity getActivity(Long stravaActivityId, ActivitySource source) {
-
         Activity activity = activityRepository
                 .findByStravaActivityId(stravaActivityId)
                 .orElseGet(() -> {
                     log.info("Strava activity {} not found, fetching from Strava as {}", stravaActivityId, source);
-
                     Activity newActivity =
                             activityTransformer.toEntity(
                                     stravaService.getActivityData(String.valueOf(stravaActivityId))
                             );
-
                     newActivity.setSource(source);
                     return activityRepository.save(newActivity);
                 });
-
         if (source == ActivitySource.SYNC) {
             boolean hasStreams = activityStreamDataService.existsByActivityId(activity.getId());
             if (!hasStreams) {
@@ -75,8 +82,15 @@ public class ActivityService {
                         String.valueOf(stravaActivityId)
                 );
             }
-        }
 
+            if (!activity.isSegmentEffortsFetched()) {
+                log.info("Segment efforts not yet fetched for activity {}, fetching from Strava", stravaActivityId);
+                ActivityDto detailedActivity = stravaService.getActivityData(String.valueOf(stravaActivityId));
+                activityTransformer.updateActivityFromDto(detailedActivity, activity);
+                activity.setSegmentEffortsFetched(true);
+                activityRepository.save(activity);
+            }
+        }
         return activity;
     }
 
@@ -145,7 +159,7 @@ public class ActivityService {
                 Activity activityToSave;
                 if (existingActivityOptional.isPresent()) {
                     Activity existingActivity = existingActivityOptional.get();
-                    activityMapper.updateActivityFromDto(activityDto, existingActivity);
+                    activityMapper.updateActivityFromDto(activityDto, existingActivity, athleteService, summarySegmentService);
                     activityToSave = existingActivity;
                     log.info("Updating existing activity: {}", activityToSave.getStravaActivityId());
                 } else {
@@ -171,6 +185,7 @@ public class ActivityService {
             List<ActivityDto> activities = stravaService.getActivitiesAfter(fromDate.toEpochSecond(ZoneOffset.UTC));
             log.info("Fetched {} activities created after {}", activities.size(), fromDate);
             for (ActivityDto activityDto : activities) {
+                log.info("Segment efforts {}", activityDto.getSegmentEfforts());
                 Optional<Activity> existingActivityOptional = activityRepository.findByStravaActivityId(activityDto.getId());
                 Activity activityToSave;
                 if (existingActivityOptional.isEmpty()) {

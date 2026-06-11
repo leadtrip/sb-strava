@@ -5,7 +5,10 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import wood.mike.sbstravaapi.entities.segments.SummarySegment;
 
+import java.util.Optional;
+
 @Repository
 public interface SummarySegmentRepository extends JpaRepository<SummarySegment, Long>, JpaSpecificationExecutor<SummarySegment> {
-    boolean  existsByStravaSegmentId(Long stravaSegmentId);
+    boolean existsByStravaSegmentId(Long stravaSegmentId);
+    Optional<SummarySegment> findByStravaSegmentId(Long stravaSegmentId);
 }

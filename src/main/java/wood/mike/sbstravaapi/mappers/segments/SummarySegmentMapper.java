@@ -17,6 +17,6 @@ import wood.mike.sbstravaapi.services.activity.ActivityService;
 public interface SummarySegmentMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "athlete", ignore = true)
-    SummarySegment toEntity(SummarySegmentDto dto, @Context ActivityService activityService);
+    SummarySegment toEntity(SummarySegmentDto dto);
 }
 
