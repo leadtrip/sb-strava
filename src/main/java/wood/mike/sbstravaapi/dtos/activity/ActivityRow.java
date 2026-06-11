@@ -6,6 +6,7 @@ import wood.mike.sbstravaapi.entities.activity.ActivityStreamData;
 import wood.mike.sbstravaapi.entities.segments.SegmentEffort;
 import wood.mike.sbstravaapi.utils.ActivityFormatter;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -55,7 +56,8 @@ public class ActivityRow {
         this.deviceName = activity.getDeviceName();
         this.summaryPolyline = activity.getPolylineMap().getSummaryPolyline();
         this.streamData = activity.getStreamData();
-        this.segmentEfforts = activity.getSegmentEfforts();
+        //this.segmentEfforts = activity.getSegmentEfforts();
+        this.segmentEfforts = Collections.emptyList();
     }
 
     public List<Integer> getStreamData(String streamType) {
