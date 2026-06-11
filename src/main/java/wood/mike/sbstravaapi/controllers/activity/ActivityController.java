@@ -11,10 +11,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
 import wood.mike.sbstravaapi.dtos.activity.ActivityRow;
+import wood.mike.sbstravaapi.dtos.activity.ActivityRowMin;
 import wood.mike.sbstravaapi.dtos.activity.SyncActivitiesRequest;
 import wood.mike.sbstravaapi.entities.activity.Activity;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
@@ -132,8 +132,8 @@ public class ActivityController {
         Page<Activity> activities =
                 activityService.findFiltered(page, filter.getLength(), filter);
 
-        List<ActivityRow> rows = activities.getContent().stream()
-                .map(activity -> new ActivityRow(activity, activityFormatter))
+        List<ActivityRowMin> rows = activities.getContent().stream()
+                .map(activity -> new ActivityRowMin(activity, activityFormatter))
                 .toList();
 
         Map<String, Object> response = new HashMap<>();
