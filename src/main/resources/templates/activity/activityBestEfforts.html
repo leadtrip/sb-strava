@@ -1,0 +1,20 @@
+<div th:fragment="bestEfforts(activity)">
+    <table th:fragment="activityBestEfforts" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Distance</th>
+            <th>Elapsed Time</th>
+            <th>PR rank</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="effort : ${activity.bestEfforts}">
+            <td th:text="${effort.name}"></td>
+            <td th:text="${@activityFormatter.formatDistance(effort.distance)}"></td>
+            <td th:text="${@activityFormatter.formatDuration(effort.elapsedTime)}"></td>
+            <td th:text="${effort.prRank}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>

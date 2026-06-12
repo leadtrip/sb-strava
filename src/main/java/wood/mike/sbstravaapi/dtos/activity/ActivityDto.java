@@ -147,4 +147,7 @@ public class ActivityDto {
 
     @JsonProperty("segment_efforts")
     private List<DetailedSegmentEffortDto> segmentEfforts;
+
+    @JsonProperty("best_efforts")
+    private List<DetailedSegmentEffortDto> bestEfforts;
 }

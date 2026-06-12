@@ -100,6 +100,15 @@
                             role="tab">
                         Segments
                     </button>
+                    <button class="nav-link"
+                            th:if="${activity.sportType == 'Run'}"
+                            id="nav-best-efforts-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#nav-best-efforts"
+                            type="button"
+                            role="tab">
+                        Best efforts
+                    </button>
                 </nav>
                 <div class="card-body tab-content activity-tab-content" id="nav-tabContent">
                     <div class="tab-pane fade"
@@ -119,6 +128,12 @@
                          id="nav-segments"
                          role="tabpanel">
                         <div th:replace="~{activity/activitySegments :: segments(${activity})}"></div>
+                    </div>
+                    <div class="tab-pane fade"
+                         th:if="${activity.sportType == 'Run'}"
+                         id="nav-best-efforts"
+                         role="tabpanel">
+                        <div th:replace="~{activity/activityBestEfforts :: bestEfforts(${activity})}"></div>
                     </div>
                 </div>
             </th:block>
