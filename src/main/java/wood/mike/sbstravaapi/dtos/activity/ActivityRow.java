@@ -6,6 +6,7 @@ import wood.mike.sbstravaapi.entities.activity.ActivityStreamData;
 import wood.mike.sbstravaapi.entities.efforts.BestEffort;
 import wood.mike.sbstravaapi.entities.laps.Lap;
 import wood.mike.sbstravaapi.entities.segments.SegmentEffort;
+import wood.mike.sbstravaapi.entities.splits.Split;
 import wood.mike.sbstravaapi.utils.ActivityFormatter;
 
 import java.util.Comparator;
@@ -34,6 +35,7 @@ public class ActivityRow {
     @Getter private final List<SegmentEffort> segmentEfforts;
     @Getter private final List<BestEffort> bestEfforts;
     @Getter private final List<Lap> laps;
+    @Getter private final List<Split> splitsMetric;
     private final List<ActivityStreamData> streamData;
 
     public ActivityRow(Activity activity, ActivityFormatter activityFormatter) {
@@ -61,6 +63,7 @@ public class ActivityRow {
         this.segmentEfforts = activity.getSegmentEfforts();
         this.bestEfforts = activity.getBestEfforts();
         this.laps = activity.getLaps();
+        this.splitsMetric = activity.getSplitsMetric();
     }
 
     public List<Integer> getStreamData(String streamType) {

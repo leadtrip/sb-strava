@@ -6,6 +6,7 @@ import wood.mike.sbstravaapi.dtos.athlete.AthleteDto;
 import wood.mike.sbstravaapi.dtos.laps.LapDto;
 import wood.mike.sbstravaapi.dtos.polylinemap.PolylineMapDto;
 import wood.mike.sbstravaapi.dtos.segments.DetailedSegmentEffortDto;
+import wood.mike.sbstravaapi.dtos.splits.SplitDto;
 import wood.mike.sbstravaapi.repositories.activity.ActivitySource;
 
 import java.time.LocalDateTime;
@@ -154,4 +155,7 @@ public class ActivityDto {
 
     @JsonProperty("laps")
     private List<LapDto> laps;
+
+    @JsonProperty("splits_metric")
+    private List<SplitDto> splitsMetric;
 }

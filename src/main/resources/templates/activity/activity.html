@@ -117,6 +117,14 @@
                             role="tab">
                         Laps
                     </button>
+                    <button class="nav-link"
+                            id="nav-splits-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#nav-splits"
+                            type="button"
+                            role="tab">
+                        Splits
+                    </button>
                 </nav>
                 <div class="card-body tab-content activity-tab-content" id="nav-tabContent">
                     <div class="tab-pane fade"
@@ -147,6 +155,11 @@
                          id="nav-laps"
                          role="tabpanel">
                         <div th:replace="~{activity/activityLaps :: laps(${activity})}"></div>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="nav-splits"
+                         role="tabpanel">
+                        <div th:replace="~{activity/activitySplits :: splits(${activity})}"></div>
                     </div>
                 </div>
             </th:block>

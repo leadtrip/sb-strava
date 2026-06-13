@@ -8,10 +8,12 @@ import wood.mike.sbstravaapi.entities.activity.Activity;
 import wood.mike.sbstravaapi.entities.efforts.BestEffort;
 import wood.mike.sbstravaapi.entities.laps.Lap;
 import wood.mike.sbstravaapi.entities.segments.SegmentEffort;
+import wood.mike.sbstravaapi.entities.splits.Split;
 import wood.mike.sbstravaapi.mappers.efforts.BestEffortMapper;
 import wood.mike.sbstravaapi.mappers.laps.LapMapper;
 import wood.mike.sbstravaapi.mappers.polylinemap.PolylineMapMapper;
 import wood.mike.sbstravaapi.mappers.segments.SegmentEffortMapper;
+import wood.mike.sbstravaapi.mappers.splits.SplitMapper;
 import wood.mike.sbstravaapi.services.athlete.AthleteService;
 import wood.mike.sbstravaapi.services.segments.SummarySegmentService;
 
@@ -35,6 +37,8 @@ public abstract class ActivityMapper {
     private BestEffortMapper bestEffortMapper;
     @Autowired
     private LapMapper lapMapper;
+    @Autowired
+    private SplitMapper splitMapper;
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "version", ignore = true)
@@ -48,6 +52,7 @@ public abstract class ActivityMapper {
     @Mapping(target = "segmentEfforts", ignore = true)
     @Mapping(target = "bestEfforts", ignore = true)
     @Mapping(target = "laps", ignore = true)
+    @Mapping(target = "splitsMetric", ignore = true)
     public abstract Activity toEntity(
             ActivityDto dto,
             @Context AthleteService athleteService,
@@ -73,6 +78,10 @@ public abstract class ActivityMapper {
             log.info("Mapping {} laps for Strava activity {}", dto.getLaps().size(), dto.getId());
             mapLaps(dto, activity, athleteService);
         }
+        if(dto.getSplitsMetric() != null) {
+            log.info("Mapping {} splits for Strava activity {}", dto.getSplitsMetric().size(), dto.getId());
+            mapSplits(dto, activity);
+        }
     }
 
     private void mapLaps(ActivityDto dto, Activity activity, AthleteService athleteService) {
@@ -90,6 +99,23 @@ public abstract class ActivityMapper {
         } else {
             activity.getLaps().clear();
             activity.getLaps().addAll(laps);
+        }
+    }
+
+    private void mapSplits(ActivityDto dto, Activity activity) {
+        List<Split> splits = dto.getSplitsMetric().stream()
+                .map(splitDto ->
+                        splitMapper.toEntity(
+                                splitDto,
+                                activity
+                        ))
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        if(activity.getSplitsMetric() == null) {
+            activity.setSplitsMetric(splits);
+        } else {
+            activity.getSplitsMetric().clear();
+            activity.getSplitsMetric().addAll(splits);
         }
     }
 
@@ -149,6 +175,7 @@ public abstract class ActivityMapper {
     @Mapping(target = "segmentEfforts", ignore = true)
     @Mapping(target = "bestEfforts", ignore = true)
     @Mapping(target = "laps", ignore = true)
+    @Mapping(target = "splitsMetric", ignore = true)
     public abstract void updateActivityFromDto(
             ActivityDto dto,
             @MappingTarget Activity entity,

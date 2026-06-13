@@ -1,0 +1,18 @@
+<div th:fragment="splits(activity)">
+    <table th:fragment="activitySplits" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Split</th>
+            <th>Elapsed Time</th>
+            <th>Pace zone</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="split : ${activity.splitsMetric}">
+            <td th:text="${split.split}"></td>
+            <td th:text="${@activityFormatter.formatDuration(split.elapsedTime)}"></td>
+            <td th:text="${split.paceZone}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
