@@ -4,6 +4,7 @@ import lombok.Getter;
 import wood.mike.sbstravaapi.entities.activity.Activity;
 import wood.mike.sbstravaapi.entities.activity.ActivityStreamData;
 import wood.mike.sbstravaapi.entities.efforts.BestEffort;
+import wood.mike.sbstravaapi.entities.laps.Lap;
 import wood.mike.sbstravaapi.entities.segments.SegmentEffort;
 import wood.mike.sbstravaapi.utils.ActivityFormatter;
 
@@ -32,6 +33,7 @@ public class ActivityRow {
     @Getter private final String summaryPolyline;
     @Getter private final List<SegmentEffort> segmentEfforts;
     @Getter private final List<BestEffort> bestEfforts;
+    @Getter private final List<Lap> laps;
     private final List<ActivityStreamData> streamData;
 
     public ActivityRow(Activity activity, ActivityFormatter activityFormatter) {
@@ -58,6 +60,7 @@ public class ActivityRow {
         this.streamData = activity.getStreamData();
         this.segmentEfforts = activity.getSegmentEfforts();
         this.bestEfforts = activity.getBestEfforts();
+        this.laps = activity.getLaps();
     }
 
     public List<Integer> getStreamData(String streamType) {

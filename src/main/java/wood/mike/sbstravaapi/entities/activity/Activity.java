@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import wood.mike.sbstravaapi.entities.athlete.Athlete;
 import wood.mike.sbstravaapi.entities.efforts.BestEffort;
+import wood.mike.sbstravaapi.entities.laps.Lap;
 import wood.mike.sbstravaapi.entities.polylinemap.PolylineMap;
 import wood.mike.sbstravaapi.entities.segments.SegmentEffort;
 import wood.mike.sbstravaapi.repositories.activity.ActivitySource;
@@ -178,4 +179,8 @@ public class Activity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "activity_id")
     private List<BestEffort> bestEfforts = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "activity_id")
+    private List<Lap> laps = new ArrayList<>();
 }

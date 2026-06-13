@@ -1,0 +1,22 @@
+<div th:fragment="laps(activity)">
+    <table th:fragment="activityLaps" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Distance</th>
+            <th>Elapsed Time</th>
+            <th>Elevation gain</th>
+            <th>Pace zone</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="lap : ${activity.laps}">
+            <td th:text="${lap.name}"></td>
+            <td th:text="${@activityFormatter.formatDistance(lap.distance)}"></td>
+            <td th:text="${@activityFormatter.formatDuration(lap.elapsedTime)}"></td>
+            <td th:text="${@activityFormatter.roundWithUnit(lap.totalElevationGain,'m')}"></td>
+            <td th:text="${lap.paceZone}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>

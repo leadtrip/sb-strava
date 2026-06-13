@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import wood.mike.sbstravaapi.dtos.activity.ActivityDto;
 import wood.mike.sbstravaapi.entities.activity.Activity;
 import wood.mike.sbstravaapi.entities.efforts.BestEffort;
+import wood.mike.sbstravaapi.entities.laps.Lap;
 import wood.mike.sbstravaapi.entities.segments.SegmentEffort;
 import wood.mike.sbstravaapi.mappers.efforts.BestEffortMapper;
+import wood.mike.sbstravaapi.mappers.laps.LapMapper;
 import wood.mike.sbstravaapi.mappers.polylinemap.PolylineMapMapper;
 import wood.mike.sbstravaapi.mappers.segments.SegmentEffortMapper;
 import wood.mike.sbstravaapi.services.athlete.AthleteService;
@@ -31,6 +33,8 @@ public abstract class ActivityMapper {
     protected SegmentEffortMapper segmentEffortMapper;
     @Autowired
     private BestEffortMapper bestEffortMapper;
+    @Autowired
+    private LapMapper lapMapper;
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "version", ignore = true)
@@ -43,6 +47,7 @@ public abstract class ActivityMapper {
     @Mapping(target = "segmentEffortsFetched", ignore = true)
     @Mapping(target = "segmentEfforts", ignore = true)
     @Mapping(target = "bestEfforts", ignore = true)
+    @Mapping(target = "laps", ignore = true)
     public abstract Activity toEntity(
             ActivityDto dto,
             @Context AthleteService athleteService,
@@ -50,7 +55,7 @@ public abstract class ActivityMapper {
     );
 
     @AfterMapping
-    protected void mapEfforts(
+    protected void mapCollections(
             ActivityDto dto,
             @MappingTarget Activity activity,
             @Context AthleteService athleteService,
@@ -63,6 +68,28 @@ public abstract class ActivityMapper {
         if(dto.getBestEfforts() != null) {
             log.info("Mapping {} best efforts for Strava activity {}", dto.getBestEfforts().size(), dto.getId());
             mapBestEfforts(dto, activity, athleteService);
+        }
+        if(dto.getLaps() != null) {
+            log.info("Mapping {} laps for Strava activity {}", dto.getLaps().size(), dto.getId());
+            mapLaps(dto, activity, athleteService);
+        }
+    }
+
+    private void mapLaps(ActivityDto dto, Activity activity, AthleteService athleteService) {
+        List<Lap> laps = dto.getLaps().stream()
+                .map(lapDto ->
+                    lapMapper.toEntity(
+                            lapDto,
+                            activity,
+                            athleteService
+                    ))
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        if(activity.getLaps() == null) {
+            activity.setLaps(laps);
+        } else {
+            activity.getLaps().clear();
+            activity.getLaps().addAll(laps);
         }
     }
 
@@ -121,6 +148,7 @@ public abstract class ActivityMapper {
     @Mapping(target = "segmentEffortsFetched", ignore = true)
     @Mapping(target = "segmentEfforts", ignore = true)
     @Mapping(target = "bestEfforts", ignore = true)
+    @Mapping(target = "laps", ignore = true)
     public abstract void updateActivityFromDto(
             ActivityDto dto,
             @MappingTarget Activity entity,

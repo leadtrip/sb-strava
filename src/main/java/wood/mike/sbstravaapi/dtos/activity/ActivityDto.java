@@ -3,6 +3,7 @@ package wood.mike.sbstravaapi.dtos.activity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import wood.mike.sbstravaapi.dtos.athlete.AthleteDto;
+import wood.mike.sbstravaapi.dtos.laps.LapDto;
 import wood.mike.sbstravaapi.dtos.polylinemap.PolylineMapDto;
 import wood.mike.sbstravaapi.dtos.segments.DetailedSegmentEffortDto;
 import wood.mike.sbstravaapi.repositories.activity.ActivitySource;
@@ -150,4 +151,7 @@ public class ActivityDto {
 
     @JsonProperty("best_efforts")
     private List<DetailedSegmentEffortDto> bestEfforts;
+
+    @JsonProperty("laps")
+    private List<LapDto> laps;
 }
