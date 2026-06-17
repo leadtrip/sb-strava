@@ -1,7 +1,16 @@
 ###
 @strava_api = https://www.strava.com/api/v3/
-@access_token = c8107b9a8d6acb2c5d05b9fac66f5b5a400e36e9
-@activity_id = 18874285947
+@access_token = 3bfb578ebe8208092884cfeaa6480c2120231a34
+@activity_id = 18925479389
+@segment_id = 623388
+
+###
+GET {{strava_api}}athlete
+Authorization: Bearer {{access_token}}
+
+###
+GET {{strava_api}}athlete/zones
+Authorization: Bearer {{access_token}}
 
 ###
 GET {{strava_api}}segments/starred
@@ -21,4 +30,12 @@ Authorization: Bearer {{access_token}}
 
 ###
 GET {{strava_api}}activities/{{activity_id}}/laps
+Authorization: Bearer {{access_token}}
+
+###
+GET {{strava_api}}segments/{{segment_id}}
+Authorization: Bearer {{access_token}}
+
+###
+GET {{strava_api}}activities/{{activity_id}}/zones
 Authorization: Bearer {{access_token}}

@@ -110,6 +110,7 @@
                         Best efforts
                     </button>
                     <button class="nav-link"
+                            th:if="${activity.sportType == 'Run'}"
                             id="nav-laps-tab"
                             data-bs-toggle="tab"
                             data-bs-target="#nav-laps"
@@ -118,6 +119,7 @@
                         Laps
                     </button>
                     <button class="nav-link"
+                            th:if="${activity.sportType == 'Run'}"
                             id="nav-splits-tab"
                             data-bs-toggle="tab"
                             data-bs-target="#nav-splits"
@@ -152,11 +154,13 @@
                         <div th:replace="~{activity/activityBestEfforts :: bestEfforts(${activity})}"></div>
                     </div>
                     <div class="tab-pane fade"
+                         th:if="${activity.sportType == 'Run'}"
                          id="nav-laps"
                          role="tabpanel">
                         <div th:replace="~{activity/activityLaps :: laps(${activity})}"></div>
                     </div>
                     <div class="tab-pane fade"
+                         th:if="${activity.sportType == 'Run'}"
                          id="nav-splits"
                          role="tabpanel">
                         <div th:replace="~{activity/activitySplits :: splits(${activity})}"></div>
