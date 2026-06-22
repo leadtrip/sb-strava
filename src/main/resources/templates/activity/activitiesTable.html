@@ -77,6 +77,9 @@
             const table = $('#activitiesTable').DataTable({
                 processing: true,
                 serverSide: true,
+                order: [
+                    [0, 'desc']
+                ],
                 ajax: {
                     url: /*[[@{/filteredactivities}]]*/,
                     data: function (d) {

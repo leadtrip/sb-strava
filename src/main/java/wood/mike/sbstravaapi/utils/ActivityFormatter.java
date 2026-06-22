@@ -1,6 +1,7 @@
 package wood.mike.sbstravaapi.utils;
 
 import org.springframework.stereotype.Component;
+import wood.mike.sbstravaapi.controllers.activity.PaceZone;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -67,4 +68,7 @@ public class ActivityFormatter {
         return String.format("%.1f km/h", kmPerHour);
     }
 
+    public String getPaceZone(Integer val) {
+        return PaceZone.zoneForVal(val).getDisplay();
+    }
 }

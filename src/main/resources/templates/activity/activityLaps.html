@@ -1,5 +1,5 @@
 <div th:fragment="laps(activity)">
-    <table th:fragment="activityLaps" class="table table-striped">
+    <table th:fragment="activityLaps" class="table">
         <thead>
         <tr>
             <th>Name</th>
@@ -10,12 +10,12 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="lap : ${activity.laps}">
+        <tr th:each="lap : ${activity.laps}" th:classappend="'shading-zone-' + ${lap.paceZone}">
             <td th:text="${lap.name}"></td>
             <td th:text="${@activityFormatter.formatDistance(lap.distance)}"></td>
             <td th:text="${@activityFormatter.formatDuration(lap.elapsedTime)}"></td>
             <td th:text="${@activityFormatter.roundWithUnit(lap.totalElevationGain,'m')}"></td>
-            <td th:text="${lap.paceZone}"></td>
+            <td th:text="${@activityFormatter.getPaceZone(lap.paceZone)}"></td>
         </tr>
         </tbody>
     </table>

@@ -210,3 +210,11 @@ body {
 .act-desc {
     font-size: small;
 }
+
+/* Run pace zones */
+.shading-zone-1 { background-color: #e0f2fe; color: #0369a1; }
+.shading-zone-2 { background-color: #dcfce7; color: #15803d; }
+.shading-zone-3 { background-color: #fef9c3; color: #a16207; }
+.shading-zone-4 { background-color: #ffedd5; color: #c2410c; }
+.shading-zone-5 { background-color: #fee2e2; color: #b91c1c; }
+.shading-zone-6 { background-color: #f3e8ff; color: #6b21a8; }
